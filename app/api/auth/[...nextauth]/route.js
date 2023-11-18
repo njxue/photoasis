@@ -17,7 +17,6 @@ const handler = NextAuth({
         where: { email: session.user.email },
       });
       session.user.id = user.id;
-      console.log(session.user);
       return session;
     },
     async signIn({ profile }) {
