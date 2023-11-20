@@ -2,10 +2,10 @@ import fetchCollections from "@actions/fetchCollections";
 import CollectionCard from "./CollectionCard";
 
 const Collections = async ({}) => {
-  const collections = await fetchCollections();
+  const data = await fetchCollections();
   return (
     <div className="flex flex-row gap-2 flex-wrap ">
-      {collections.map((c, i) => (
+      {data?.map((c, i) => (
         <CollectionCard data={c} key={i} />
       ))}
     </div>

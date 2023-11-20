@@ -7,7 +7,8 @@ import SubmitButton from "./SubmitButton";
 const Modal = ({ isOpen, setIsOpen }) => {
   const { data: session } = useSession();
   const handleAddPhoto = (formData) => {
-    addPhoto(formData, session?.user.id);
+    console.log(session?.user.id);
+    //addPhoto(formData, session?.user.id);
   };
   return (
     <div>
@@ -20,7 +21,13 @@ const Modal = ({ isOpen, setIsOpen }) => {
             <div>
               <form action={handleAddPhoto}>
                 <label htmlFor="photo">Photos: </label>
-                <input type="file" name="photo" />
+                <input
+                  type="file"
+                  name="photos"
+                  id="uploadPhoto"
+                  accept="image/png, image/jpg, image/jpeg"
+                  multiple
+                />
                 <SubmitButton />
               </form>
             </div>
