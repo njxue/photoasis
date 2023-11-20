@@ -4,9 +4,6 @@ const nextConfig = {
     domains: ["lh3.googleusercontent.com"],
     unoptimized: true,
   },
-  experimental: {
-    appDir: true,
-  },
 };
 
 module.exports = nextConfig;
