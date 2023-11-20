@@ -3,11 +3,10 @@ import CollectionCard from "./CollectionCard";
 
 const Collections = async ({}) => {
   const data = await fetchCollections();
+  console.log(data);
   return (
     <div className="flex flex-row gap-2 flex-wrap ">
-      {data?.map((c, i) => (
-        <CollectionCard data={c} key={i} />
-      ))}
+      <CollectionCard data={data} />
     </div>
   );
 };
