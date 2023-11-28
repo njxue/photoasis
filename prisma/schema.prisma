@@ -1,18 +1,44 @@
 generator client {
   provider = "prisma-client-js"
- 
 }
 
 datasource db {
   provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL")
-  directUrl = env("POSTGRES_URL_NON_POOLING")
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  image     String?
-  createdAt DateTime @default(now())
+  id          Int          @id @default(autoincrement())
+  name        String
+  email       String       @unique
+  image       String?
+  createdAt   DateTime     @default(now())
+  photos      Photo[]
+  collections Collection[]
+}
+
+model Photo {
+  pid  Int    @id @default(autoincrement())
+  name String
+  user User   @relation(fields: [uid], references: [id])
+  uid  Int
+  collections CollectionPhotos[]
+}
+
+model Collection {
+  cid  Int    @id @default(autoincrement())
+  name String
+  user User   @relation(fields: [uid], references: [id])
+  uid  Int
+  photos CollectionPhotos[]
+}
+
+model CollectionPhotos {
+  cid        Int
+  collection Collection @relation(fields: [cid], references: [cid])
+  pid        Int
+  photo      Photo      @relation(fields: [pid], references: [pid])
+  @@map("collectionphotos")
+  @@id([cid, pid])
 }

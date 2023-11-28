@@ -1,23 +1,48 @@
 import CollectionCard from "./CollectionCard";
 import { authOptions } from "@app/api/auth/[...nextauth]/route";
 import { PrismaClient } from "@prisma/client";
+import { getServerSession } from "next-auth";
+import { unstable_cache } from "next/cache";
 
-async function fetchCollections() {
+const fetchCollections = unstable_cache(async () => {
   try {
     const prisma = new PrismaClient();
+    const session = await getServerSession(authOptions);
+    const uid = session?.user.id;
+    console.log("fetching");
+    let collections = await prisma.collection.findMany({
+      where: {
+        uid: uid,
+      },
+      include: {
+        photos: {
+          include: {
+            photo: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
     return {
-      image: "https://cloudflare-b2.ngjxue.workers.dev/1/DSC_0814.jpg",
+      data: collections,
       status: 200,
     };
   } catch (err) {
+    console.log(err);
     return { status: 500 };
   }
-}
+});
 const Collections = async ({}) => {
-  const data = await fetchCollections();
+  const res = await fetchCollections();
+
   return (
     <div className="flex flex-row gap-2 flex-wrap ">
-      <CollectionCard data={data} />
+      {res.data?.map((collection) => (
+        <CollectionCard data={collection} key={collection.cid} />
+      ))}
     </div>
   );
 };
