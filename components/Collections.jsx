@@ -2,14 +2,14 @@ import CollectionCard from "./CollectionCard";
 import { authOptions } from "@app/api/auth/[...nextauth]/route";
 import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
-import { unstable_cache } from "next/cache";
 
-const fetchCollections = unstable_cache(async () => {
+
+const fetchCollections = async () => {
   try {
     const prisma = new PrismaClient();
     const session = await getServerSession(authOptions);
     const uid = session?.user.id;
-    console.log("fetching");
+    console.log(uid);
     let collections = await prisma.collection.findMany({
       where: {
         uid: uid,
@@ -34,7 +34,7 @@ const fetchCollections = unstable_cache(async () => {
     console.log(err);
     return { status: 500 };
   }
-});
+};
 const Collections = async ({}) => {
   const res = await fetchCollections();
 
