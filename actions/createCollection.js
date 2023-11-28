@@ -9,78 +9,80 @@ import { revalidatePath } from "next/cache";
 async function createCollection(formData) {
   try {
     const prisma = new PrismaClient();
-    const file = formData.get("photos");
-    const collectionName = formData.get("collectionName");
     const session = await getServerSession(authOptions);
     const uid = session?.user.id;
+
     const thumbnailQuality = 10;
 
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const compressedBuffer = await sharp(buffer)
-      .jpeg({ quality: thumbnailQuality, progressive: true })
-      .toBuffer();
+    const collectionName = formData.get("collectionName");
+    const files = formData.getAll("photos");
 
-    // Insert into b2
     const b2 = new BackBlazeB2({
       applicationKey: process.env.BACKBLAZE_APP_KEY,
       applicationKeyId: process.env.BACKBLAZE_KEY_ID,
     });
     await b2.authorize();
 
-    // Insert thumbnail
-    let res = await b2.getUploadUrl({
-      bucketId: process.env.BACKBLAZE_BUCKET_ID,
-    });
-
-    let r = await b2.uploadFile({
-      uploadUrl: res.data.uploadUrl,
-      uploadAuthToken: res.data.authorizationToken,
-      fileName: `${uid}/thumbnail_${file.name}`,
-      data: compressedBuffer,
-    });
-
-    // Insert uncompressed image
-    res = await b2.getUploadUrl({
-      bucketId: process.env.BACKBLAZE_BUCKET_ID,
-    });
-
-    r = await b2.uploadFile({
-      uploadUrl: res.data.uploadUrl,
-      uploadAuthToken: res.data.authorizationToken,
-      fileName: `${uid}/${file.name}`,
-      data: compressedBuffer,
-    });
-
-    if (r.status === 200) {
-      const photo = await prisma.photo.create({
-        data: {
-          name: file.name,
-          user: { connect: { id: uid } },
-        },
+    files.forEach(async (file) => {
+      const buffer = Buffer.from(await file.arrayBuffer());
+      const compressedBuffer = await sharp(buffer)
+        .jpeg({ quality: thumbnailQuality, progressive: true })
+        .toBuffer();
+      // Insert thumbnail
+      let res = await b2.getUploadUrl({
+        bucketId: process.env.BACKBLAZE_BUCKET_ID,
       });
 
-      const collection = await prisma.collection.create({
-        data: {
-          name: collectionName,
-          user: { connect: { id: uid } },
-        },
+      await b2.uploadFile({
+        uploadUrl: res.data.uploadUrl,
+        uploadAuthToken: res.data.authorizationToken,
+        fileName: `${uid}/thumbnail_${file.name}`,
+        data: compressedBuffer,
       });
 
-      await prisma.collectionPhotos.create({
-        data: {
-          photo: { connect: { pid: photo.pid } },
-          collection: { connect: { cid: collection.cid } },
-        },
+      // Insert uncompressed image
+      res = await b2.getUploadUrl({
+        bucketId: process.env.BACKBLAZE_BUCKET_ID,
       });
-    }
+
+      await b2.uploadFile({
+        uploadUrl: res.data.uploadUrl,
+        uploadAuthToken: res.data.authorizationToken,
+        fileName: `${uid}/${file.name}`,
+        data: buffer,
+      });
+    });
+
+    let collection = await prisma.collection.create({
+      data: {
+        name: collectionName,
+        uid,
+        photos: {
+          create: files.map((file) => ({
+            name: file.name,
+            uid,
+          })),
+        },
+      },
+      include: { photos: true },
+    });
+    collection = await prisma.collection.update({
+      where: {
+        cid: collection.cid,
+      },
+      data: {
+        thumbnail: {
+          connect: {
+            pid: collection.photos[0].pid,
+          },
+        },
+      },
+    });
     revalidatePath("/");
-    return {
-      status: 200,
-      success: true,
-    };
+    return { status: 200 };
   } catch (err) {
     console.log(err);
-    return { status: 500, success: false };
+    return { status: 500 };
   }
 }
 

@@ -19,26 +19,21 @@ model User {
 }
 
 model Photo {
-  pid  Int    @id @default(autoincrement())
-  name String
-  user User   @relation(fields: [uid], references: [id])
-  uid  Int
-  collections CollectionPhotos[]
+  pid                    Int         @id @default(autoincrement())
+  name                   String
+  user                   User        @relation(fields: [uid], references: [id])
+  uid                    Int
+  collection             Collection? @relation(fields: [cid], references: [cid])
+  thumbnailForCollection Collection? @relation("thumbnail")
+  cid                    Int?
 }
 
 model Collection {
-  cid  Int    @id @default(autoincrement())
-  name String
-  user User   @relation(fields: [uid], references: [id])
-  uid  Int
-  photos CollectionPhotos[]
-}
-
-model CollectionPhotos {
-  cid        Int
-  collection Collection @relation(fields: [cid], references: [cid])
-  pid        Int
-  photo      Photo      @relation(fields: [pid], references: [pid])
-  @@map("collectionphotos")
-  @@id([cid, pid])
+  cid          Int     @id @default(autoincrement())
+  name         String
+  user         User    @relation(fields: [uid], references: [id])
+  uid          Int
+  photos       Photo[]
+  thumbnail    Photo?  @relation("thumbnail", fields: [thumbnailPid], references: [pid])
+  thumbnailPid Int?    @unique
 }
