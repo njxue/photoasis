@@ -17,11 +17,17 @@ async function createCollection(formData) {
     const collectionName = formData.get("collectionName");
     const files = formData.getAll("photos");
 
+    // Initialise b2
     const b2 = new BackBlazeB2({
       applicationKey: process.env.BACKBLAZE_APP_KEY,
       applicationKeyId: process.env.BACKBLAZE_KEY_ID,
     });
     await b2.authorize();
+    let res = await b2.getUploadUrl({
+      bucketId: process.env.BACKBLAZE_BUCKET_ID,
+    });
+    const uploadUrl = res.data.uploadUrl;
+
 
     files.forEach(async (file) => {
       const buffer = Buffer.from(await file.arrayBuffer());
@@ -32,23 +38,16 @@ async function createCollection(formData) {
         .jpeg({ quality: thumbnailQuality, progressive: true })
         .toBuffer();
       // Insert thumbnail
-      let res = await b2.getUploadUrl({
-        bucketId: process.env.BACKBLAZE_BUCKET_ID,
-      });
-
+      
       await b2.uploadFile({
-        uploadUrl: res.data.uploadUrl,
+        uploadUrl: uploadUrl,
         uploadAuthToken: res.data.authorizationToken,
         fileName: `${uid}/thumbnail_${file.name}`,
         data: compressedBuffer,
       });
 
-      res = await b2.getUploadUrl({
-        bucketId: process.env.BACKBLAZE_BUCKET_ID,
-      });
-
       await b2.uploadFile({
-        uploadUrl: res.data.uploadUrl,
+        uploadUrl: uploadUrl,
         uploadAuthToken: res.data.authorizationToken,
         fileName: `${uid}/${file.name}`,
         data: buffer,
