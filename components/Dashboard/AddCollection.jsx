@@ -31,6 +31,7 @@ const AddCollection = () => {
                 name="photos"
                 accept="image/png, image/jpg, image/jpeg"
                 multiple
+                required
               />
             </div>
             <SubmitButton />
