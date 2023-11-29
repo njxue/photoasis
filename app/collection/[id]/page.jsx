@@ -1,11 +1,10 @@
 import { authOptions } from "@app/api/auth/[...nextauth]/route";
 import PhotoCard from "@components/Collection/PhotoCard";
-import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import prisma from "@prisma/prisma";
 
 const fetchCollectionData = async (cid) => {
-  const prisma = new PrismaClient();
   const data = await prisma.collection.findUniqueOrThrow({
     where: {
       cid: cid,
