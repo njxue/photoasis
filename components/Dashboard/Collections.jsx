@@ -14,11 +14,9 @@ const fetchCollections = async () => {
         uid: uid,
       },
       include: {
-        photos: true,
         thumbnail: true,
       },
     });
-
     return {
       data: collections,
       status: 200,

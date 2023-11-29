@@ -12,7 +12,7 @@ async function createCollection(formData) {
     const session = await getServerSession(authOptions);
     const uid = session?.user.id;
 
-    const thumbnailQuality = 10;
+    const thumbnailQuality = 100;
 
     const collectionName = formData.get("collectionName");
     const files = formData.getAll("photos");
@@ -26,6 +26,9 @@ async function createCollection(formData) {
     files.forEach(async (file) => {
       const buffer = Buffer.from(await file.arrayBuffer());
       const compressedBuffer = await sharp(buffer)
+        .resize(1080, 720, {
+          fit: "inside",
+        })
         .jpeg({ quality: thumbnailQuality, progressive: true })
         .toBuffer();
       // Insert thumbnail

@@ -1,4 +1,4 @@
-import Dashboard from "@components/Dashboard";
+import Dashboard from "@components/Dashboard/Dashboard";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@app/api/auth/[...nextauth]/route";
 const Home = async () => {

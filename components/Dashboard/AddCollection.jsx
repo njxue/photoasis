@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
 import createCollection from "@actions/createCollection";
-import Modal from "./Modal/Modal";
-import { ModalBody } from "./Modal/ModalBody";
-import { ModalHeader } from "./Modal/ModalHeader";
-import SubmitButton from "./SubmitButton";
+import Modal from "../Modal/Modal";
+import { ModalBody } from "../Modal/ModalBody";
+import { ModalHeader } from "../Modal/ModalHeader";
+import SubmitButton from "../SubmitButton";
 const AddCollection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   async function handleCreateCollection(formdata) {
