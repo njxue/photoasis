@@ -43,7 +43,6 @@ async function createCollection(formData) {
         data: compressedBuffer,
       });
 
-      // Insert uncompressed image
       res = await b2.getUploadUrl({
         bucketId: process.env.BACKBLAZE_BUCKET_ID,
       });
@@ -56,31 +55,35 @@ async function createCollection(formData) {
       });
     });
 
-    let collection = await prisma.collection.create({
-      data: {
-        name: collectionName,
-        uid,
-        photos: {
-          create: files.map((file) => ({
-            name: file.name,
-            uid,
-          })),
-        },
-      },
-      include: { photos: true },
-    });
-    collection = await prisma.collection.update({
-      where: {
-        cid: collection.cid,
-      },
-      data: {
-        thumbnail: {
-          connect: {
-            pid: collection.photos[0].pid,
+    // Interactive transaction
+    await prisma.$transaction(async (prisma) => {
+      let collection = await prisma.collection.create({
+        data: {
+          name: collectionName,
+          uid,
+          photos: {
+            create: files.map((file) => ({
+              name: file.name,
+              uid,
+            })),
           },
         },
-      },
+        include: { photos: true },
+      });
+      collection = await prisma.collection.update({
+        where: {
+          cid: collection.cid,
+        },
+        data: {
+          thumbnail: {
+            connect: {
+              pid: collection.photos[0].pid,
+            },
+          },
+        },
+      });
     });
+
     revalidatePath("/");
     return { status: 200 };
   } catch (err) {
