@@ -26,10 +26,6 @@ async function createCollection(formData) {
       applicationKeyId: process.env.BACKBLAZE_KEY_ID,
     });
     await b2.authorize();
-    let res = await b2.getUploadUrl({
-      bucketId: process.env.BACKBLAZE_BUCKET_ID,
-    });
-    const uploadUrl = res.data.uploadUrl;
 
     files.forEach(async (file) => {
       const buffer = Buffer.from(await file.arrayBuffer());
@@ -40,7 +36,10 @@ async function createCollection(formData) {
         .jpeg({ quality: thumbnailQuality, progressive: true })
         .toBuffer();
       // Insert thumbnail
-
+      let res = await b2.getUploadUrl({
+        bucketId: process.env.BACKBLAZE_BUCKET_ID,
+      });
+      let uploadUrl = res.data.uploadUrl;
       await b2.uploadFile({
         uploadUrl: uploadUrl,
         uploadAuthToken: res.data.authorizationToken,
@@ -48,6 +47,10 @@ async function createCollection(formData) {
         data: compressedBuffer,
       });
 
+      res = await b2.getUploadUrl({
+        bucketId: process.env.BACKBLAZE_BUCKET_ID,
+      });
+      uploadUrl = res.data.uploadUrl;
       await b2.uploadFile({
         uploadUrl: uploadUrl,
         uploadAuthToken: res.data.authorizationToken,
@@ -58,22 +61,25 @@ async function createCollection(formData) {
 
     // Interactive transaction
     await prisma.$transaction(async (prisma) => {
-      let collection = await prisma.collection.create({
-        data: {
-          name: collectionName,
-          uid,
-          photos: {
-            create: files.map((file, i) => ({
-              name: file.name,
-              uid,
-              aperture: aperture[i],
-              shutterspeed: shutterspeed[i],
-              iso: parseInt(iso[i]),
-            })),
+      let collection = await prisma.collection.create(
+        {
+          data: {
+            name: collectionName,
+            uid,
+            photos: {
+              create: files.map((file, i) => ({
+                name: file.name,
+                uid,
+                aperture: parseInt(aperture[i]),
+                shutterspeed: shutterspeed[i],
+                iso: parseInt(iso[i]),
+              })),
+            },
           },
+          include: { photos: true },
         },
-        include: { photos: true },
-      });
+        { timeout: 10000 }
+      );
       collection = await prisma.collection.update({
         where: {
           cid: collection.cid,
