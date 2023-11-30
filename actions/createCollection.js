@@ -16,6 +16,9 @@ async function createCollection(formData) {
 
     const collectionName = formData.get("collectionName");
     const files = formData.getAll("photos");
+    const aperture = formData.getAll("aperture");
+    const shutterspeed = formData.getAll("shutterspeed");
+    const iso = formData.getAll("iso");
 
     // Initialise b2
     const b2 = new BackBlazeB2({
@@ -28,7 +31,6 @@ async function createCollection(formData) {
     });
     const uploadUrl = res.data.uploadUrl;
 
-
     files.forEach(async (file) => {
       const buffer = Buffer.from(await file.arrayBuffer());
       const compressedBuffer = await sharp(buffer)
@@ -38,7 +40,7 @@ async function createCollection(formData) {
         .jpeg({ quality: thumbnailQuality, progressive: true })
         .toBuffer();
       // Insert thumbnail
-      
+
       await b2.uploadFile({
         uploadUrl: uploadUrl,
         uploadAuthToken: res.data.authorizationToken,
@@ -61,9 +63,12 @@ async function createCollection(formData) {
           name: collectionName,
           uid,
           photos: {
-            create: files.map((file) => ({
+            create: files.map((file, i) => ({
               name: file.name,
               uid,
+              aperture: aperture[i],
+              shutterspeed: shutterspeed[i],
+              iso: parseInt(iso[i]),
             })),
           },
         },

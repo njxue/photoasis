@@ -26,6 +26,9 @@ model Photo {
   collection             Collection? @relation(fields: [cid], references: [cid])
   thumbnailForCollection Collection? @relation("thumbnail")
   cid                    Int?
+  aperture               Decimal?
+  shutterspeed           String?
+  iso                    Int?
 }
 
 model Collection {
