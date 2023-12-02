@@ -70,7 +70,7 @@ async function createCollection(formData) {
               create: files.map((file, i) => ({
                 name: file.name,
                 uid,
-                aperture: parseInt(aperture[i]),
+                aperture: parseFloat(aperture[i]),
                 shutterspeed: shutterspeed[i],
                 iso: parseInt(iso[i]),
               })),

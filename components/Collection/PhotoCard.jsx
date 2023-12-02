@@ -1,14 +1,17 @@
 import Image from "next/image";
 
 const PhotoCard = ({ photo }) => {
-  console.log(photo);
   return (
-    <div className="card w-[250px] h-[250px] cursor-pointer">
+    <div className="card w-[220px] h-[220px] cursor-pointer">
       <Image
         src={photo.url}
         width={0}
         height={0}
-        style={{ height: "70%", width: "100%", objectFit: "contain" }}
+        style={{
+          height: "80%",
+          width: "100%",
+          objectFit: "cover",
+        }}
       />
       <div className="flex flex-row justify-around items-center p-2">
         <div className="flex flex-row items-center gap-2">
