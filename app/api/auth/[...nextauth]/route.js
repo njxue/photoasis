@@ -12,10 +12,15 @@ const authOptions = {
 
   callbacks: {
     async session({ session }) {
-      const user = await prisma.user.findUnique({
-        where: { email: session.user.email },
-      });
-      session.user.id = user.id;
+      try {
+        const user = await prisma.user.findUniqueOrThrow({
+          where: { email: session.user.email },
+        });
+        session.user.id = user.id;
+      } catch (err) {
+        console.log(err);
+      }
+
       return session;
     },
     async signIn({ profile }) {
