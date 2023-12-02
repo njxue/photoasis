@@ -29,7 +29,7 @@ const Page = async ({ params }) => {
   const { photos } = collectionData;
 
   return (
-    <div className="flex flex-row flex-wrap">
+    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-7">
       {photos.map((photo) => (
         <PhotoCard photo={photo} key={photo.pid} />
       ))}
