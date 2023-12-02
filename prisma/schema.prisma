@@ -14,29 +14,29 @@ model User {
   email       String       @unique
   image       String?
   createdAt   DateTime     @default(now())
-  photos      Photo[]
   collections Collection[]
+  photos      Photo[]
 }
 
 model Photo {
   pid                    Int         @id @default(autoincrement())
   name                   String
-  user                   User        @relation(fields: [uid], references: [id])
   uid                    Int
-  collection             Collection? @relation(fields: [cid], references: [cid])
-  thumbnailForCollection Collection? @relation("thumbnail")
   cid                    Int?
   aperture               Decimal?
-  shutterspeed           String?
   iso                    Int?
+  shutterspeed           String?
+  thumbnailForCollection Collection? @relation("thumbnail")
+  collection             Collection? @relation(fields: [cid], references: [cid])
+  user                   User        @relation(fields: [uid], references: [id])
 }
 
 model Collection {
   cid          Int     @id @default(autoincrement())
   name         String
-  user         User    @relation(fields: [uid], references: [id])
   uid          Int
-  photos       Photo[]
-  thumbnail    Photo?  @relation("thumbnail", fields: [thumbnailPid], references: [pid])
   thumbnailPid Int?    @unique
+  thumbnail    Photo?  @relation("thumbnail", fields: [thumbnailPid], references: [pid])
+  user         User    @relation(fields: [uid], references: [id])
+  photos       Photo[]
 }
