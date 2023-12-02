@@ -1,5 +1,3 @@
 export const ModalBody = ({ children }) => {
-  return (
-    <div className="h-full border border-solid border-black">{children}</div>
-  );
+  return <div className="h-full">{children}</div>;
 };
