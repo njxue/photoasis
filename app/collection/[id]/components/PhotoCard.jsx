@@ -1,7 +1,7 @@
 "use client";
-import Modal from "@components/Modal/Modal";
-import { ModalBody } from "@components/Modal/ModalBody";
-import { ModalHeader } from "@components/Modal/ModalHeader";
+import Modal from "@app/components/Modal/Modal";
+import { ModalBody } from "@app/components/Modal/ModalBody";
+import { ModalHeader } from "@app/components/Modal/ModalHeader";
 import Image from "next/image";
 import { useState } from "react";
 import PhotoInfo from "./PhotoInfo";

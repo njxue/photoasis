@@ -1,5 +1,5 @@
 import { authOptions } from "@app/api/auth/[...nextauth]/route";
-import PhotoCard from "@components/Collection/PhotoCard";
+import PhotoCard from "@app/collection/[id]/components/PhotoCard";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import prisma from "@prisma/prisma";

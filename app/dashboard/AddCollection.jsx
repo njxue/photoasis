@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import createCollection from "@actions/createCollection";
-import Modal from "../Modal/Modal";
-import { ModalBody } from "../Modal/ModalBody";
-import { ModalHeader } from "../Modal/ModalHeader";
-import SubmitButton from "../SubmitButton";
-import { ModalFooter } from "@components/Modal/ModalFooter";
+import Modal from "../components/Modal/Modal";
+import { ModalBody } from "../components/Modal/ModalBody";
+import { ModalHeader } from "../components/Modal/ModalHeader";
+import SubmitButton from "../components/SubmitButton";
+import { ModalFooter } from "@app/components/Modal/ModalFooter";
 import Image from "next/image";
 import ExifReader from "exifreader";
 const AddCollection = () => {

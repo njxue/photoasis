@@ -19,7 +19,6 @@ async function createCollection(formData) {
     const aperture = formData.getAll("aperture");
     const shutterspeed = formData.getAll("shutterspeed");
     const iso = formData.getAll("iso");
-
     // Initialise b2
     const b2 = new BackBlazeB2({
       applicationKey: process.env.BACKBLAZE_APP_KEY,
