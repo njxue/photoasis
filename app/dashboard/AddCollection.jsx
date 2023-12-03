@@ -1,24 +1,57 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import createCollection from "@actions/createCollection";
-import Modal from "../components/Modal/Modal";
-import { ModalBody } from "../components/Modal/ModalBody";
-import { ModalHeader } from "../components/Modal/ModalHeader";
-import SubmitButton from "../components/SubmitButton";
+import Modal from "../../app/components/Modal/Modal";
+import { ModalBody } from "../../app/components/Modal/ModalBody";
+import { ModalHeader } from "../../app/components/Modal/ModalHeader";
+import SubmitButton from "../../app/components/SubmitButton";
 import { ModalFooter } from "@app/components/Modal/ModalFooter";
 import Image from "next/image";
 import ExifReader from "exifreader";
+import { b2GetUploadUrl } from "@utils/b2";
+import { useSession } from "next-auth/react";
+
 const AddCollection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [isLoadingPreview, setIsLoadingPreview] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
 
-  async function handleCreateCollection(formdata) {
-    const res = await createCollection(formdata);
+  const { data: session } = useSession();
+  const uid = session?.user.id;
 
-    if (res === 200) {
-      setIsModalOpen(false);
+  async function handleCreateCollection(formdata) {
+    try {
+      const files = formdata.getAll("photos");
+      const fileNames = [];
+      files.forEach(async (file) => {
+        // Replace input field for file object with file name
+        fileNames.push(file.name);
+        formdata.delete("photos");
+        formdata.append("fileName", file.name);
+
+        // Insert into b2
+        const buffer = Buffer.from(await file.arrayBuffer());
+        const { url, token } = await b2GetUploadUrl();
+        const res = await fetch(url, {
+          method: "POST",
+          headers: {
+            Authorization: token,
+            "X-Bz-File-Name": `${uid}/${file.name}`,
+            "Content-Type": "b2/x-auto",
+            "X-Bz-Content-Sha1": "do_not_verify",
+          },
+          body: buffer,
+        });
+      });
+
+      const res = await createCollection(formdata);
+      console.log(res);
+      if (res.status === 200) {
+        setIsModalOpen(false);
+      }
+    } catch (err) {
+      console.log(err);
     }
   }
 
@@ -33,7 +66,6 @@ const AddCollection = () => {
         : null;
       const iso = metadata["ISOSpeedRatings"]?.value;
       const shutterspeed = metadata["ShutterSpeedValue"]?.value;
-      console.log(aperture);
       previews.push({
         name: fileList[i].name,
         url: URL.createObjectURL(fileList[i]),

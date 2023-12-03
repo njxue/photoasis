@@ -12,51 +12,11 @@ async function createCollection(formData) {
     const session = await getServerSession(authOptions);
     const uid = session?.user.id;
 
-    const thumbnailQuality = 100;
-
     const collectionName = formData.get("collectionName");
-    const files = formData.getAll("photos");
+    const files = formData.getAll("fileName");
     const aperture = formData.getAll("aperture");
     const shutterspeed = formData.getAll("shutterspeed");
     const iso = formData.getAll("iso");
-    // Initialise b2
-    const b2 = new BackBlazeB2({
-      applicationKey: process.env.BACKBLAZE_APP_KEY,
-      applicationKeyId: process.env.BACKBLAZE_KEY_ID,
-    });
-    await b2.authorize();
-
-    files.forEach(async (file) => {
-      const buffer = Buffer.from(await file.arrayBuffer());
-      const compressedBuffer = await sharp(buffer)
-        .resize(1080, 720, {
-          fit: "inside",
-        })
-        .jpeg({ quality: thumbnailQuality, progressive: true })
-        .toBuffer();
-      // Insert thumbnail
-      let res = await b2.getUploadUrl({
-        bucketId: process.env.BACKBLAZE_BUCKET_ID,
-      });
-      let uploadUrl = res.data.uploadUrl;
-      await b2.uploadFile({
-        uploadUrl: uploadUrl,
-        uploadAuthToken: res.data.authorizationToken,
-        fileName: `${uid}/thumbnail_${file.name}`,
-        data: compressedBuffer,
-      });
-
-      res = await b2.getUploadUrl({
-        bucketId: process.env.BACKBLAZE_BUCKET_ID,
-      });
-      uploadUrl = res.data.uploadUrl;
-      await b2.uploadFile({
-        uploadUrl: uploadUrl,
-        uploadAuthToken: res.data.authorizationToken,
-        fileName: `${uid}/${file.name}`,
-        data: buffer,
-      });
-    });
 
     // Interactive transaction
     await prisma.$transaction(async (prisma) => {
@@ -67,7 +27,7 @@ async function createCollection(formData) {
             uid,
             photos: {
               create: files.map((file, i) => ({
-                name: file.name,
+                name: file,
                 uid,
                 aperture: parseFloat(aperture[i]),
                 shutterspeed: shutterspeed[i],
@@ -79,6 +39,7 @@ async function createCollection(formData) {
         },
         { timeout: 10000 }
       );
+      console.log(collection);
       collection = await prisma.collection.update({
         where: {
           cid: collection.cid,

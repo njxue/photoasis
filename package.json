@@ -13,6 +13,7 @@
     "@vercel/postgres": "^0.5.1",
     "aws4fetch": "^1.0.17",
     "backblaze-b2": "^1.7.0",
+    "compressjs": "^1.0.3",
     "exif-reader": "^2.0.0",
     "exifreader": "^4.17.0",
     "next": "14.0.2",

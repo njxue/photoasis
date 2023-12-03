@@ -30,12 +30,12 @@ const PhotoCard = ({ photo }) => {
             <img src="/assets/icons/aperture-black.svg" width={20} />
             <div>{photo.aperture === "" ? "-" : photo.aperture}</div>
           </div>
-          <div class="border-r border-gray-200 h-[20px] w-[1px]"></div>
+          <div className="border-r border-gray-200 h-[20px] w-[1px]"></div>
           <div className="flex flex-row items-center gap-2 flex-wrap">
             <img src="/assets/icons/shutterspeed-black.svg" width={20} />
             <div>{photo.shutterspeed === "" ? "-" : photo.shutterspeed}</div>
           </div>
-          <div class="border-r border-gray-200 h-[20px] w-[1px]"></div>
+          <div className="border-r border-gray-200 h-[20px] w-[1px]"></div>
           <div className="flex flex-row items-center gap-2 flex-wrap justify-center">
             <img src="/assets/icons/iso-black.svg" width={20} />
             <div>{photo.iso === "" ? "-" : photo.iso}</div>

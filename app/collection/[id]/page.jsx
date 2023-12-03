@@ -15,7 +15,7 @@ const fetchCollectionData = async (cid) => {
   });
   data.photos = data.photos.map((photo) => ({
     ...photo,
-    url: `${process.env.CLOUDFLARE_URL}/${data.uid}/thumbnail_${photo.name}`,
+    url: `${process.env.CLOUDFLARE_URL}/${data.uid}/${photo.name}`,
   }));
 
   return data;
