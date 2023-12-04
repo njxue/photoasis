@@ -26,7 +26,7 @@ const AddCollection = () => {
     try {
       const files = formdata.getAll("photos");
       const requests = files.map((file) => {
-        return new Promise(async (resolve, reject) => {
+        return new Promise((resolve, reject) => {
           (async () => {
             try {
               const compressed = await imageCompression(file, {
