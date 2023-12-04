@@ -11,13 +11,13 @@ const PhotoCard = ({ photo }) => {
   return (
     <>
       <div className="card min-w-[150px] min-h-[150px] cursor-pointer">
-        <Image
+        <img
           src={photo.url}
           width={0}
           height={0}
           style={{
             height: "80%",
-            width: "100%",
+            width: "100%  ",
             objectFit: "cover",
           }}
           alt={photo.name}

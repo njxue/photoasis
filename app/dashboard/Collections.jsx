@@ -16,7 +16,7 @@ const fetchCollections = async () => {
         thumbnail: true,
       },
     });
-    return {
+     return {
       data: collections,
       status: 200,
     };

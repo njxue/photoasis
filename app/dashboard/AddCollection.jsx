@@ -10,6 +10,7 @@ import Image from "next/image";
 import ExifReader from "exifreader";
 import { b2GetUploadUrl } from "@utils/b2";
 import { useSession } from "next-auth/react";
+import pako from "pako";
 
 const AddCollection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,17 +24,49 @@ const AddCollection = () => {
   async function handleCreateCollection(formdata) {
     try {
       const files = formdata.getAll("photos");
-      const fileNames = [];
-      files.forEach(async (file) => {
-        // Replace input field for file object with file name
-        fileNames.push(file.name);
+
+      /* const uploadFiles = () =>
+        new Promise((resolve, reject) => {
+          if (!window.Worker) {
+            console.log("Unable to create worker");
+          }
+          let count = 0;
+          let completed = 0;
+          files.forEach(async (file) => {
+            const worker = new Worker("worker.js");
+            formdata.delete("photos");
+            const buffer = Buffer.from(await file.arrayBuffer());
+
+            let { url, token } = await b2GetUploadUrl();
+            worker.postMessage({
+              buffer,
+              url,
+              token,
+              filename: `${uid}/${file.name}`,
+            });
+            count++;
+            worker.onmessage = (e) => {
+              worker.terminate();
+              completed++;
+
+              if (e.data) {
+                formdata.append("fileName", file.name);
+              } else {
+                console.log("failed to upload " + file.name);
+              }
+              if (14 === completed) {
+                resolve();
+              }
+            }; 
+          });
+        });
+      await uploadFiles(); */
+      const requests = files.map(async (file) => {
         formdata.delete("photos");
         formdata.append("fileName", file.name);
-
-        // Insert into b2
         const buffer = Buffer.from(await file.arrayBuffer());
-        const { url, token } = await b2GetUploadUrl();
-        const res = await fetch(url, {
+        let { url, token } = await b2GetUploadUrl();
+        return fetch(url, {
           method: "POST",
           headers: {
             Authorization: token,
@@ -42,11 +75,11 @@ const AddCollection = () => {
             "X-Bz-Content-Sha1": "do_not_verify",
           },
           body: buffer,
-        });
+        }).then((res) => console.log(res.status));
       });
+      await Promise.all(requests);
 
       const res = await createCollection(formdata);
-      console.log(res);
       if (res.status === 200) {
         setIsModalOpen(false);
       }

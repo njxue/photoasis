@@ -39,7 +39,6 @@ async function createCollection(formData) {
         },
         { timeout: 10000 }
       );
-      console.log(collection);
       collection = await prisma.collection.update({
         where: {
           cid: collection.cid,
