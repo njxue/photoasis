@@ -11,6 +11,7 @@ import ExifReader from "exifreader";
 import { b2GetUploadUrl } from "@utils/b2";
 import { useSession } from "next-auth/react";
 import pako from "pako";
+import imageCompression from "browser-image-compression";
 
 const AddCollection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,64 +25,40 @@ const AddCollection = () => {
   async function handleCreateCollection(formdata) {
     try {
       const files = formdata.getAll("photos");
-
-      /* const uploadFiles = () =>
-        new Promise((resolve, reject) => {
-          if (!window.Worker) {
-            console.log("Unable to create worker");
-          }
-          let count = 0;
-          let completed = 0;
-          files.forEach(async (file) => {
-            const worker = new Worker("worker.js");
-            formdata.delete("photos");
-            const buffer = Buffer.from(await file.arrayBuffer());
-
-            let { url, token } = await b2GetUploadUrl();
-            worker.postMessage({
-              buffer,
-              url,
-              token,
-              filename: `${uid}/${file.name}`,
-            });
-            count++;
-            worker.onmessage = (e) => {
-              worker.terminate();
-              completed++;
-
-              if (e.data) {
-                formdata.append("fileName", file.name);
-              } else {
-                console.log("failed to upload " + file.name);
-              }
-              if (14 === completed) {
-                resolve();
-              }
-            }; 
-          });
+      const requests = files.map((file) => {
+        return new Promise(async (resolve, reject) => {
+          (async () => {
+            try {
+              const compressed = await imageCompression(file, {
+                maxSizeMB: 0.5,
+              });
+              formdata.delete("photos");
+              formdata.append("fileName", file.name);
+              let { url, token } = await b2GetUploadUrl();
+              const res = await fetch(url, {
+                method: "POST",
+                headers: {
+                  Authorization: token,
+                  "X-Bz-File-Name": `${uid}/${file.name}`,
+                  "Content-Type": "b2/x-auto",
+                  "X-Bz-Content-Sha1": "do_not_verify",
+                },
+                body: compressed,
+              });
+              return resolve(res);
+            } catch (err) {
+              console.log(err);
+              reject(err);
+            }
+          })();
         });
-      await uploadFiles(); */
-      const requests = files.map(async (file) => {
-        formdata.delete("photos");
-        formdata.append("fileName", file.name);
-        const buffer = Buffer.from(await file.arrayBuffer());
-        let { url, token } = await b2GetUploadUrl();
-        return fetch(url, {
-          method: "POST",
-          headers: {
-            Authorization: token,
-            "X-Bz-File-Name": `${uid}/${file.name}`,
-            "Content-Type": "b2/x-auto",
-            "X-Bz-Content-Sha1": "do_not_verify",
-          },
-          body: buffer,
-        }).then((res) => console.log(res.status));
       });
-      await Promise.all(requests);
-
+      const uploadFiles = await Promise.all(requests);
       const res = await createCollection(formdata);
       if (res.status === 200) {
         setIsModalOpen(false);
+      } else {
+        console.log(err);
       }
     } catch (err) {
       console.log(err);

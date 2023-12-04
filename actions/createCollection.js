@@ -1,7 +1,5 @@
 "use server";
 
-import BackBlazeB2 from "backblaze-b2";
-import sharp from "sharp";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@app/api/auth/[...nextauth]/route";
 import { PrismaClient } from "@prisma/client";
