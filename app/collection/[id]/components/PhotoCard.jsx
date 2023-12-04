@@ -10,7 +10,7 @@ const PhotoCard = ({ photo }) => {
   const [expandPhoto, setExpandPhoto] = useState(false);
   return (
     <>
-      <div className="card min-w-[150px] min-h-[150px] cursor-pointer">
+      <div className="card min-w-[150px] min-h-[150px] h-full cursor-pointer">
         <img
           src={photo.url}
           width={0}
@@ -56,6 +56,8 @@ const PhotoCard = ({ photo }) => {
               height: "100%",
               width: "100%",
               objectFit: "contain",
+              maxHeight: "80vh",
+              maxWidth: "90vw",
             }}
             alt={photo.name}
             onClick={() => {}}

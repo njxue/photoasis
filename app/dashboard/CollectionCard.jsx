@@ -4,12 +4,12 @@ const CollectionCard = ({ data }) => {
   const { uid, name, cid, thumbnail } = data;
   return (
     <Link href={`/collection/${cid}`}>
-      <div className="card min-w-[150px] min-h-[150px] cursor-pointer">
+      <div className="card min-w-[150px] min-h-[150px] h-full cursor-pointer">
         <Image
           src={`${process.env.CLOUDFLARE_URL}/${uid}/${thumbnail?.name}`}
           width={0}
           height={0}
-          style={{ height: "70%", width: "100%" }}
+          style={{ height: "75%", width: "100%" }}
           alt={name}
         />
 
