@@ -8,9 +8,8 @@ import SubmitButton from "../../app/components/SubmitButton";
 import { ModalFooter } from "@app/components/Modal/ModalFooter";
 import Image from "next/image";
 import ExifReader from "exifreader";
-import { b2GetUploadUrl, b2GetUploadUrls } from "@utils/b2";
+import { b2GetUploadUrls } from "@actions/b2";
 import { useSession } from "next-auth/react";
-import pako from "pako";
 import imageCompression from "browser-image-compression";
 
 const AddCollection = () => {
