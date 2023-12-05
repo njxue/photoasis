@@ -6,7 +6,7 @@ onmessage = async (e) => {
       method: "POST",
       headers: {
         Authorization: file.token,
-        "X-Bz-File-Name": `${uid}/${file.name}`,
+        "X-Bz-File-Name": `${uid}/${encodeURIComponent(file.name)}`,
         "Content-Type": "b2/x-auto",
         "X-Bz-Content-Sha1": "do_not_verify",
       },
