@@ -8,7 +8,7 @@ import SubmitButton from "../../app/components/SubmitButton";
 import { ModalFooter } from "@app/components/Modal/ModalFooter";
 import Image from "next/image";
 import ExifReader from "exifreader";
-import { b2GetUploadUrl } from "@utils/b2";
+import { b2GetUploadUrl, b2GetUploadUrls } from "@utils/b2";
 import { useSession } from "next-auth/react";
 import pako from "pako";
 import imageCompression from "browser-image-compression";
@@ -24,41 +24,45 @@ const AddCollection = () => {
 
   async function handleCreateCollection(formdata) {
     try {
-      const files = formdata.getAll("photos");
-      const requests = files.map((file) => {
+      let files = formdata.getAll("photos");
+      const uploadUrlsAndTokens = await b2GetUploadUrls(files.length);
+      files = files.map(async (file, i) => {
+        formdata.delete("photos");
+        formdata.append("fileName", file.name);
+        const { url, token } = uploadUrlsAndTokens[i];
+        const compressed = await imageCompression(file, {
+          maxSizeMB: 0.5,
+        });
         return new Promise((resolve, reject) => {
-          (async () => {
-            try {
-              const compressed = await imageCompression(file, {
-                maxSizeMB: 0.5,
-              });
-              formdata.delete("photos");
-              formdata.append("fileName", file.name);
-              let { url, token } = await b2GetUploadUrl();
-              const res = await fetch(url, {
-                method: "POST",
-                headers: {
-                  Authorization: token,
-                  "X-Bz-File-Name": `${uid}/${file.name}`,
-                  "Content-Type": "b2/x-auto",
-                  "X-Bz-Content-Sha1": "do_not_verify",
-                },
-                body: compressed,
-              });
-              return resolve(res);
-            } catch (err) {
-              console.log(err);
-              reject(err);
-            }
-          })();
+          resolve({
+            name: file.name,
+            compressed,
+            url,
+            token,
+          });
         });
       });
-      const uploadFiles = await Promise.all(requests);
-      const res = await createCollection(formdata);
-      if (res.status === 200) {
-        setIsModalOpen(false);
-      } else {
-        console.log(err);
+      files = await Promise.all(files);
+      const chunkSize = 1;
+      let numChunks = Math.ceil(files.length / chunkSize);
+      let completed = 0;
+
+      for (let i = 0; i < files.length; i += chunkSize) {
+        const chunk = files.slice(i, i + chunkSize);
+        const worker = new Worker("worker.js");
+        worker.postMessage({ chunk, uid });
+        worker.onmessage = async (e) => {
+          completed++;
+          worker.terminate();
+          if (completed === numChunks) {
+            const res = await createCollection(formdata);
+            if (res.status === 200) {
+              setIsModalOpen(false);
+            } else {
+              console.log(err);
+            }
+          }
+        };
       }
     } catch (err) {
       console.log(err);
@@ -69,13 +73,21 @@ const AddCollection = () => {
     setIsLoadingPreview(true);
     const fileList = e.target.files;
     const previews = [];
+    let aperture = null;
+    let iso = null;
+    let shutterspeed = null;
     for (let i = 0; i < fileList.length; i++) {
-      const metadata = await ExifReader.load(fileList[i]);
-      const aperture = metadata["FNumber"]
-        ? metadata["FNumber"].value[0] / metadata["FNumber"].value[1]
-        : null;
-      const iso = metadata["ISOSpeedRatings"]?.value;
-      const shutterspeed = metadata["ShutterSpeedValue"]?.value;
+      try {
+        const metadata = await ExifReader.load(fileList[i]);
+        aperture = metadata["FNumber"]
+          ? metadata["FNumber"].value[0] / metadata["FNumber"].value[1]
+          : null;
+        iso = metadata["ISOSpeedRatings"]?.value;
+        shutterspeed = metadata["ShutterSpeedValue"]?.value;
+      } catch (err) {
+        console.log("No metadata");
+      }
+
       previews.push({
         name: fileList[i].name,
         url: URL.createObjectURL(fileList[i]),
