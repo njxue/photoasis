@@ -13,6 +13,14 @@ onmessage = async (e) => {
       body: file.compressed,
     });
   });
-  const uploadFiles = await Promise.all(requests);
-  postMessage("ok");
+  const res = await Promise.all(requests);
+  const fileInfos = await Promise.all(res.map((r) => r.json()));
+
+  postMessage(
+    chunk.map((file, i) => ({
+      idx: file.idx,
+      name: file.name,
+      fileId: fileInfos[i].fileId,
+    }))
+  );
 };

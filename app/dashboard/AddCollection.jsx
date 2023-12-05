@@ -24,10 +24,13 @@ const AddCollection = () => {
   async function handleCreateCollection(formdata) {
     try {
       let files = formdata.getAll("photos");
+      // Generate all urls
       const uploadUrlsAndTokens = await b2GetUploadUrls(files.length);
+
+      // Compress and assign upload urls and auth tokens
       files = files.map(async (file, i) => {
+        // To avoid sending the entire File object to server, which may exceed the payload limit
         formdata.delete("photos");
-        formdata.append("fileName", file.name);
         const { url, token } = uploadUrlsAndTokens[i];
         const compressed = await imageCompression(file, {
           maxSizeMB: 0.5,
@@ -38,27 +41,29 @@ const AddCollection = () => {
             compressed,
             url,
             token,
+            idx: i,
           });
         });
       });
       files = await Promise.all(files);
-      const chunkSize = 1;
+
+      // Delegate workers to perform parallel fetch
+      const chunkSize = 1; // Number of fetch requests per worker
       let numChunks = Math.ceil(files.length / chunkSize);
       let completed = 0;
-
+      let fileInfos = [];
       for (let i = 0; i < files.length; i += chunkSize) {
         const chunk = files.slice(i, i + chunkSize);
         const worker = new Worker("worker.js");
         worker.postMessage({ chunk, uid });
         worker.onmessage = async (e) => {
+          fileInfos = fileInfos.concat(e.data);
           completed++;
           worker.terminate();
           if (completed === numChunks) {
-            const res = await createCollection(formdata);
+            const res = await createCollection(formdata, fileInfos);
             if (res.status === 200) {
               setIsModalOpen(false);
-            } else {
-              console.log(err);
             }
           }
         };

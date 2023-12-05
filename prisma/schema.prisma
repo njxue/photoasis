@@ -19,7 +19,7 @@ model User {
 }
 
 model Photo {
-  pid                    Int         @id @default(autoincrement())
+  pid                    String      @id
   name                   String
   uid                    Int
   cid                    Int?
@@ -35,7 +35,7 @@ model Collection {
   cid          Int     @id @default(autoincrement())
   name         String
   uid          Int
-  thumbnailPid Int?    @unique
+  thumbnailPid String? @unique
   thumbnail    Photo?  @relation("thumbnail", fields: [thumbnailPid], references: [pid])
   user         User    @relation(fields: [uid], references: [id])
   photos       Photo[]
