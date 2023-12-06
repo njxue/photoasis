@@ -162,6 +162,7 @@ const AddCollection = () => {
                         onClick={handleClickPhoto}
                         key={image.name}
                         id={image.name}
+                        alt={image.name}
                         priority={true}
                       />
                     ))}
