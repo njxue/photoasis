@@ -11,7 +11,7 @@ async function deleteCollection(cid) {
   const uid = session?.user.id;
 
   if (uid == null) {
-    // Handle error
+    return { status: 500, message: "Authentication error" };
   }
 
   // List all photos to delete, for b2 deletion
@@ -21,21 +21,38 @@ async function deleteCollection(cid) {
     },
   });
 
-  await prisma.$transaction(async (prisma) => {
-    let res = await prisma.photo.deleteMany({
+  const dbDeleteRes = await prisma.$transaction(async (prisma) => {
+    const res = await prisma.photo.deleteMany({
       where: {
         cid: cid,
+        uid: uid,
       },
     });
-    if (res.count === 0) {
-      // Error
+    if (res.count !== photosToDelete.length) {
+      return {
+        status: 500,
+        message: "Unable to delete photos in this colelction",
+      };
     }
-    res = await prisma.collection.delete({
+
+    const deletedCollection = await prisma.collection.delete({
       where: {
-        cid: cid,
+        cid_uid: { cid, uid },
       },
     });
+    if (!deletedCollection) {
+      return { status: 500, message: "Unable to delete collection" };
+    }
+    return {
+      status: 200,
+      message: "Success",
+      data: { ...deletedCollection, photos: photosToDelete },
+    };
   });
+
+  if (dbDeleteRes.status !== 200) {
+    return dbDeleteRes;
+  }
 
   const b2 = new BackBlazeB2({
     applicationKey: process.env.BACKBLAZE_APP_KEY,
@@ -44,16 +61,22 @@ async function deleteCollection(cid) {
 
   await b2.authorize();
 
-  // TODO: Make this atomic
   const deleteRequests = photosToDelete.map((photo) => {
     const b2Id = photo.pid;
-    const b2Name = `${uid}/${photo.name}`;
-    return b2.deleteFileVersion({ fileId: b2Id, fileName: b2Name });
+    const b2Name = `${uid}/${cid}/${photo.name}`;
+    return b2
+      .deleteFileVersion({ fileId: b2Id, fileName: "force error" })
+      .catch((err) => Promise.reject(err));
   });
 
-  const b2res = await Promise.all(deleteRequests);
-  revalidatePath("/");
-  return { status: 2040 };
+  try {
+    await Promise.all(deleteRequests);
+    revalidatePath("/");
+    return { status: 204, message: "Success" };
+  } catch (err) {
+    revalidatePath("/");
+    return { status: 204, message: "File(s) not found" };
+  }
 }
 
 export default deleteCollection;

@@ -15,7 +15,6 @@ model User {
   image       String?
   createdAt   DateTime     @default(now())
   collections Collection[]
-  photos      Photo[]
 }
 
 model Photo {
@@ -27,16 +26,17 @@ model Photo {
   iso                    Int?
   shutterspeed           String?
   thumbnailForCollection Collection? @relation("thumbnail")
-  collection             Collection? @relation(fields: [cid], references: [cid])
-  user                   User        @relation(fields: [uid], references: [id])
+  collection             Collection? @relation(fields: [cid, uid], references: [cid, uid])
 }
 
 model Collection {
-  cid          Int     @id @default(autoincrement())
+  cid          Int     @default(autoincrement())
   name         String
   uid          Int
   thumbnailPid String? @unique
   thumbnail    Photo?  @relation("thumbnail", fields: [thumbnailPid], references: [pid])
   user         User    @relation(fields: [uid], references: [id])
   photos       Photo[]
+
+  @@id([cid, uid])
 }

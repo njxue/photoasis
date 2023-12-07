@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import createCollection from "@actions/createCollection";
 import Modal from "../../app/components/Modal/Modal";
 import { ModalBody } from "../../app/components/Modal/ModalBody";
 import { ModalHeader } from "../../app/components/Modal/ModalHeader";
@@ -8,10 +7,11 @@ import SubmitButton from "../../app/components/SubmitButton";
 import { ModalFooter } from "@app/components/Modal/ModalFooter";
 import Image from "next/image";
 import ExifReader from "exifreader";
-import { b2GetUploadUrls } from "@actions/b2";
+import { b2GetUploadUrls, b2GetUploadUrl } from "@actions/b2";
 import { useSession } from "next-auth/react";
 import imageCompression from "browser-image-compression";
-
+import updateCollection from "@actions/updateCollection";
+import createCollection from "@actions/createCollection";
 const AddCollection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imagePreviews, setImagePreviews] = useState([]);
@@ -24,14 +24,23 @@ const AddCollection = () => {
   async function handleCreateCollection(formdata) {
     try {
       let files = formdata.getAll("photos");
-      // Generate all urls
-      const uploadUrlsAndTokens = await b2GetUploadUrls(files.length);
+      const aperture = formdata.getAll("aperture");
+      const shutterspeed = formdata.getAll("shutterspeed");
+      const iso = formdata.getAll("iso");
+      const collectionName = formdata.get("collectionName");
 
+      const collectionRes = await createCollection({
+        collectionName,
+      });
+      if (collectionRes.status !== 200) {
+        // Handle error
+      }
+      const cid = collectionRes.data.cid;
       // Compress and assign upload urls and auth tokens
       files = files.map(async (file, i) => {
         // To avoid sending the entire File object to server, which may exceed the payload limit
         formdata.delete("photos");
-        const { url, token } = uploadUrlsAndTokens[i];
+        const { url, token } = await b2GetUploadUrl();
         const compressed = await imageCompression(file, {
           maxSizeMB: 0.5,
         });
@@ -41,7 +50,9 @@ const AddCollection = () => {
             compressed,
             url,
             token,
-            idx: i,
+            aperture: aperture[i],
+            shutterspeed: shutterspeed[i],
+            iso: iso[i],
           });
         });
       });
@@ -55,13 +66,19 @@ const AddCollection = () => {
       for (let i = 0; i < files.length; i += chunkSize) {
         const chunk = files.slice(i, i + chunkSize);
         const worker = new Worker("worker.js");
-        worker.postMessage({ chunk, uid });
+        worker.postMessage({ chunk, uid, cid });
         worker.onmessage = async (e) => {
-          fileInfos = fileInfos.concat(e.data);
+          const res = e.data;
+          const fileInfo = res.data;
+          fileInfos = fileInfos.concat(fileInfo);
           completed++;
           worker.terminate();
           if (completed === numChunks) {
-            const res = await createCollection(formdata, fileInfos);
+            const res = await updateCollection({
+              cid,
+              collectionName,
+              photos: fileInfos,
+            });
             if (res.status === 200) {
               setIsModalOpen(false);
             }

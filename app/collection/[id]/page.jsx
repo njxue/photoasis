@@ -4,10 +4,10 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import prisma from "@prisma/prisma";
 
-const fetchCollectionData = async (cid) => {
+const fetchCollectionData = async (cid, uid) => {
   const data = await prisma.collection.findUniqueOrThrow({
     where: {
-      cid: cid,
+      cid_uid: { cid, uid },
     },
     include: {
       photos: true,
@@ -15,7 +15,7 @@ const fetchCollectionData = async (cid) => {
   });
   data.photos = data.photos.map((photo) => ({
     ...photo,
-    url: `${process.env.CLOUDFLARE_URL}/${data.uid}/${photo.name}`,
+    url: `${process.env.CLOUDFLARE_URL}/${uid}/${cid}/${photo.name}`,
   }));
 
   return data;
@@ -25,7 +25,10 @@ const Page = async ({ params }) => {
   if (!session?.user) {
     redirect("/");
   }
-  const collectionData = await fetchCollectionData(parseInt(params.id));
+  const collectionData = await fetchCollectionData(
+    parseInt(params.id),
+    session.user.id
+  );
   const { photos } = collectionData;
 
   return (
