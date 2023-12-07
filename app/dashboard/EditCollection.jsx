@@ -1,6 +1,7 @@
 "use client";
 
 import deleteCollection from "@actions/deleteCollection";
+import updateCollection from "@actions/updateCollection";
 import Modal from "@app/components/Modal/Modal";
 import { ModalBody } from "@app/components/Modal/ModalBody";
 import { ModalHeader } from "@app/components/Modal/ModalHeader";
@@ -22,6 +23,12 @@ const EditCollection = ({ data }) => {
       }
     }
   }
+
+  async function handleUpdateCollection(formdata) {
+    const collectionName = formdata.get("collectionName");
+    await updateCollection({ cid, collectionName });
+    setIsEditModalOpen(false);
+  }
   return (
     <>
       <div className="absolute right-0 top-0 bg-black w-[15%] opacity-0 rounded p-1 hover:opacity-50">
@@ -37,7 +44,7 @@ const EditCollection = ({ data }) => {
         <ModalHeader>Edit</ModalHeader>
         <ModalBody>
           <div className="flex flex-col justify-between h-full">
-            <form>
+            <form action={handleUpdateCollection}>
               <label htmlFor="collectionName">Name:</label>
               <input
                 className="w-full border border-solid border-gray-600 rounded p-1"
@@ -46,6 +53,7 @@ const EditCollection = ({ data }) => {
                 defaultValue={name}
                 placeholder="Collection Name"
               />
+              <SubmitButton text="Save" />
             </form>
             <button
               onClick={() => {
@@ -74,7 +82,11 @@ const EditCollection = ({ data }) => {
             <div className="flex flex-row gap-1 w-full mt-1">
               <SubmitButton text="Yes" />
 
-              <button className="bg-red-700 rounded p-2 text-white w-full">
+              <button
+                onClick={() => {
+                  setIsConfirmationModalOpen(false);
+                }}
+                className="bg-red-700 rounded p-2 text-white w-full">
                 No
               </button>
             </div>
