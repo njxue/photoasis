@@ -7,7 +7,7 @@ import { ModalHeader } from "@app/components/Modal/ModalHeader";
 import SubmitButton from "@app/components/SubmitButton";
 import { useState } from "react";
 
-const EditButton = ({ data }) => {
+const EditCollection = ({ data }) => {
   const { name, cid } = data;
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
@@ -85,4 +85,4 @@ const EditButton = ({ data }) => {
   );
 };
 
-export default EditButton;
+export default EditCollection;

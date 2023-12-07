@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import EditButton from "./EditButton";
+import EditCollection from "./EditCollection";
 const CollectionCard = ({ data }) => {
   const { uid, name, cid, thumbnail } = data;
   return (
@@ -15,7 +15,7 @@ const CollectionCard = ({ data }) => {
         />
         <div className="px-5 py-3">{name}</div>
       </Link>
-      <EditButton data={{ cid, name }} />
+      <EditCollection data={{ cid, name }} />
     </div>
   );
 };
