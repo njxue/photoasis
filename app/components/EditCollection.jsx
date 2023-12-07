@@ -2,10 +2,10 @@
 
 import deleteCollection from "@actions/deleteCollection";
 import updateCollection from "@actions/updateCollection";
-import Modal from "@app/components/Modal/Modal";
-import { ModalBody } from "@app/components/Modal/ModalBody";
-import { ModalHeader } from "@app/components/Modal/ModalHeader";
-import SubmitButton from "@app/components/SubmitButton";
+import Modal from "@app/common/Modal/Modal";
+import { ModalBody } from "@app/common/Modal/ModalBody";
+import { ModalHeader } from "@app/common/Modal/ModalHeader";
+import SubmitButton from "@app/common/SubmitButton";
 import { useState } from "react";
 
 const EditCollection = ({ data }) => {

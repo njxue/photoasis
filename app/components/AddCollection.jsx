@@ -1,13 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
-import Modal from "../../app/components/Modal/Modal";
-import { ModalBody } from "../../app/components/Modal/ModalBody";
-import { ModalHeader } from "../../app/components/Modal/ModalHeader";
-import SubmitButton from "../../app/components/SubmitButton";
-import { ModalFooter } from "@app/components/Modal/ModalFooter";
+import Modal from "@app/common/Modal/Modal";
+import { ModalBody } from "@app/common/Modal/ModalBody";
+import { ModalHeader } from "@app/common/Modal/ModalHeader";
+import SubmitButton from "@app/common/SubmitButton";
 import Image from "next/image";
 import ExifReader from "exifreader";
-import { b2GetUploadUrls, b2GetUploadUrl } from "@actions/b2";
+import { b2GetUploadUrl } from "@actions/b2";
 import { useSession } from "next-auth/react";
 import imageCompression from "browser-image-compression";
 import updateCollection from "@actions/updateCollection";
@@ -221,7 +220,6 @@ const AddCollection = () => {
             <SubmitButton />
           </form>
         </ModalBody>
-        <ModalFooter>test</ModalFooter>
       </Modal>
     </>
   );
