@@ -17,17 +17,18 @@ const Login = () => {
   return (
     <div className="relative h-full w-full flex flex-row justify-center items-center bg-[url('/assets/images/polaroid.jpg')] bg-cover bg-center bg-no-repeat">
       <div class="absolute top-0 left-0 w-full h-full bg-white bg-opacity-50"></div>
-      <div className="flex flex-col justify-center items-center w-[90%] sm:w-1/2 z-50">
-        <div className="text-4xl font-bold">Placeholder name</div>
-        <div className="mt-10">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut a sed
-          doloremque odit dicta, officiis aliquam iste nam vel, assumenda
-          nostrum minima ipsum laudantium reiciendis facere accusamus esse culpa
-          explicabo!
-        </div>
-        <div className="mt-10 w-full md:w-1/2">
-          {providers &&
-            Object.values(providers).map((provider) => (
+
+      {providers && (
+        <div className="flex flex-col justify-center items-center w-[90%] sm:w-1/2 z-50 animate-fadeInAndSlideDown">
+          <div className="text-4xl font-bold">Placeholder name</div>
+          <div className="mt-10">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut a sed
+            doloremque odit dicta, officiis aliquam iste nam vel, assumenda
+            nostrum minima ipsum laudantium reiciendis facere accusamus esse
+            culpa explicabo!
+          </div>
+          <div className="mt-10 w-full md:w-1/2">
+            {Object.values(providers).map((provider) => (
               <button
                 onClick={() => signIn(provider.id)}
                 className="flex flex-row justify-center items-center gap-3 h-[40px] w-full border border-solid border-gray-500 rounded p-2">
@@ -38,9 +39,9 @@ const Login = () => {
                 <p>Sign in with {capitalize(provider.id)}</p>
               </button>
             ))}
+          </div>
         </div>
-      </div>
-      {/* <img className="w-[100vw] h-[100vh] object-contain" src="/assets/images/test.JPG" /> */}
+      )}
     </div>
   );
 };

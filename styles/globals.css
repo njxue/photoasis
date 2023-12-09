@@ -6,3 +6,32 @@
   @apply border border-solid border-gray-200 shadow-lg rounded;
   position: relative;
 }
+
+@keyframes fadeInAndSlideRight {
+  0% {
+    opacity: 0;
+    transform: translateX(-20%);
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInAndSlideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-20%);
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.animate-fadeInAndSlideRight {
+  animation: fadeInAndSlideRight 1s ease-out;
+}
+
+
+.animate-fadeInAndSlideDown{
+  animation: fadeInAndSlideDown 1s ease-out;
+}
