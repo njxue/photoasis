@@ -9,7 +9,7 @@ const PhotoCard = ({ photo }) => {
   const [expandPhoto, setExpandPhoto] = useState(false);
   return (
     <>
-      <div className="card min-w-[150px] min-h-[150px]  cursor-pointer">
+      <div className="card">
         <img
           src={photo.url}
           width={0}

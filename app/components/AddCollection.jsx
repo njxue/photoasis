@@ -132,7 +132,13 @@ const AddCollection = () => {
 
   return (
     <>
-      <button onClick={() => setIsModalOpen(true)}>Create new</button>
+      <div
+        onClick={() => setIsModalOpen(true)}
+        className="flex flex-col gap-3 justify-center items-center border border-dashed border-gray-500 cursor-pointer h-[250px]">
+        <p>New Collection</p>
+        <img src="/assets/icons/add.svg" width={30} height={30} />
+      </div>
+      {/* <button onClick={() => setIsModalOpen(true)}>Create new</button> */}
       <Modal isOpen={isModalOpen} setOpen={setIsModalOpen}>
         <ModalHeader size="lg">New Collection</ModalHeader>
         <ModalBody>

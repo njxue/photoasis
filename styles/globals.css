@@ -3,8 +3,7 @@
 @tailwind utilities;
 
 .card {
-  @apply border border-solid border-gray-200 shadow-lg rounded;
-  position: relative;
+  @apply border border-solid border-gray-200 shadow-lg rounded h-[250px] cursor-pointer;
 }
 
 @keyframes fadeInAndSlideRight {
