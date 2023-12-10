@@ -11,6 +11,7 @@ import { useSession } from "next-auth/react";
 import imageCompression from "browser-image-compression";
 import updateCollection from "@actions/updateCollection";
 import createCollection from "@actions/createCollection";
+import formUploadPhotos from "@utils/formUploadPhotos";
 const AddCollection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imagePreviews, setImagePreviews] = useState([]);
@@ -22,10 +23,6 @@ const AddCollection = () => {
 
   async function handleCreateCollection(formdata) {
     try {
-      let files = formdata.getAll("photos");
-      const aperture = formdata.getAll("aperture");
-      const shutterspeed = formdata.getAll("shutterspeed");
-      const iso = formdata.getAll("iso");
       const collectionName = formdata.get("collectionName");
 
       const collectionRes = await createCollection({
@@ -35,55 +32,9 @@ const AddCollection = () => {
         // Handle error
       }
       const cid = collectionRes.data.cid;
-      // Compress and assign upload urls and auth tokens
-      files = files.map(async (file, i) => {
-        // To avoid sending the entire File object to server, which may exceed the payload limit
-        formdata.delete("photos");
-        const { url, token } = await b2GetUploadUrl();
-        const compressed = await imageCompression(file, {
-          maxSizeMB: 0.5,
-        });
-        return new Promise((resolve, reject) => {
-          resolve({
-            name: file.name,
-            compressed,
-            url,
-            token,
-            aperture: aperture[i],
-            shutterspeed: shutterspeed[i],
-            iso: iso[i],
-          });
-        });
+      await formUploadPhotos(cid, uid, formdata, () => {
+        setIsModalOpen(false);
       });
-      files = await Promise.all(files);
-
-      // Delegate workers to perform parallel fetch
-      const chunkSize = 1; // Number of fetch requests per worker
-      let numChunks = Math.ceil(files.length / chunkSize);
-      let completed = 0;
-      let fileInfos = [];
-      for (let i = 0; i < files.length; i += chunkSize) {
-        const chunk = files.slice(i, i + chunkSize);
-        const worker = new Worker("worker.js");
-        worker.postMessage({ chunk, uid, cid });
-        worker.onmessage = async (e) => {
-          const res = e.data;
-          const fileInfo = res.data;
-          fileInfos = fileInfos.concat(fileInfo);
-          completed++;
-          worker.terminate();
-          if (completed === numChunks) {
-            const res = await updateCollection({
-              cid,
-              collectionName,
-              photos: fileInfos,
-            });
-            if (res.status === 200) {
-              setIsModalOpen(false);
-            }
-          }
-        };
-      }
     } catch (err) {
       console.log(err);
     }
