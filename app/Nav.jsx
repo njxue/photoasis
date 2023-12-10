@@ -2,6 +2,7 @@
 
 import { getProviders, signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const Nav = ({}) => {
@@ -17,7 +18,9 @@ const Nav = ({}) => {
 
   return (
     <div className="w-full bg-teal-500 h-10 text-white p-2 flex flex-row justify-between items-center">
-      <h1>Photoapp</h1>
+      <Link href="/">
+        <h1>Photoapp</h1>
+      </Link>
       <div className="flex flex-row justify-between items-center gap-3">
         <Image
           src={session?.user.image}
