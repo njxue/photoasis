@@ -40,7 +40,6 @@ const AddCollection = () => {
   }
 
   async function handleChange(e) {
-    setIsLoadingPreview(true);
     const fileList = e.target.files;
     const previews = [];
     for (let i = 0; i < fileList.length; i++) {
@@ -52,10 +51,6 @@ const AddCollection = () => {
   useEffect(() => {
     setImagePreviews([]);
   }, [isModalOpen]);
-
-  useEffect(() => {
-    setIsLoadingPreview(false);
-  }, [imagePreviews]);
 
   return (
     <>
