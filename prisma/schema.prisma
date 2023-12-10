@@ -27,6 +27,8 @@ model Photo {
   shutterspeed           String?
   thumbnailForCollection Collection? @relation("thumbnail")
   collection             Collection? @relation(fields: [cid, uid], references: [cid, uid])
+
+  @@unique([uid, cid, name])
 }
 
 model Collection {
