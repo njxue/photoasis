@@ -6,17 +6,15 @@ import { ModalHeader } from "@app/common/Modal/ModalHeader";
 import SubmitButton from "@app/common/SubmitButton";
 import Image from "next/image";
 import ExifReader from "exifreader";
-import { b2GetUploadUrl } from "@actions/b2";
 import { useSession } from "next-auth/react";
-import imageCompression from "browser-image-compression";
-import updateCollection from "@actions/updateCollection";
 import createCollection from "@actions/createCollection";
 import formUploadPhotos from "@utils/formUploadPhotos";
+import readFileExif from "@utils/readFileExif";
+import ImagePreviews from "./ImagePreviews";
+import updateCollection from "@actions/updateCollection";
 const AddCollection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imagePreviews, setImagePreviews] = useState([]);
-  const [isLoadingPreview, setIsLoadingPreview] = useState(false);
-  const [selectedPhoto, setSelectedPhoto] = useState(null);
 
   const { data: session } = useSession();
   const uid = session?.user.id;
@@ -28,13 +26,14 @@ const AddCollection = () => {
       const collectionRes = await createCollection({
         collectionName,
       });
+      console.log(collectionRes);
       if (collectionRes.status !== 200) {
         // Handle error
       }
       const cid = collectionRes.data.cid;
-      await formUploadPhotos(cid, uid, formdata, () => {
-        setIsModalOpen(false);
-      });
+      const fileInfos = await formUploadPhotos(cid, uid, formdata);
+      await updateCollection({ cid, photos: fileInfos });
+      setIsModalOpen(false);
     } catch (err) {
       console.log(err);
     }
@@ -44,33 +43,10 @@ const AddCollection = () => {
     setIsLoadingPreview(true);
     const fileList = e.target.files;
     const previews = [];
-    let aperture = null;
-    let iso = null;
-    let shutterspeed = null;
     for (let i = 0; i < fileList.length; i++) {
-      try {
-        const metadata = await ExifReader.load(fileList[i]);
-        aperture = metadata["FNumber"]
-          ? metadata["FNumber"].value[0] / metadata["FNumber"].value[1]
-          : null;
-        iso = metadata["ISOSpeedRatings"]?.value;
-        shutterspeed = metadata["ShutterSpeedValue"]?.value;
-      } catch (err) {
-        console.log("No metadata");
-      }
-
-      previews.push({
-        name: fileList[i].name,
-        url: URL.createObjectURL(fileList[i]),
-        aperture,
-        iso,
-        shutterspeed,
-      });
+      previews.push(await readFileExif(fileList[i]));
     }
     setImagePreviews(previews);
-  }
-  function handleClickPhoto(e) {
-    setSelectedPhoto(e.target.id);
   }
 
   useEffect(() => {
@@ -119,60 +95,7 @@ const AddCollection = () => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="flex flex-row gap-1 flex-wrap">
-                {isLoadingPreview
-                  ? "Loading preview..."
-                  : imagePreviews.map((image) => (
-                      <Image
-                        className={`hover:opacity-100 ${
-                          selectedPhoto === image.name
-                            ? "opacity-100"
-                            : "opacity-50"
-                        }`}
-                        width={100}
-                        height={20}
-                        src={image.url}
-                        onClick={handleClickPhoto}
-                        key={image.name}
-                        id={image.name}
-                        alt={image.name}
-                        priority={true}
-                      />
-                    ))}
-              </div>
-              {imagePreviews.map((image) => (
-                <div hidden={selectedPhoto !== image.name}>
-                  <p>{image.name}</p>
-                  <label>Aperture: </label>
-                  <input
-                    className="border border-solid border-gray-600 rounded p-1"
-                    type="number"
-                    name="aperture"
-                    step={0.1}
-                    min={0}
-                    defaultValue={image.aperture}
-                    placeholder="Aperture"
-                  />
-                  <label>Shutter Speed: </label>
-                  <input
-                    className="border border-solid border-gray-600 rounded p-1"
-                    type="text"
-                    name="shutterspeed"
-                    defaultValue={image.shutterspeed}
-                    placeholder="Shutter Speed"
-                  />
-                  <label>ISO: </label>
-                  <input
-                    className="border border-solid border-gray-600 rounded p-1"
-                    type="number"
-                    name="iso"
-                    min={0}
-                    defaultValue={image.iso}
-                    placeholder="ISO"
-                  />
-                  <div />
-                </div>
-              ))}
+              <ImagePreviews images={imagePreviews} withForm />
             </div>
             <SubmitButton />
           </form>
