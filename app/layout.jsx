@@ -14,7 +14,7 @@ const Layout = async ({ children }) => {
     <html lang="en">
       <body>
         <Provider>
-          <main className="app">
+          <main className="app h-screen w-screen">
             {session?.user && <Nav />}
             {children}
           </main>

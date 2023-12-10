@@ -16,16 +16,20 @@ const Nav = ({}) => {
   }, []);
 
   return (
-    <div className="w-full bg-teal-500 h-10 text-white p-2 flex flex-row justify-between">
+    <div className="w-full bg-teal-500 h-10 text-white p-2 flex flex-row justify-between items-center">
       <h1>Photoapp</h1>
-      <Image
-        src={session?.user.image}
-        width={30}
-        height={30}
-        className="rounded-full"
-        alt="profile-pic"
-      />
-      <button onClick={signOut}>Sign out</button>
+      <div className="flex flex-row justify-between items-center gap-3">
+        <Image
+          src={session?.user.image}
+          width={0}
+          height={0}
+          className="rounded-full w-7 h-7"
+          alt="profile-pic"
+        />
+        <button onClick={signOut}>
+          <img width={25} src="/assets/icons/logout.svg" />
+        </button>
+      </div>
     </div>
   );
 };
