@@ -65,7 +65,7 @@ async function deleteCollection(cid) {
     const b2Id = photo.pid;
     const b2Name = `${uid}/${cid}/${photo.name}`;
     return b2
-      .deleteFileVersion({ fileId: b2Id, fileName: "b2Name" })
+      .deleteFileVersion({ fileId: b2Id, fileName: b2Name })
       .catch((err) => Promise.reject(err));
   });
 

@@ -4,12 +4,19 @@ import { ModalBody } from "@app/common/Modal/ModalBody";
 import Image from "next/image";
 import { useState } from "react";
 import PhotoInfo from "./PhotoInfo";
+import deletePhoto from "@actions/deletePhoto";
+import { usePathname } from "next/navigation";
 
 const PhotoCard = ({ photo }) => {
   const [expandPhoto, setExpandPhoto] = useState(false);
+  const pathname = usePathname();
+  
+  async function handleDelete() {
+    const res = await deletePhoto(photo, pathname);
+  }
   return (
     <>
-      <div className="card">
+      <div className="card relative">
         <img
           src={photo.url}
           width={0}
@@ -24,6 +31,11 @@ const PhotoCard = ({ photo }) => {
             setExpandPhoto(true);
           }}
         />
+        <div
+          className="opacity-0 absolute w-[15%] p-1 right-0 top-0 hover:bg-black rounded hover:opacity-50"
+          onClick={handleDelete}>
+          <img src="/assets/icons/trash.svg" />
+        </div>
         <div className="flex flex-row justify-around items-center p-2">
           <div className="flex flex-row items-center gap-2 flex-wrap">
             <img src="/assets/icons/aperture-black.svg" width={20} />
