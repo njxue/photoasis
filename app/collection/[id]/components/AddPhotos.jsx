@@ -3,21 +3,42 @@ import Modal from "@app/common/Modal/Modal";
 import { ModalBody } from "@app/common/Modal/ModalBody";
 import { ModalHeader } from "@app/common/Modal/ModalHeader";
 import SubmitButton from "@app/common/SubmitButton";
-import { useRef, useState } from "react";
-import ExifReader from "exifreader";
+import { useEffect, useRef, useState } from "react";
 import readFileExif from "@utils/readFileExif";
 import ImagePreviews from "@app/components/ImagePreviews";
 import { useSession } from "next-auth/react";
 import formUploadPhotos from "@utils/formUploadPhotos";
 import updateCollection from "@actions/updateCollection";
+
 const AddPhotos = ({ cid }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [images, setImages] = useState([]);
   const inputRef = useRef();
   const { data: session } = useSession();
+  
+  function handleClick() {
+    inputRef.current && inputRef.current.click();
+  }
 
-  async function handleChange(e) {
+  function handleChange(e) {
     const fileList = e.target.files;
+    handlePreview(fileList);
+  }
+
+  function handleDragOver(e) {
+    e.preventDefault();
+  }
+
+  function handleDrop(e) {
+    e.preventDefault();
+    const fileList = e.dataTransfer.files;
+    if (inputRef?.current) {
+      inputRef.current.files = fileList;
+    }
+    handlePreview(fileList);
+  }
+
+  async function handlePreview(fileList) {
     const previews = [];
     for (let i = 0; i < fileList.length; i++) {
       previews.push(await readFileExif(fileList[i]));
@@ -30,10 +51,12 @@ const AddPhotos = ({ cid }) => {
       const fileInfos = await formUploadPhotos(cid, session?.user.id, formdata);
       await updateCollection({ cid, photos: fileInfos });
       setIsModalOpen(false);
+      setImages([]);
     } catch (err) {
       console.log(err);
     }
   }
+
   return (
     <>
       <div
@@ -49,18 +72,9 @@ const AddPhotos = ({ cid }) => {
             action={handleSubmit}>
             <div
               className="border border-dashed border-gray-500 h-full w-full rounded"
-              onClick={() => {
-                inputRef.current && inputRef.current.click();
-              }}
-              onDrop={(e) => {
-                e.preventDefault();
-                const data = e.dataTransfer.items;
-
-                console.log([...data].forEach(console.log));
-              }}
-              onDragOver={(e) => {
-                e.preventDefault();
-              }}>
+              onClick={handleClick}
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}>
               <input
                 type="file"
                 name="photos"
@@ -68,6 +82,7 @@ const AddPhotos = ({ cid }) => {
                 className="hidden"
                 ref={inputRef}
                 onChange={handleChange}
+                accept="image/*"
               />
             </div>
             <ImagePreviews images={images} withForm />
