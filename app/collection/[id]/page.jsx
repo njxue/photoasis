@@ -6,7 +6,6 @@ import prisma from "@prisma/prisma";
 import AddPhotos from "@app/collection/[id]/components/AddPhotos";
 
 const fetchCollectionData = async (cid, uid) => {
-  console.log(cid)
   const data = await prisma.collection.findUniqueOrThrow({
     where: {
       cid_uid: { cid, uid },
@@ -27,7 +26,7 @@ const Page = async ({ params }) => {
   if (!session?.user) {
     redirect("/");
   }
- 
+
   const collectionData = await fetchCollectionData(
     parseInt(params.id),
     session.user.id
