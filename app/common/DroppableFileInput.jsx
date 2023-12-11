@@ -40,10 +40,12 @@ const DroppableFileInput = ({ name }) => {
   return (
     <>
       <div
-        className="border border-dashed border-gray-500 h-full w-full rounded"
+        className="border border-dashed border-black h-full w-full rounded flex flex-col justify-center items-center gap-5 opacity-50 text-center text-lg cursor-pointer"
         onClick={handleClick}
         onDrop={handleDrop}
         onDragOver={handleDragOver}>
+        <p>Drag or click to upload files</p>
+        <img src="/assets/icons/upload.svg" className="w-[35px]" />
         <input
           type="file"
           name={name}
