@@ -8,7 +8,7 @@ const AlbumPhotos = ({ albumData }) => {
   return (
     <div className="h-full ">
       <div
-        className="fixed right-5 bottom-5 w-[30px] cursor-pointer opacity-20 hover:opacity-70 hover:scale-110 transition-opacity ease-in-out duration-200"
+        className="fixed right-5 bottom-5 w-[30px] cursor-pointer z-50 opacity-20 hover:opacity-70 hover:scale-110 transition-opacity ease-in-out duration-200"
         onClick={() => setMinimalisticView((prev) => !prev)}>
         <img
           src={`/assets/icons/${minimalisticView ? "unhide" : "hide"}.svg`}
@@ -19,7 +19,6 @@ const AlbumPhotos = ({ albumData }) => {
         <div className="flex flex-row text-5xl font-light items-center gap-16 mb-7 mt-2">
           <hr className="grow border border-solid border-gray-300" />
           {albumData.name}
-
           <hr className="grow border border-solid border-gray-300" />
         </div>
       )}
