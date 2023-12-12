@@ -5,7 +5,7 @@ const AlbumCard = ({ data }) => {
   const { uid, name, aid, thumbnail } = data;
   // TODO: handle empty thumbnail
   return (
-    <div className="card relative">
+    <div className="card relative hover:opacity-50 transition-opacity ease-in-out duration-50">
       <Link href={`/album/${aid}`}>
         <Image
           src={`${process.env.CLOUDFLARE_URL}/${uid}/${aid}/${thumbnail?.name}`}

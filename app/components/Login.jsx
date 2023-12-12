@@ -14,7 +14,7 @@ const Login = () => {
   }, []);
 
   return (
-    <div className="relative h-full w-full flex flex-row justify-center items-center bg-[url('/assets/images/polaroid.jpg')] bg-cover bg-center bg-no-repeat">
+    <div className="relative w-screen h-screen flex flex-row justify-center items-center bg-[url('/assets/images/polaroid.jpg')] bg-cover bg-center bg-no-repeat">
       <div class="absolute top-0 left-0 w-full h-full bg-white bg-opacity-50"></div>
 
       {providers && (

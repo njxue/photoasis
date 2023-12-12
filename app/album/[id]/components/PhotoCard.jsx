@@ -7,7 +7,7 @@ import PhotoInfo from "./PhotoInfo";
 import deletePhoto from "@actions/deletePhoto";
 import { usePathname } from "next/navigation";
 
-const PhotoCard = ({ photo }) => {
+const PhotoCard = ({ photo, minimalisticView }) => {
   const [expandPhoto, setExpandPhoto] = useState(false);
   const pathname = usePathname();
 
@@ -16,13 +16,13 @@ const PhotoCard = ({ photo }) => {
   }
   return (
     <>
-      <div className="card relative bg-white">
+      <div className="card relative bg-white hover:opacity-50 transition-opacity ease-in-out duration-50">
         <img
           src={photo.url}
           width={0}
           height={0}
           style={{
-            height: "80%",
+            height: minimalisticView ? "100%" : "80%",
             width: "100%  ",
             objectFit: "cover",
           }}
@@ -36,22 +36,24 @@ const PhotoCard = ({ photo }) => {
           onClick={handleDelete}>
           <img src="/assets/icons/trash.svg" />
         </div>
-        <div className="flex flex-row justify-around items-center p-2">
-          <div className="flex flex-row items-center gap-2 flex-wrap">
-            <img src="/assets/icons/aperture-black.svg" width={20} />
-            <div>{photo.aperture === "" ? "-" : photo.aperture}</div>
+        {!minimalisticView && (
+          <div className="flex flex-row justify-around items-center p-2">
+            <div className="flex flex-row items-center gap-2 flex-wrap">
+              <img src="/assets/icons/aperture-black.svg" width={20} />
+              <div>{photo.aperture === "" ? "-" : photo.aperture}</div>
+            </div>
+            <div className="border-r border-gray-200 h-[20px] w-[1px]"></div>
+            <div className="flex flex-row items-center gap-2 flex-wrap">
+              <img src="/assets/icons/shutterspeed-black.svg" width={20} />
+              <div>{photo.shutterspeed === "" ? "-" : photo.shutterspeed}</div>
+            </div>
+            <div className="border-r border-gray-200 h-[20px] w-[1px]"></div>
+            <div className="flex flex-row items-center gap-2 flex-wrap justify-center">
+              <img src="/assets/icons/iso-black.svg" width={20} />
+              <div>{photo.iso === "" ? "-" : photo.iso}</div>
+            </div>
           </div>
-          <div className="border-r border-gray-200 h-[20px] w-[1px]"></div>
-          <div className="flex flex-row items-center gap-2 flex-wrap">
-            <img src="/assets/icons/shutterspeed-black.svg" width={20} />
-            <div>{photo.shutterspeed === "" ? "-" : photo.shutterspeed}</div>
-          </div>
-          <div className="border-r border-gray-200 h-[20px] w-[1px]"></div>
-          <div className="flex flex-row items-center gap-2 flex-wrap justify-center">
-            <img src="/assets/icons/iso-black.svg" width={20} />
-            <div>{photo.iso === "" ? "-" : photo.iso}</div>
-          </div>
-        </div>
+        )}
       </div>
       <Modal
         isOpen={expandPhoto}

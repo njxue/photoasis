@@ -14,7 +14,7 @@ const Layout = async ({ children }) => {
     <html lang="en">
       <body>
         <Provider>
-          <main className="app h-screen w-screen flex flex-col">
+          <main className="app flex flex-col">
             <div>{session?.user && <Nav />}</div>
             <div className="grow">{children}</div>
           </main>
