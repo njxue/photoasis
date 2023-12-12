@@ -17,7 +17,7 @@ const PhotoCard = ({ photo, minimalisticView }) => {
   return (
     <>
       <div className="card relative bg-white hover:opacity-50 transition-opacity ease-in-out duration-50">
-        <img
+        <Image
           src={photo.url}
           width={0}
           height={0}
