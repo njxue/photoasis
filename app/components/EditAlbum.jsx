@@ -1,22 +1,22 @@
 "use client";
 
-import deleteCollection from "@actions/deleteCollection";
-import updateCollection from "@actions/updateCollection";
+import deleteAlbum from "@actions/deleteAlbum";
+import updateAlbum from "@actions/updateAlbum";
 import Modal from "@app/common/Modal/Modal";
 import { ModalBody } from "@app/common/Modal/ModalBody";
 import { ModalHeader } from "@app/common/Modal/ModalHeader";
 import SubmitButton from "@app/common/SubmitButton";
 import { useState } from "react";
 
-const EditCollection = ({ data }) => {
-  const { name, cid } = data;
+const EditAlbum = ({ data }) => {
+  const { name, aid } = data;
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
-  async function handleDeleteCollection(formdata) {
+  async function handleDeleteAlbum(formdata) {
     const confirmText = formdata.get("deleteConfirmation");
     if (confirmText === "Delete") {
-      const res = await deleteCollection(cid);
+      const res = await deleteAlbum(aid);
       if (res.status === 204) {
         setIsConfirmationModalOpen(false);
         setIsEditModalOpen(false);
@@ -24,9 +24,9 @@ const EditCollection = ({ data }) => {
     }
   }
 
-  async function handleUpdateCollection(formdata) {
-    const collectionName = formdata.get("collectionName");
-    await updateCollection({ cid, collectionName });
+  async function handleUpdateAlbum(formdata) {
+    const albumName = formdata.get("albumName");
+    await updateAlbum({ aid, albumName });
     setIsEditModalOpen(false);
   }
   return (
@@ -44,14 +44,14 @@ const EditCollection = ({ data }) => {
         <ModalHeader>Edit</ModalHeader>
         <ModalBody>
           <div className="flex flex-col justify-between h-full">
-            <form action={handleUpdateCollection}>
-              <label htmlFor="collectionName">Name:</label>
+            <form action={handleUpdateAlbum}>
+              <label htmlFor="albumName">Name:</label>
               <input
                 className="w-full border border-solid border-gray-600 rounded p-1"
                 type="text"
-                name="collectionName"
+                name="albumName"
                 defaultValue={name}
-                placeholder="Collection Name"
+                placeholder="Album Name"
               />
               <SubmitButton text="Save" />
             </form>
@@ -60,7 +60,7 @@ const EditCollection = ({ data }) => {
                 setIsConfirmationModalOpen(true);
               }}
               className="bg-red-900 rounded text-white w-full">
-              Delete collection
+              Delete album
             </button>
           </div>
         </ModalBody>
@@ -68,11 +68,9 @@ const EditCollection = ({ data }) => {
       <Modal
         isOpen={isConfirmationModalOpen}
         setOpen={setIsConfirmationModalOpen}>
-        <ModalHeader>
-          Are you sure you want to delete this collection?
-        </ModalHeader>
+        <ModalHeader>Are you sure you want to delete this album?</ModalHeader>
         <ModalBody>
-          <form className="w-full" action={handleDeleteCollection}>
+          <form className="w-full" action={handleDeleteAlbum}>
             <label for="deleteConfirmation">Type "Delete" to confirm: </label>
             <input
               className="w-full border border-solid border-gray-600 rounded p-1"
@@ -97,4 +95,4 @@ const EditCollection = ({ data }) => {
   );
 };
 
-export default EditCollection;
+export default EditAlbum;

@@ -6,7 +6,7 @@ import prisma from "@prisma/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@app/api/auth/[...nextauth]/route";
 
-async function deleteCollection(cid) {
+async function deleteAlbum(aid) {
   const session = await getServerSession(authOptions);
   const uid = session?.user.id;
 
@@ -17,14 +17,14 @@ async function deleteCollection(cid) {
   // List all photos to delete, for b2 deletion
   let photosToDelete = await prisma.photo.findMany({
     where: {
-      cid: cid,
+      aid: aid,
     },
   });
 
   const dbDeleteRes = await prisma.$transaction(async (prisma) => {
     const res = await prisma.photo.deleteMany({
       where: {
-        cid: cid,
+        aid: aid,
         uid: uid,
       },
     });
@@ -35,18 +35,18 @@ async function deleteCollection(cid) {
       };
     }
 
-    const deletedCollection = await prisma.collection.delete({
+    const deletedAlbum = await prisma.album.delete({
       where: {
-        cid_uid: { cid, uid },
+        aid_uid: { aid, uid },
       },
     });
-    if (!deletedCollection) {
-      return { status: 500, message: "Unable to delete collection" };
+    if (!deletedAlbum) {
+      return { status: 500, message: "Unable to delete album" };
     }
     return {
       status: 200,
       message: "Success",
-      data: { ...deletedCollection, photos: photosToDelete },
+      data: { ...deletedAlbum, photos: photosToDelete },
     };
   });
 
@@ -63,7 +63,7 @@ async function deleteCollection(cid) {
 
   const deleteRequests = photosToDelete.map((photo) => {
     const b2Id = photo.pid;
-    const b2Name = `${uid}/${cid}/${photo.name}`;
+    const b2Name = `${uid}/${aid}/${photo.name}`;
     return b2
       .deleteFileVersion({ fileId: b2Id, fileName: b2Name })
       .catch((err) => Promise.reject(err));
@@ -79,4 +79,4 @@ async function deleteCollection(cid) {
   }
 }
 
-export default deleteCollection;
+export default deleteAlbum;

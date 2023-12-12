@@ -1,15 +1,15 @@
-import CollectionCard from "./CollectionCard";
+import AlbumCard from "./AlbumCard";
 import { authOptions } from "@app/api/auth/[...nextauth]/route";
 import prisma from "@prisma/prisma";
 import { getServerSession } from "next-auth";
-import AddCollection from "./AddCollection";
+import AddAlbum from "./AddAlbum";
 
-const fetchCollections = async () => {
+const fetchAlbums = async () => {
   try {
     const session = await getServerSession(authOptions);
     const uid = session?.user.id;
 
-    let collections = await prisma.collection.findMany({
+    let albums = await prisma.album.findMany({
       where: {
         uid: uid,
       },
@@ -18,23 +18,23 @@ const fetchCollections = async () => {
       },
     });
     return {
-      data: collections,
+      data: albums,
       status: 200,
     };
   } catch (err) {
     return { status: 500 };
   }
 };
-const Collections = async ({}) => {
-  const res = await fetchCollections();
+const Albums = async ({}) => {
+  const res = await fetchAlbums();
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
-      <AddCollection />
-      {res.data?.map((collection) => (
-        <CollectionCard data={collection} key={collection.cid} />
+      <AddAlbum />
+      {res.data?.map((album) => (
+        <AlbumCard data={album} key={album.aid} />
       ))}
     </div>
   );
 };
-export default Collections;
+export default Albums;

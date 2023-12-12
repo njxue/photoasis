@@ -4,8 +4,8 @@ generator client {
 
 datasource db {
   provider  = "postgresql"
-  url       = env("DIRECT_URL")
-  directUrl = env("DIRECT_URL")
+  url       = env("DIRECT_URL") // Investigate
+  directUrl = env("DIRECT_URL") 
 }
 
 model User {
@@ -14,24 +14,24 @@ model User {
   email       String       @unique
   image       String?
   createdAt   DateTime     @default(now())
-  collections Collection[]
+  albums Album[]
 }
 
 model Photo {
   pid                    String      @id
   name                   String
   uid                    Int
-  cid                    Int?
+  aid                    Int?
   aperture               Decimal?
   iso                    Int?
   shutterspeed           String?
-  thumbnailForCollection Collection? @relation("thumbnail")
-  collection             Collection? @relation(fields: [cid, uid], references: [cid, uid])
+  thumbnailForAlbum Album? @relation("thumbnail")
+  album             Album? @relation(fields: [aid, uid], references: [aid, uid])
 
  }
 
-model Collection {
-  cid          Int     @default(autoincrement())
+model Album {
+  aid          Int     @default(autoincrement())
   name         String
   uid          Int
   thumbnailPid String? @unique
@@ -39,5 +39,5 @@ model Collection {
   user         User    @relation(fields: [uid], references: [id])
   photos       Photo[]
 
-  @@id([cid, uid])
+  @@id([aid, uid])
 }

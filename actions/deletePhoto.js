@@ -7,14 +7,14 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@app/api/auth/[...nextauth]/route";
 
 const deletePhoto = async (photo, pathname) => {
-  const { cid, pid, name } = photo;
+  const { aid, pid, name } = photo;
   const session = await getServerSession(authOptions);
   const uid = session?.user.id;
 
   await prisma.$transaction(async (prisma) => {
-    const collection = await prisma.collection.findUniqueOrThrow({
+    const album = await prisma.album.findUniqueOrThrow({
       where: {
-        cid_uid: { cid, uid },
+        aid_uid: { aid, uid },
       },
       include: {
         thumbnail: true,
@@ -34,22 +34,20 @@ const deletePhoto = async (photo, pathname) => {
       };
     }
 
-    if (!collection) {
+    if (!album) {
       return {
         status: 500,
         message: "Unable to delete photo",
       };
     }
 
-    if (collection.thumbnailPid === pid) {
-      const existingPhotos = collection.photos.filter(
-        (photo) => photo.pid !== pid
-      );
+    if (album.thumbnailPid === pid) {
+      const existingPhotos = album.photos.filter((photo) => photo.pid !== pid);
 
       if (existingPhotos.length > 0) {
-        await prisma.collection.update({
+        await prisma.album.update({
           where: {
-            cid_uid: { cid, uid },
+            aid_uid: { aid, uid },
           },
           data: {
             thumbnail: {
@@ -72,7 +70,7 @@ const deletePhoto = async (photo, pathname) => {
     await b2.authorize();
     await b2.deleteFileVersion({
       fileId: pid,
-      fileName: `${uid}/${cid}/${name}`,
+      fileName: `${uid}/${aid}/${name}`,
     });
     revalidatePath(pathname);
 

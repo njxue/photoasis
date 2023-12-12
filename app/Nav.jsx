@@ -17,7 +17,7 @@ const Nav = ({}) => {
   }, []);
 
   return (
-    <div className="w-full bg-teal-500 h-10 text-white p-2 flex flex-row justify-between items-center">
+    <div className="w-full bg-blue-950 h-10 text-white p-2 flex flex-row justify-between items-center">
       <Link href="/">
         <h1>Photoapp</h1>
       </Link>

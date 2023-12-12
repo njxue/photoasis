@@ -10,13 +10,13 @@ import { usePathname } from "next/navigation";
 const PhotoCard = ({ photo }) => {
   const [expandPhoto, setExpandPhoto] = useState(false);
   const pathname = usePathname();
-  
+
   async function handleDelete() {
     const res = await deletePhoto(photo, pathname);
   }
   return (
     <>
-      <div className="card relative">
+      <div className="card relative bg-white">
         <img
           src={photo.url}
           width={0}

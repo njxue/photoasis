@@ -1,8 +1,8 @@
 import { b2GetUploadUrl } from "@actions/b2";
 import imageCompression from "browser-image-compression";
-import updateCollection from "@actions/updateCollection";
+import updateAlbum from "@actions/updateAlbum";
 
-const formUploadPhotos = async (cid, uid, formdata) => {
+const formUploadPhotos = async (aid, uid, formdata) => {
   return new Promise((resolve, reject) => {
     (async () => {
       let files = formdata.getAll("photos");
@@ -38,7 +38,7 @@ const formUploadPhotos = async (cid, uid, formdata) => {
       for (let i = 0; i < files.length; i += chunkSize) {
         const chunk = files.slice(i, i + chunkSize);
         const worker = new Worker("/worker.js");
-        worker.postMessage({ chunk, uid, cid });
+        worker.postMessage({ chunk, uid, aid });
         worker.onmessage = async (e) => {
           const res = e.data;
           const fileInfo = res.data;

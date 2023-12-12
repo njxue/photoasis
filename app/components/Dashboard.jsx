@@ -1,9 +1,9 @@
-import Collections from "./Collections";
+import Albums from "./Albums";
 
 const Dashboard = async () => {
   return (
-    <div className="p-1">
-      <Collections />
+    <div className="p-3 ">
+      <Albums />
     </div>
   );
 };

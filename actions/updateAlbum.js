@@ -4,15 +4,15 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@app/api/auth/[...nextauth]/route";
 import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-async function updateCollection(data) {
+async function updateAlbum(data) {
   try {
     const prisma = new PrismaClient();
     const session = await getServerSession(authOptions);
     const uid = session?.user.id;
-    const { cid, photos, collectionName } = data;
+    const { aid, photos, albumName } = data;
 
     const res = await prisma.$transaction(async (prisma) => {
-      let collectionData = collectionName ? { name: collectionName } : {};
+      let albumData = albumName ? { name: albumName } : {};
 
       if (photos) {
         // Insert photos
@@ -20,7 +20,7 @@ async function updateCollection(data) {
           {
             data: photos.map((photo) => ({
               name: photo.name,
-              cid,
+              aid,
               uid,
               aperture: parseFloat(photo.aperture),
               shutterspeed: photo.shutterspeed,
@@ -39,7 +39,7 @@ async function updateCollection(data) {
         // Update thumbnail
         const thumbnail = await prisma.photo.findFirst({
           where: {
-            cid,
+            aid,
             uid,
           },
         });
@@ -48,8 +48,8 @@ async function updateCollection(data) {
           return { status: 404, message: "Thumbnail not found" };
         }
 
-        collectionData = {
-          ...collectionData,
+        albumData = {
+          ...albumData,
           thumbnail: {
             connect: {
               pid: thumbnail.pid,
@@ -58,17 +58,17 @@ async function updateCollection(data) {
         };
       }
 
-      const updatedCollection = await prisma.collection.update({
-        where: { cid_uid: { cid, uid } },
-        data: collectionData,
+      const updatedAlbum = await prisma.album.update({
+        where: { aid_uid: { aid, uid } },
+        data: albumData,
         include: {
           photos: true,
         },
       });
-      if (!updatedCollection) {
-        return { status: 400, message: "Unable to update collection " };
+      if (!updatedAlbum) {
+        return { status: 400, message: "Unable to update album " };
       }
-      return { status: 200, message: "Success", data: updatedCollection };
+      return { status: 200, message: "Success", data: updatedAlbum };
     });
 
     revalidatePath("/");
@@ -79,4 +79,4 @@ async function updateCollection(data) {
   }
 }
 
-export default updateCollection;
+export default updateAlbum;

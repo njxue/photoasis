@@ -5,7 +5,7 @@ import Login from "./components/Login";
 const Home = async () => {
   const isLoggedIn = await getServerSession(authOptions);
   return (
-    <div className="flex flex-center flex-col">
+    <div className="flex flex-center flex-col h-full w-full ">
       {isLoggedIn ? <Dashboard /> : <Login />}
     </div>
   );

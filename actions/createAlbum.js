@@ -4,17 +4,17 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@app/api/auth/[...nextauth]/route";
 import { PrismaClient } from "@prisma/client";
 
-async function createCollection(data) {
+async function createAlbum(data) {
   try {
     const prisma = new PrismaClient();
-    const { collectionName, photos } = data;
+    const { albumName, photos } = data;
     const session = await getServerSession(authOptions);
     const uid = session?.user.id;
     const res = await prisma.$transaction(async (prisma) => {
-      let collectionData = { name: collectionName, uid };
+      let albumData = { name: albumName, uid };
       if (photos) {
-        collectionData = {
-          ...collectionData,
+        albumData = {
+          ...albumData,
           photos: {
             create: photos.map((photo) => ({
               name: photo,
@@ -27,33 +27,33 @@ async function createCollection(data) {
         };
       }
 
-      const collection = await prisma.collection.create(
+      const album = await prisma.album.create(
         {
-          data: collectionData,
+          data: albumData,
         },
         { timeout: 10000 }
       );
 
-      // If creation of collection and photos is successful
-      if (collection && collection.photos?.length > 0) {
-        await prisma.collection.update({
+      // If creation of album and photos is successful
+      if (album && album.photos?.length > 0) {
+        await prisma.album.update({
           where: {
-            cid_uid: { cid: collection.cid, uid },
+            aid_uid: { aid: album.aid, uid },
           },
           data: {
             thumbnail: {
               connect: {
-                pid: collection.photos[0].pid,
+                pid: album.photos[0].pid,
               },
             },
           },
         });
       }
 
-      if (!collection) {
-        return { status: 400, message: "Unable to create collection" };
+      if (!album) {
+        return { status: 400, message: "Unable to create album" };
       } else {
-        return { status: 200, message: "Success", data: collection };
+        return { status: 200, message: "Success", data: album };
       }
     });
     return res;
@@ -63,4 +63,4 @@ async function createCollection(data) {
   }
 }
 
-export default createCollection;
+export default createAlbum;

@@ -5,30 +5,30 @@ import { ModalBody } from "@app/common/Modal/ModalBody";
 import { ModalHeader } from "@app/common/Modal/ModalHeader";
 import SubmitButton from "@app/common/SubmitButton";
 import { useSession } from "next-auth/react";
-import createCollection from "@actions/createCollection";
+import createAlbum from "@actions/createAlbum";
 import formUploadPhotos from "@utils/formUploadPhotos";
-import updateCollection from "@actions/updateCollection";
+import updateAlbum from "@actions/updateAlbum";
 import DroppableFileInput from "@app/common/DroppableFileInput";
-const AddCollection = () => {
+const AddAlbum = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data: session } = useSession();
   const uid = session?.user.id;
 
-  async function handleCreateCollection(formdata) {
+  async function handleCreateAlbum(formdata) {
     try {
-      const collectionName = formdata.get("collectionName");
+      const albumName = formdata.get("albumName");
 
-      const collectionRes = await createCollection({
-        collectionName,
+      const albumRes = await createAlbum({
+        albumName,
       });
-      console.log(collectionRes);
-      if (collectionRes.status !== 200) {
+      console.log(albumRes);
+      if (albumRes.status !== 200) {
         // Handle error
       }
-      const cid = collectionRes.data.cid;
-      const fileInfos = await formUploadPhotos(cid, uid, formdata);
-      await updateCollection({ cid, photos: fileInfos });
+      const aid = albumRes.data.aid;
+      const fileInfos = await formUploadPhotos(aid, uid, formdata);
+      await updateAlbum({ aid, photos: fileInfos });
       setIsModalOpen(false);
     } catch (err) {
       console.log(err);
@@ -40,24 +40,24 @@ const AddCollection = () => {
       <div
         onClick={() => setIsModalOpen(true)}
         className="flex flex-col gap-3 justify-center items-center border border-dashed border-gray-500 cursor-pointer h-[250px]">
-        <p>New Collection</p>
+        <p>New Album</p>
         <img src="/assets/icons/add.svg" width={30} height={30} />
       </div>
       {/* <button onClick={() => setIsModalOpen(true)}>Create new</button> */}
       <Modal isOpen={isModalOpen} setOpen={setIsModalOpen}>
-        <ModalHeader size="lg">New Collection</ModalHeader>
+        <ModalHeader size="lg">New Album</ModalHeader>
         <ModalBody>
           <form
             className="flex flex-col gap-3 p-2 w-full h-full justify-between"
-            action={handleCreateCollection}>
+            action={handleCreateAlbum}>
             <div className="flex flex-col grow gap-2">
               <div>
-                <label htmlFor="collectionName">Collection Name: </label>
+                <label htmlFor="albumName">Album Name: </label>
                 <input
                   className="w-full block border border-solid border-gray-600 rounded p-1"
                   type="text"
-                  name="collectionName"
-                  placeholder="Collection Name"
+                  name="albumName"
+                  placeholder="Album Name"
                   required
                 />
               </div>
@@ -71,4 +71,4 @@ const AddCollection = () => {
   );
 };
 
-export default AddCollection;
+export default AddAlbum;

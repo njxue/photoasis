@@ -5,17 +5,17 @@ import SubmitButton from "@app/common/SubmitButton";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import formUploadPhotos from "@utils/formUploadPhotos";
-import updateCollection from "@actions/updateCollection";
+import updateAlbum from "@actions/updateAlbum";
 import DroppableFileInput from "@app/common/DroppableFileInput";
 
-const AddPhotos = ({ cid }) => {
+const AddPhotos = ({ aid }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: session } = useSession();
 
   async function handleSubmit(formdata) {
     try {
-      const fileInfos = await formUploadPhotos(cid, session?.user.id, formdata);
-      await updateCollection({ cid, photos: fileInfos });
+      const fileInfos = await formUploadPhotos(aid, session?.user.id, formdata);
+      await updateAlbum({ aid, photos: fileInfos });
       setIsModalOpen(false);
     } catch (err) {
       console.log(err);

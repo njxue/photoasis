@@ -1,13 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
-import EditCollection from "./EditCollection";
-const CollectionCard = ({ data }) => {
-  const { uid, name, cid, thumbnail } = data;
+import EditAlbum from "./EditAlbum";
+const AlbumCard = ({ data }) => {
+  const { uid, name, aid, thumbnail } = data;
+  // TODO: handle empty thumbnail
   return (
     <div className="card relative">
-      <Link href={`/collection/${cid}`}>
+      <Link href={`/album/${aid}`}>
         <Image
-          src={`${process.env.CLOUDFLARE_URL}/${uid}/${cid}/${thumbnail?.name}`}
+          src={`${process.env.CLOUDFLARE_URL}/${uid}/${aid}/${thumbnail?.name}`}
           width={0}
           height={0}
           style={{ height: "80%", width: "100%", objectFit: "cover" }}
@@ -15,9 +16,9 @@ const CollectionCard = ({ data }) => {
         />
         <div className="px-5 py-3 h-[20%] text-start">{name}</div>
       </Link>
-      <EditCollection data={{ cid, name }} />
+      <EditAlbum data={{ aid, name }} />
     </div>
   );
 };
 
-export default CollectionCard;
+export default AlbumCard;
