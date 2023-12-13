@@ -17,7 +17,7 @@ const fetchAlbumData = async (aid, uid) => {
     ...photo,
     url: `${process.env.CLOUDFLARE_URL}/${uid}/${aid}/${photo.name}`,
   }));
-
+  
   return data;
 };
 const Page = async ({ params }) => {

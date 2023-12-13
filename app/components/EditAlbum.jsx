@@ -31,15 +31,12 @@ const EditAlbum = ({ data }) => {
   }
   return (
     <>
-      <div className="absolute right-0 top-0 bg-black w-[15%] opacity-0 rounded p-1 hover:opacity-50">
-        <img
-          src={"/assets/icons/pencil.svg"}
-          onClick={() => {
-            setIsEditModalOpen(true);
-          }}
-        />
-      </div>
-
+      <img
+        src={"/assets/icons/pencil.svg"}
+        onClick={() => {
+          setIsEditModalOpen(true);
+        }}
+      />
       <Modal isOpen={isEditModalOpen} setOpen={setIsEditModalOpen}>
         <ModalHeader>Edit</ModalHeader>
         <ModalBody>

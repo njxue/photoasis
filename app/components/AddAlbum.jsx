@@ -22,7 +22,7 @@ const AddAlbum = () => {
       const albumRes = await createAlbum({
         albumName,
       });
-      console.log(albumRes);
+
       if (albumRes.status !== 200) {
         // Handle error
       }

@@ -16,23 +16,21 @@ const PhotoCard = ({ photo, minimalisticView }) => {
   }
   return (
     <>
-      <div className="card relative bg-white hover:opacity-50 transition-opacity ease-in-out duration-50">
+      <div className="card relative bg-white">
         <Image
           src={photo.url}
           width={0}
           height={0}
-          style={{
-            height: minimalisticView ? "100%" : "80%",
-            width: "100%  ",
-            objectFit: "cover",
-          }}
           alt={photo.name}
           onClick={() => {
             setExpandPhoto(true);
           }}
+          className={`${
+            minimalisticView ? "h-full" : "h-5/6"
+          } object-cover w-full  hover:opacity-50 transition-opacity ease-in-out duration-50`}
         />
         <div
-          className="opacity-0 absolute w-[15%] p-1 right-0 top-0 hover:bg-black rounded hover:opacity-50"
+          className="opacity-0 absolute w-[15%] p-1 right-0 top-0 border border-solid border-gray-300 hover:bg-black rounded hover:opacity-50"
           onClick={handleDelete}>
           <img src="/assets/icons/trash.svg" />
         </div>

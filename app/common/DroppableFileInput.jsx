@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import ImagePreviews from "@app/components/ImagePreviews";
 import readFileExif from "@utils/readFileExif";
 
-const DroppableFileInput = ({ name }) => {
+const DroppableFileInput = ({ name, disabled }) => {
   const inputRef = useRef();
   const [images, setImages] = useState([]);
 
@@ -54,6 +54,7 @@ const DroppableFileInput = ({ name }) => {
           ref={inputRef}
           onChange={handleChange}
           accept="image/*"
+          disabled={disabled}
         />
       </div>
       <ImagePreviews images={images} withForm />

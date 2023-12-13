@@ -6,6 +6,15 @@
   @apply border border-solid border-gray-200 shadow-lg rounded h-[250px] cursor-pointer;
 }
 
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 @keyframes fadeInAndSlideRight {
   0% {
     opacity: 0;
@@ -26,11 +35,18 @@
   }
 }
 
+.animate-fadeIn {
+  animation: fadeIn 1s ease-out;
+}
+
 .animate-fadeInAndSlideRight {
   animation: fadeInAndSlideRight 1s ease-out;
 }
 
-
-.animate-fadeInAndSlideDown{
+.animate-fadeInAndSlideDown {
   animation: fadeInAndSlideDown 1s ease-out;
+}
+
+.text-border {
+  text-shadow: 2px 2px 3px black;
 }

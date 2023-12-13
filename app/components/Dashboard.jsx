@@ -2,7 +2,7 @@ import Albums from "./Albums";
 
 const Dashboard = async () => {
   return (
-    <div className="p-3 ">
+    <div className="p-1">
       <Albums />
     </div>
   );
