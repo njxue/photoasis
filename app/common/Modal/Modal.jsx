@@ -2,8 +2,21 @@
 
 import { useEffect, useRef } from "react";
 import { ModalProvider } from "./ModalContext";
+import { createPortal } from "react-dom";
 
-const Modal = ({ isOpen, setOpen, closeOnClickOutside, children, style }) => {
+const Modal = ({
+  isOpen,
+  setOpen,
+  closeOnClickOutside,
+  children,
+  style,
+  size,
+}) => {
+  const widths = { sm: "30vw", md: "70vw", lg: "70vw" };
+  const heights = { sm: "25vh", md: "50vh", lg: "90vh" };
+
+  console.log(widths[size]);
+  console.log(heights[size]);
   const modalRef = useRef();
   useEffect(() => {
     const handleClick = (e) => {
@@ -20,17 +33,21 @@ const Modal = ({ isOpen, setOpen, closeOnClickOutside, children, style }) => {
     };
   }, [isOpen, modalRef]);
   return (
-    isOpen && (
-      <div className="max-h-[100vh] max-w-[100vw] fixed inset-0 flex flex-col items-center justify-center z-50 bg-gray-700 bg-opacity-30">
+    isOpen &&
+    createPortal(
+      <div className="h-screen w-screen fixed inset-0 flex flex-col items-center justify-center z-50 bg-gray-700 bg-opacity-30">
         <ModalProvider setOpen={setOpen}>
           <div
             ref={modalRef}
-            className="bg-white w-[70%] h-[90%] flex flex-col justify-between p-3"
+            className={`bg-white w-[${widths[size] ?? "90vw"}] h-[${
+              heights[size] ?? "80vh"
+            }] flex flex-col justify-between p-3 rounded`}
             style={style}>
             {children}
           </div>
         </ModalProvider>
-      </div>
+      </div>,
+      document.body
     )
   );
 };

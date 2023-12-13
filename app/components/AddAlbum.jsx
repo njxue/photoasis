@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import createAlbum from "@actions/createAlbum";
 import formUploadPhotos from "@utils/formUploadPhotos";
 import updateAlbum from "@actions/updateAlbum";
+import { createPortal } from "react-dom";
 import DroppableFileInput from "@app/common/DroppableFileInput";
 const AddAlbum = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,12 +44,12 @@ const AddAlbum = () => {
         <p>New Album</p>
         <img src="/assets/icons/add.svg" width={30} height={30} />
       </div>
-      {/* <button onClick={() => setIsModalOpen(true)}>Create new</button> */}
-      <Modal isOpen={isModalOpen} setOpen={setIsModalOpen}>
+
+      <Modal isOpen={isModalOpen} setOpen={setIsModalOpen} size="lg">
         <ModalHeader size="lg">New Album</ModalHeader>
         <ModalBody>
           <form
-            className="flex flex-col gap-3 p-2 w-full h-full justify-between"
+            className="flex flex-col gap-3 p-2 w-full h-[90h] justify-between"
             action={handleCreateAlbum}>
             <div className="flex flex-col grow gap-2">
               <div>

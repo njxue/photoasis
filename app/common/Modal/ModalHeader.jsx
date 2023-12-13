@@ -15,7 +15,7 @@ export const ModalHeader = ({ children, size }) => {
           } flex flex-col justify-center mb-2`}>
           {children}
         </div>
-        <button onClick={() => setOpen(false)}>Close</button>
+        <button onClick={() => setOpen(false)}>x</button>
       </div>
       <hr />
     </div>

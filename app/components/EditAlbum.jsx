@@ -64,7 +64,8 @@ const EditAlbum = ({ data }) => {
       </Modal>
       <Modal
         isOpen={isConfirmationModalOpen}
-        setOpen={setIsConfirmationModalOpen}>
+        setOpen={setIsConfirmationModalOpen}
+        size="lg">
         <ModalHeader>Are you sure you want to delete this album?</ModalHeader>
         <ModalBody>
           <form className="w-full" action={handleDeleteAlbum}>
