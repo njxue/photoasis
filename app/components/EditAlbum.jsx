@@ -37,20 +37,26 @@ const EditAlbum = ({ data }) => {
           setIsEditModalOpen(true);
         }}
       />
-      <Modal isOpen={isEditModalOpen} setOpen={setIsEditModalOpen} size="md">
-        <ModalHeader closeButton>Edit</ModalHeader>
+      <Modal isOpen={isEditModalOpen} setOpen={setIsEditModalOpen} size="sm">
+        <ModalHeader closeButton>
+          Edit '<b>{name}</b>'
+        </ModalHeader>
         <ModalBody>
-          <div className="flex flex-col justify-between h-full">
+          <div className="flex flex-col justify-between h-full gap-2">
             <form action={handleUpdateAlbum}>
               <label htmlFor="albumName">Name:</label>
-              <input
-                className="w-full border border-solid border-gray-600 rounded p-1"
-                type="text"
-                name="albumName"
-                defaultValue={name}
-                placeholder="Album Name"
-              />
-              <SubmitButton text="Save" />
+              <div className="flex flex-row items-stretch justify-stretch gap-2">
+                <input
+                  className="w-full border border-solid border-gray-600 rounded p-1 grow"
+                  type="text"
+                  name="albumName"
+                  defaultValue={name}
+                  placeholder="Album Name"
+                />
+                <div className="h-full">
+                  <SubmitButton text="Save" />
+                </div>
+              </div>
             </form>
             <button
               onClick={() => {

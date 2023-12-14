@@ -49,7 +49,7 @@ const AddAlbum = () => {
         <ModalHeader size="lg" closeButton>New Album</ModalHeader>
         <ModalBody>
           <form
-            className="flex flex-col gap-3 p-2 w-full h-[90h] justify-between"
+            className="flex flex-col gap-3 p-2 w-full h-full justify-between"
             action={handleCreateAlbum}>
             <div className="flex flex-col grow gap-2">
               <div>
