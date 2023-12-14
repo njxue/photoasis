@@ -46,7 +46,7 @@ const AddAlbum = () => {
       </div>
 
       <Modal isOpen={isModalOpen} setOpen={setIsModalOpen} size="lg">
-        <ModalHeader size="lg">New Album</ModalHeader>
+        <ModalHeader size="lg" closeButton>New Album</ModalHeader>
         <ModalBody>
           <form
             className="flex flex-col gap-3 p-2 w-full h-[90h] justify-between"

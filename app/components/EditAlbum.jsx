@@ -38,7 +38,7 @@ const EditAlbum = ({ data }) => {
         }}
       />
       <Modal isOpen={isEditModalOpen} setOpen={setIsEditModalOpen} size="md">
-        <ModalHeader>Edit</ModalHeader>
+        <ModalHeader closeButton>Edit</ModalHeader>
         <ModalBody>
           <div className="flex flex-col justify-between h-full">
             <form action={handleUpdateAlbum}>

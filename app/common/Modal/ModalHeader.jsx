@@ -2,7 +2,7 @@
 
 import { useModalContext } from "./ModalContext";
 
-export const ModalHeader = ({ children, size }) => {
+export const ModalHeader = ({ children, size, closeButton }) => {
   // default md
   const fontSizes = { sm: "text-md", md: "text-xl", lg: "text-3xl" };
   const { setOpen } = useModalContext();
@@ -15,7 +15,7 @@ export const ModalHeader = ({ children, size }) => {
           } flex flex-col justify-center mb-2`}>
           {children}
         </div>
-        <button onClick={() => setOpen(false)}>x</button>
+        {closeButton && <button onClick={() => setOpen(false)}>x</button>}
       </div>
       <hr />
     </div>
