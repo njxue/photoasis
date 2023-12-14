@@ -37,7 +37,7 @@ const EditAlbum = ({ data }) => {
           setIsEditModalOpen(true);
         }}
       />
-      <Modal isOpen={isEditModalOpen} setOpen={setIsEditModalOpen}>
+      <Modal isOpen={isEditModalOpen} setOpen={setIsEditModalOpen} size="md">
         <ModalHeader>Edit</ModalHeader>
         <ModalBody>
           <div className="flex flex-col justify-between h-full">
@@ -65,7 +65,7 @@ const EditAlbum = ({ data }) => {
       <Modal
         isOpen={isConfirmationModalOpen}
         setOpen={setIsConfirmationModalOpen}
-        size="lg">
+        size="sm">
         <ModalHeader>Are you sure you want to delete this album?</ModalHeader>
         <ModalBody>
           <form className="w-full" action={handleDeleteAlbum}>

@@ -30,7 +30,7 @@ const AddPhotos = ({ aid }) => {
         <p>Add Photos</p>
         <img src="/assets/icons/add.svg" width={30} height={30} />
       </div>
-      <Modal isOpen={isModalOpen} setOpen={setIsModalOpen} closeOnClickOutside>
+      <Modal isOpen={isModalOpen} setOpen={setIsModalOpen} closeOnClickOutside size="md">
         <ModalBody>
           <form
             className="flex flex-col gap-3 p-2 w-full h-full justify-between"

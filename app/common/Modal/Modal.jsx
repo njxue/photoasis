@@ -9,14 +9,12 @@ const Modal = ({
   setOpen,
   closeOnClickOutside,
   children,
-  style,
   size,
+  style,
 }) => {
   const widths = { sm: "30vw", md: "70vw", lg: "70vw" };
   const heights = { sm: "25vh", md: "50vh", lg: "90vh" };
 
-  console.log(widths[size]);
-  console.log(heights[size]);
   const modalRef = useRef();
   useEffect(() => {
     const handleClick = (e) => {
@@ -32,6 +30,7 @@ const Modal = ({
       document.removeEventListener("click", handleClick);
     };
   }, [isOpen, modalRef]);
+
   return (
     isOpen &&
     createPortal(
