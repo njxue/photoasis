@@ -8,11 +8,8 @@ export const ModalHeader = ({ children, size, closeButton }) => {
   const { setOpen } = useModalContext();
   return (
     <div className="w-full">
-      <div className="w-full flex flex-row justify-between items-center">
-        <div
-          className={`${
-            fontSizes[size] ?? "text-xl"
-          } flex flex-col justify-center mb-2`}>
+      <div className="w-full flex flex-row justify-between items-center gap-2">
+        <div className={`${fontSizes[size] ?? "text-xl"} mb-2 grow line-clamp-1`}>
           {children}
         </div>
         {closeButton && <button onClick={() => setOpen(false)}>x</button>}
