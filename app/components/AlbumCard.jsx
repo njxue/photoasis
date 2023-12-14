@@ -21,7 +21,8 @@ const AlbumCard = ({ data }) => {
             className="hover:opacity-50 transition-opacity ease-in-out duration-50 h-full w-full object-cover"
           />
         </Link>
-        <div className="absolute bottom-0 text-white text-border text-xl font-bold px-5 py-3 text-start line-clamp-2">
+
+        <div className="absolute bottom-2 px-5 text-white text-border text-xl font-bold text-start line-clamp-2">
           {name}
         </div>
       </div>
