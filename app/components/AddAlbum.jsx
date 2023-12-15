@@ -38,15 +38,17 @@ const AddAlbum = () => {
 
   return (
     <>
-      <div
+      <img
+        src="/assets/icons/add.svg"
         onClick={() => setIsModalOpen(true)}
-        className="flex flex-col gap-3 justify-center items-center border border-dashed border-gray-500 cursor-pointer h-[250px]">
-        <p>New Album</p>
-        <img src="/assets/icons/add.svg" width={30} height={30} />
-      </div>
-
+        width={30}
+        height={30}
+        className="cursor-pointer hover:opacity-50"
+      />
       <Modal isOpen={isModalOpen} setOpen={setIsModalOpen} size="lg">
-        <ModalHeader size="lg" closeButton>New Album</ModalHeader>
+        <ModalHeader size="lg" closeButton>
+          New Album
+        </ModalHeader>
         <ModalBody>
           <form
             className="flex flex-col gap-3 p-2 w-full h-full justify-between"

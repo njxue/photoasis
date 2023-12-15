@@ -24,13 +24,18 @@ const AddPhotos = ({ aid }) => {
 
   return (
     <>
-      <div
+      <img
+        src="/assets/icons/add.svg"
         onClick={() => setIsModalOpen(true)}
-        className="flex flex-col gap-3 justify-center items-center border border-dashed border-gray-500 cursor-pointer h-[250px]">
-        <p>Add Photos</p>
-        <img src="/assets/icons/add.svg" width={30} height={30} />
-      </div>
-      <Modal isOpen={isModalOpen} setOpen={setIsModalOpen} closeOnClickOutside size="md">
+        width={30}
+        height={30}
+        className="cursor-pointer hover:opacity-50"
+      />
+      <Modal
+        isOpen={isModalOpen}
+        setOpen={setIsModalOpen}
+        closeOnClickOutside
+        size="md">
         <ModalBody>
           <form
             className="flex flex-col gap-3 p-2 w-full h-full justify-between"

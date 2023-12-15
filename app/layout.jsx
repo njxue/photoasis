@@ -19,7 +19,7 @@ const Layout = async ({ children }) => {
             <div className="h-12 w-screen md:w-12 md:h-screen fixed z-50">
               {session?.user && <Nav />}
             </div>
-            <div className="grow mt-12 md:ml-12 md:mt-0">{children}</div>
+            <div className="grow mt-12 md:ml-12 md:mt-0 p-3">{children}</div>
           </main>
         </Provider>
       </body>
