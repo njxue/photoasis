@@ -8,9 +8,8 @@ import { useSession } from "next-auth/react";
 import createAlbum from "@actions/createAlbum";
 import formUploadPhotos from "@utils/formUploadPhotos";
 import updateAlbum from "@actions/updateAlbum";
-import { createPortal } from "react-dom";
 import DroppableFileInput from "@app/common/DroppableFileInput";
-const AddAlbum = () => {
+const AddAlbum = ({ icon }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data: session } = useSession();
@@ -39,7 +38,7 @@ const AddAlbum = () => {
   return (
     <>
       <img
-        src="/assets/icons/add-dark.svg"
+        src={`/assets/icons/${icon ?? "add-dark"}.svg`}
         onClick={() => setIsModalOpen(true)}
         width={30}
         height={30}

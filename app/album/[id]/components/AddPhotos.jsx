@@ -25,7 +25,7 @@ const AddPhotos = ({ aid, icon }) => {
   return (
     <>
       <img
-        src="/assets/icons/add-dark.svg"
+        src={`/assets/icons/${icon ?? "add-dark"}.svg`}
         onClick={() => setIsModalOpen(true)}
         width={30}
         height={30}
