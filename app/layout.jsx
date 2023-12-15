@@ -4,6 +4,7 @@ import "@styles/globals.css";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/route";
 import { inter } from "@styles/fonts";
+import Login from "./components/Login";
 
 export const metadata = {
   title: "Photoapp",
@@ -16,10 +17,18 @@ const Layout = async ({ children }) => {
       <body className={`${inter.className} antialiased`}>
         <Provider>
           <main className="app flex flex-col md:flex-row">
-            <div className="h-12 w-screen md:w-12 md:h-screen fixed z-50">
-              {session?.user && <Nav />}
-            </div>
-            <div className="grow mt-12 md:ml-12 md:mt-0 p-3">{children}</div>
+            {session?.user ? (
+              <>
+                <div className="h-12 w-screen md:w-12 md:h-screen fixed z-50">
+                  <Nav />
+                </div>
+                <div className="grow mt-12 md:ml-12 md:mt-0 p-3">
+                  {children}
+                </div>
+              </>
+            ) : (
+              <Login />
+            )}
           </main>
         </Provider>
       </body>
