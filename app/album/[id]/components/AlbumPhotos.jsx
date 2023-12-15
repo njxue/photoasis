@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import PhotoCard from "./PhotoCard";
+import PhotoCard from "../../../common/PhotoCard";
 import AddPhotos from "./AddPhotos";
 const AlbumPhotos = ({ albumData }) => {
   const [minimalisticView, setMinimalisticView] = useState(false);
@@ -19,7 +19,7 @@ const AlbumPhotos = ({ albumData }) => {
         <div>
           <div className="flex flex-row items-center gap-3 mb-3 mt-2 text-3xl font-light">
             <p className="line-clamp-1">{albumData.name}</p>
-            <AddPhotos />
+            <AddPhotos aid={aid}/>
           </div>
           <hr className="mb-3" />
         </div>
