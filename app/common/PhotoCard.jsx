@@ -57,7 +57,8 @@ const PhotoCard = ({ photo, minimalisticView }) => {
         isOpen={expandPhoto}
         setOpen={setExpandPhoto}
         style={{ width: "auto", height: "auto", padding: "1px" }}
-        closeOnClickOutside size="md">
+        closeOnClickOutside
+        size="md">
         <ModalBody>
           <Image
             src={photo.url}

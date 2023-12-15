@@ -8,7 +8,7 @@ import formUploadPhotos from "@utils/formUploadPhotos";
 import updateAlbum from "@actions/updateAlbum";
 import DroppableFileInput from "@app/common/DroppableFileInput";
 
-const AddPhotos = ({ aid }) => {
+const AddPhotos = ({ aid, icon }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: session } = useSession();
 
@@ -25,7 +25,7 @@ const AddPhotos = ({ aid }) => {
   return (
     <>
       <img
-        src="/assets/icons/add.svg"
+        src="/assets/icons/add-dark.svg"
         onClick={() => setIsModalOpen(true)}
         width={30}
         height={30}

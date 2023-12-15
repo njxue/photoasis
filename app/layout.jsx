@@ -22,7 +22,7 @@ const Layout = async ({ children }) => {
                 <div className="h-12 w-screen md:w-12 md:h-screen fixed z-50">
                   <Nav />
                 </div>
-                <div className="grow mt-12 md:ml-12 md:mt-0 p-3">
+                <div className="grow mt-12 md:ml-12 md:mt-0 p-3 bg-gray-200 h-screen overflow-auto">
                   {children}
                 </div>
               </>

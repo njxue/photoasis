@@ -39,7 +39,7 @@ const AddAlbum = () => {
   return (
     <>
       <img
-        src="/assets/icons/add.svg"
+        src="/assets/icons/add-dark.svg"
         onClick={() => setIsModalOpen(true)}
         width={30}
         height={30}

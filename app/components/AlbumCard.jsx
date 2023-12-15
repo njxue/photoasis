@@ -3,7 +3,6 @@ import Link from "next/link";
 import EditAlbum from "./EditAlbum";
 const AlbumCard = ({ data }) => {
   let { uid, name, aid, thumbnail } = data;
-  console.log(thumbnail);
   if (!thumbnail) {
     thumbnail = "/assets/images/placeholder.png";
   } else {
