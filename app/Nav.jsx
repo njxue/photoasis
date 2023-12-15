@@ -17,9 +17,9 @@ const Nav = ({}) => {
   }, []);
 
   return (
-    <div className="w-full bg-blue-950 h-10 text-white p-2 flex flex-row justify-between items-center">
+    <div className="w-full h-full bg-blue-950 text-white p-2 flex flex-row md:flex-col justify-between items-center">
       <Link href="/">
-        <h1>Photoapp</h1>
+        <h1>P</h1>
       </Link>
       <div className="flex flex-row justify-between items-center gap-3">
         <Image

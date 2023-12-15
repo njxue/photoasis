@@ -15,9 +15,11 @@ const Layout = async ({ children }) => {
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
         <Provider>
-          <main className="app flex flex-col">
-            <div>{session?.user && <Nav />}</div>
-            <div className="grow">{children}</div>
+          <main className="app flex flex-col md:flex-row">
+            <div className="h-12 w-screen md:w-12 md:h-screen fixed z-50">
+              {session?.user && <Nav />}
+            </div>
+            <div className="grow mt-12 md:ml-12 md:mt-0">{children}</div>
           </main>
         </Provider>
       </body>
