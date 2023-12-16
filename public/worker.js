@@ -1,6 +1,5 @@
 onmessage = async (e) => {
   const { chunk, uid, aid } = e.data;
-
   const requests = chunk.map((file) => {
     return fetch(file.url, {
       method: "POST",
@@ -11,21 +10,17 @@ onmessage = async (e) => {
         "X-Bz-Content-Sha1": "do_not_verify",
       },
       body: file.compressed,
-    }).catch((err) => Promise.reject(err));
+    });
   });
 
   try {
     const res = await Promise.all(requests);
     const fileInfos = await Promise.all(res.map((r) => r.json()));
-
     postMessage({
       status: 200,
       data: chunk.map((file, i) => ({
-        name: file.name,
         fileId: fileInfos[i].fileId,
-        aperture: file.aperture,
-        shutterspeed: file.shutterspeed,
-        iso: file.iso,
+        idx: file.idx,
       })),
     });
   } catch (err) {
