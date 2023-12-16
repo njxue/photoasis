@@ -31,7 +31,7 @@ const NewAlbumForm = () => {
     <form
       className="flex flex-col gap-3 p-2 w-full h-full justify-between"
       action={handleCreateAlbum}>
-      <div className="flex flex-col grow gap-2">
+      <div className="flex flex-col h-full gap-2">
         <div>
           <label htmlFor="albumName">Album Name: </label>
           <input
@@ -42,7 +42,9 @@ const NewAlbumForm = () => {
             required
           />
         </div>
-        <DroppableFileInput name="photos" />
+        <div className="grow max-h-[100%]">
+          <DroppableFileInput name="photos" />
+        </div>
       </div>
       <SubmitButton />
     </form>

@@ -1,14 +1,15 @@
-import DroppableFileInput from "@app/common/DroppableFileInput";
 import NewAlbumForm from "./components/NewAlbumForm";
 
 const Page = () => {
   return (
-    <div className="p-1">
-      <div className="flex flex-row items-center gap-3 mb-3 mt-2 text-3xl font-light">
-        <p className="line-clamp-1">New Album</p>
+    <div className="flex flex-col p-1 h-full">
+      <div>
+        <p className="text-3xl font-light line-clamp-1">New Album</p>
+        <hr className="mb-3" />
       </div>
-      <hr className="mb-3" />
-      <NewAlbumForm />
+      <div className="grow">
+        <NewAlbumForm />
+      </div>
     </div>
   );
 };

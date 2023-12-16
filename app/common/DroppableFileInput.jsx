@@ -38,7 +38,7 @@ const DroppableFileInput = ({ name, disabled }) => {
   }
 
   return (
-    <>
+    <div className="flex flex-col h-full md:flex-row">
       <div
         className="border border-dashed border-black h-full w-full rounded flex flex-col justify-center items-center gap-5 opacity-50 text-center text-lg cursor-pointer"
         onClick={handleClick}
@@ -57,8 +57,12 @@ const DroppableFileInput = ({ name, disabled }) => {
           disabled={disabled}
         />
       </div>
-      <ImagePreviews images={images} withForm />
-    </>
+      {images.length > 0 && (
+        <div className="md:w-1/5 h-full">
+          <ImagePreviews images={images} withForm />
+        </div>
+      )}
+    </div>
   );
 };
 
