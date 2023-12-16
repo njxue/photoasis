@@ -4,8 +4,6 @@ import { getProviders, signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import AddAlbum from "./components/AddAlbum";
-import AddPhotos from "./album/[id]/components/AddPhotos";
 
 const Nav = ({}) => {
   const { data: session } = useSession();
@@ -29,7 +27,9 @@ const Nav = ({}) => {
       </Link>
       <div className="flex flex-row gap-5 md:flex-col md:justify-between md:h-1/2">
         <div className="flex flex-row gap-3 md:flex-col">
-          <AddAlbum icon="add-album" />
+          <Link href="/album/new">
+            <img src="/assets/icons/add-album.svg" width={30} />
+          </Link>
           <Link href="/photos">
             <img src="/assets/icons/gallery.svg" width={30} />
           </Link>
