@@ -1,35 +1,34 @@
 import { b2GetUploadUrl } from "@actions/b2";
-import imageCompression from "browser-image-compression";
-import updateAlbum from "@actions/updateAlbum";
+import compress from "./compress";
 
 const formUploadPhotos = async (aid, uid, formdata) => {
   return new Promise((resolve, reject) => {
     (async () => {
-      let files = formdata.getAll("photos");
+      let fileList = formdata.getAll("photos");
       const aperture = formdata.getAll("aperture");
       const shutterspeed = formdata.getAll("shutterspeed");
       const iso = formdata.getAll("iso");
 
-      files = files.map(async (file, i) => {
+      // Compress
+      const compressedFiles = await compress([...fileList]); // fileList is a FileList object, not array
+
+      // Prepare for upload
+      let files = compressedFiles.map(async (file, i) => {
         const { url, token } = await b2GetUploadUrl();
-        const compressed = await imageCompression(file, {
-          maxSizeMB: 0.5,
-        });
-        return new Promise((resolve, reject) => {
-          resolve({
-            name: file.name,
-            compressed,
-            url,
-            token,
-            aperture: aperture[i],
-            shutterspeed: shutterspeed[i],
-            iso: iso[i],
-          });
-        });
+        return {
+          name: fileList[i].name,
+          compressed: file,
+          url,
+          token,
+          aperture: aperture[i],
+          shutterspeed: shutterspeed[i],
+          iso: iso[i],
+        };
       });
+
       files = await Promise.all(files);
 
-      // Delegate workers to perform parallel fetch
+      // Delegate workers to perform parallel upload
       const chunkSize = 1; // Number of fetch requests per worker
       let numChunks = Math.ceil(files.length / chunkSize);
       let completed = 0;
