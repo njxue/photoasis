@@ -1,46 +1,41 @@
+"use client";
+import { useState } from "react";
 import AlbumCard from "./AlbumCard";
-import { authOptions } from "@app/api/auth/[...nextauth]/route";
-import prisma from "@prisma/prisma";
-import { getServerSession } from "next-auth";
+
 import Link from "next/link";
 
-const fetchAlbums = async () => {
-  try {
-    const session = await getServerSession(authOptions);
-    const uid = session?.user.id;
+const Albums = ({ albums }) => {
+  const [filteredAlbums, setFilteredAlbums] = useState(albums);
 
-    let albums = await prisma.album.findMany({
-      where: {
-        uid: uid,
-      },
-      include: {
-        thumbnail: true,
-      },
-    });
-    return {
-      data: albums,
-      status: 200,
-    };
-  } catch (err) {
-    return { status: 500 };
+  function handleChange(e) {
+    const searchTerm = e.target.value.toUpperCase().trim();
+    setFilteredAlbums(
+      albums.filter((album) =>
+        album.name.toUpperCase().trim().includes(searchTerm)
+      )
+    );
   }
-};
-const Albums = async ({}) => {
-  const res = await fetchAlbums();
-
   return (
     <>
       <div>
-        <div className="text-3xl mb-3 flex flex-row items-center justify-start gap-3 mt-2">
-          <p>Albums</p>
-          <Link href="/album/new">
-            <img src="/assets/icons/add-album.svg" width={30} />
-          </Link>
+        <div className="mb-3 flex flex-row items-center justify-between mt-2 flex-wrap">
+          <div className="flex flex-row items-center justify-between gap-3">
+            <p className="text-3xl ">Albums</p>
+            <Link href="/album/new">
+              <img src="/assets/icons/add-album.svg" width={30} />
+            </Link>
+          </div>
+          <input
+            type="search"
+            onChange={handleChange}
+            placeholder="Find an album..."
+            className="input py-1 px-2 rounded"
+          />
         </div>
         <hr className="mb-3" />
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
-        {res.data?.map((album) => (
+        {filteredAlbums?.map((album) => (
           <AlbumCard data={album} key={album.aid} />
         ))}
       </div>
