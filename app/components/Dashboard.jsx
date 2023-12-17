@@ -1,9 +1,9 @@
-import AlbumsContainer from "./AlbumsContainer";
+import DashboardContainer from "./DashboardContainer";
 
 const Dashboard = async () => {
   return (
     <div className="p-1">
-      <AlbumsContainer />
+      <DashboardContainer />
     </div>
   );
 };

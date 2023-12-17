@@ -25,8 +25,8 @@ const fetchAlbums = async () => {
   }
 };
 
-const AlbumsContainer = async () => {
-  const res = await fetchAlbums(); 
+const DashboardContainer = async () => {
+  const res = await fetchAlbums();
   return <Albums albums={res.data} />;
 };
-export default AlbumsContainer;
+export default DashboardContainer;
