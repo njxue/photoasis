@@ -1,5 +1,5 @@
 import { b2GetUploadUrl } from "@actions/b2";
-import compress from "./compress";
+import { compressMany } from "./compress";
 
 const formUploadPhotos = async (aid, uid, formdata) => {
   return new Promise((resolve, reject) => {
@@ -11,7 +11,7 @@ const formUploadPhotos = async (aid, uid, formdata) => {
         const iso = formdata.getAll("iso");
 
         // Compress
-        const compressedFiles = await compress([...fileList]); // fileList is a FileList object, not array
+        const compressedFiles = await compressMany([...fileList]); // fileList is a FileList object, not array
 
         // Prepare for upload
         let files = await getUploadTokens(compressedFiles);

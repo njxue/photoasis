@@ -1,5 +1,6 @@
 import ExifReader from "exifreader";
-const readFileExif = async (file) => {
+import { compress } from "./compress";
+const compressAndReadFileExif = async (file) => {
   let aperture = null;
   let iso = null;
   let shutterspeed = null;
@@ -13,12 +14,22 @@ const readFileExif = async (file) => {
   } catch (err) {
     // No EXIF metadata
   }
-  return {
-    aperture,
-    shutterspeed,
-    iso,
-    name: file.name,
-    url: URL.createObjectURL(file),
-  };
+
+  try {
+    const compressed = await compress(file, {
+      maxSizeMB: 0.3,
+      maxWidthOrHeight: 100,
+    });
+
+    return {
+      aperture,
+      shutterspeed,
+      iso,
+      name: file.name,
+      url: URL.createObjectURL(compressed),
+    };
+  } catch (err) {
+    console.log(err);
+  }
 };
-export default readFileExif;
+export default compressAndReadFileExif;
