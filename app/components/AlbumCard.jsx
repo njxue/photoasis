@@ -6,7 +6,7 @@ const AlbumCard = ({ data }) => {
   if (!thumbnail) {
     thumbnail = "/assets/images/placeholder.png";
   } else {
-    thumbnail = `${process.env.CLOUDFLARE_URL}/${uid}/${aid}/${thumbnail?.name}`;
+    thumbnail = `${process.env.NEXT_PUBLIC_CLOUDFLARE_URL}/${uid}/${aid}/${thumbnail?.name}`;
   }
   return (
     <div className="relative">
