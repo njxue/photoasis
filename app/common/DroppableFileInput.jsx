@@ -1,11 +1,13 @@
 "use client";
 import { useRef, useState } from "react";
 import ImagePreviews from "@app/components/ImagePreviews";
-import readFileExif from "@utils/readFileExif";
+import compressAndReadFileExif from "@utils/compressAndReadFileExif";
+import LoadingSpinner from "./LoadingSpinner";
 
 const DroppableFileInput = ({ name, disabled }) => {
   const inputRef = useRef();
   const [images, setImages] = useState([]);
+  const [isLoadingPreview, setIsLoadingPreview] = useState(false);
 
   function handleClick() {
     inputRef.current && inputRef.current.click();
@@ -30,11 +32,20 @@ const DroppableFileInput = ({ name, disabled }) => {
   }
 
   async function handlePreview(fileList) {
-    const previews = [];
-    for (let i = 0; i < fileList.length; i++) {
-      previews.push(await readFileExif(fileList[i]));
+    try {
+      setIsLoadingPreview(true);
+      const previews = [];
+      for (let i = 0; i < fileList.length; i++) {
+        previews.push(compressAndReadFileExif(fileList[i]));
+      }
+      const compressedPreviews = await Promise.all(previews);
+      setImages(compressedPreviews);
+    } catch (err) {
+      console.log(err);
+      setImages([]);
+    } finally {
+      setIsLoadingPreview(false);
     }
-    setImages(previews);
   }
 
   return (
@@ -57,9 +68,15 @@ const DroppableFileInput = ({ name, disabled }) => {
           disabled={disabled}
         />
       </div>
-      {images.length > 0 && (
+      {(images.length > 0 || isLoadingPreview) && (
         <div className="md:w-1/5 h-full">
-          <ImagePreviews images={images} withForm />
+          {isLoadingPreview ? (
+            <div className="h-full flex flex-col justify-center items-center">
+              <LoadingSpinner text="Preparing your photos..." />
+            </div>
+          ) : (
+            <ImagePreviews images={images} withForm />
+          )}
         </div>
       )}
     </div>

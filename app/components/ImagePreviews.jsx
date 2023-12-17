@@ -15,7 +15,7 @@ const ImagePreviews = ({ images, withForm }) => {
               <Image
                 className={`hover:opacity-100 ${
                   selectedPhoto === image.name ? "opacity-100" : "opacity-50"
-                } object-cover h-[80px] max-w-[100px] w-full`}
+                } object-cover h-[80px] w-full`}
                 width={0}
                 height={0}
                 src={image.url}
@@ -31,7 +31,10 @@ const ImagePreviews = ({ images, withForm }) => {
       {images &&
         withForm &&
         images.map((photo) => (
-          <div hidden={selectedPhoto !== photo.name} className="h-fit mt-2">
+          <div
+            hidden={selectedPhoto !== photo.name}
+            className="h-fit mt-2"
+            key={photo.name}>
             <PhotoSettingsInputs photo={photo} />
           </div>
         ))}
