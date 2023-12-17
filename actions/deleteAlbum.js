@@ -1,10 +1,9 @@
 "use server";
-import { revalidatePath } from "next/cache";
 import BackBlazeB2 from "backblaze-b2";
-
 import prisma from "@prisma/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@app/api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
 async function deleteAlbum(aid) {
   const session = await getServerSession(authOptions);
@@ -71,10 +70,10 @@ async function deleteAlbum(aid) {
 
   try {
     await Promise.all(deleteRequests);
-    revalidatePath("/");
+    redirect("/");
     return { status: 204, message: "Success" };
   } catch (err) {
-    revalidatePath("/");
+    redirect("/");
     return { status: 204, message: "File(s) not found" };
   }
 }
