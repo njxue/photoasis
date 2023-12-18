@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import EditAlbum from "./EditAlbum";
 const AlbumCard = ({ data }) => {
   let { uid, name, aid, thumbnail } = data;
   if (!thumbnail) {
@@ -9,7 +8,7 @@ const AlbumCard = ({ data }) => {
     thumbnail = `${process.env.NEXT_PUBLIC_CLOUDFLARE_URL}/${uid}/${aid}/${thumbnail?.name}`;
   }
   return (
-    <div className="relative">
+    <>
       <div className="card relative ">
         <Link href={`/album/${aid}`}>
           <Image
@@ -25,10 +24,7 @@ const AlbumCard = ({ data }) => {
           {name}
         </div>
       </div>
-      <div className="absolute right-0 top-0 bg-black w-[15%] border border-solid border-gray-300 opacity-0 rounded p-1 cursor-pointer hover:opacity-50">
-        <EditAlbum data={{ aid, name }} />
-      </div>
-    </div>
+    </>
   );
 };
 
