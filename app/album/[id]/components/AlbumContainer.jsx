@@ -44,7 +44,6 @@ const AlbumContainer = ({ albumData }) => {
   }
 
   useEffect(() => {
-    console.log(isSelecting);
     if (!isSelecting) {
       setSelectedPhotos({});
     }
@@ -88,7 +87,8 @@ const AlbumContainer = ({ albumData }) => {
                     <div className="flex flex-row justify-center items-center gap-1">
                       <button
                         onClick={() => setIsDeletingPhotos(true)}
-                        className="flex flex-row justify-center items-center gap-1 bg-red-700 px-2 py-1 rounded font-bold text-white">
+                        disabled={!numSelected}
+                        className="flex flex-row justify-center items-center gap-1 bg-red-700 px-2 py-1 rounded font-bold text-white disabled:opacity-50">
                         <img src="/assets/icons/trash.svg" width={20} />
                         Delete <span>({numSelected})</span>
                       </button>
