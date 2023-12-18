@@ -18,8 +18,8 @@ const Albums = ({ albums }) => {
   return (
     <>
       <div>
-        <div className="mb-3 flex flex-row items-center justify-between mt-2 flex-wrap">
-          <div className="flex flex-row items-center justify-between gap-3">
+        <div className="mb-3 flex flex-row items-center justify-between mt-2 flex-wrap gap-2">
+          <div className="flex flex-row items-center gap-3 grow basis-3/4">
             <p className="text-3xl ">Albums</p>
             <Link href="/album/new">
               <img src="/assets/icons/add-album.svg" width={30} />
@@ -29,7 +29,7 @@ const Albums = ({ albums }) => {
             type="search"
             onChange={handleChange}
             placeholder="Find an album..."
-            className="input py-1 px-2 rounded"
+            className="input py-1 px-2 rounded grow"
           />
         </div>
         <hr className="mb-3" />
