@@ -71,7 +71,7 @@ async function updateAlbum(data) {
       return { status: 200, message: "Success", data: updatedAlbum };
     });
 
-    revalidatePath("/");
+    revalidatePath(`/album/${aid}`);
     return res;
   } catch (err) {
     console.log(err);
