@@ -17,6 +17,7 @@ async function deleteAlbum(aid) {
   let photosToDelete = await prisma.photo.findMany({
     where: {
       aid: aid,
+      uid: uid,
     },
   });
 
@@ -63,18 +64,15 @@ async function deleteAlbum(aid) {
   const deleteRequests = photosToDelete.map((photo) => {
     const b2Id = photo.pid;
     const b2Name = `${uid}/${aid}/${photo.name}`;
-    return b2
-      .deleteFileVersion({ fileId: b2Id, fileName: b2Name })
-      .catch((err) => Promise.reject(err));
+    return b2.deleteFileVersion({ fileId: b2Id, fileName: b2Name });
   });
 
   try {
     await Promise.all(deleteRequests);
     redirect("/");
-    return { status: 204, message: "Success" };
   } catch (err) {
+    console.log(err);
     redirect("/");
-    return { status: 204, message: "File(s) not found" };
   }
 }
 
