@@ -7,8 +7,9 @@ import { inter } from "@styles/fonts";
 import Login from "./components/Login";
 
 export const metadata = {
-  title: "Photoapp",
-  description: "Snap",
+  title: "Photoasis",
+  description:
+    "An online photo gallery to store your photos along with your photo settings",
 };
 const Layout = async ({ children }) => {
   const session = await getServerSession(authOptions);
