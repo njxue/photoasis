@@ -14,7 +14,7 @@ const AddPhotosForm = ({ albumData, show, setShow }) => {
     try {
       const fileInfos = await formUploadPhotos(aid, session?.user.id, formdata);
       await updateAlbum({ aid, photos: fileInfos });
-      setIsModalOpen(false);
+      setShow(false);
     } catch (err) {
       console.log(err);
     }
