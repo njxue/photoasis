@@ -2,11 +2,9 @@
 
 import { getServerSession } from "next-auth";
 import { authOptions } from "@app/api/auth/[...nextauth]/route";
-import { PrismaClient } from "@prisma/client";
-
+import prisma from "@prisma/prisma";
 async function createAlbum(data) {
   try {
-    const prisma = new PrismaClient();
     const { albumName, photos } = data;
     const session = await getServerSession(authOptions);
     const uid = session?.user.id;
@@ -17,7 +15,7 @@ async function createAlbum(data) {
           ...albumData,
           photos: {
             create: photos.map((photo) => ({
-              name: photo,
+              name: photo.name,
               uid,
               aperture: parseFloat(photo.aperture),
               shutterspeed: photo.shutterspeed,
