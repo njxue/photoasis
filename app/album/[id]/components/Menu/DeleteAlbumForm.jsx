@@ -2,17 +2,15 @@
 
 import deleteAlbum from "@actions/deleteAlbum";
 import ConfirmationModal from "@app/common/ConfirmationModal";
-
 const DeleteAlbumForm = ({
   albumData,
   isDeletingAlbum,
   setIsDeletingAlbum,
 }) => {
   const { aid } = albumData;
+
   async function handleDeleteAlbum() {
-    const res = await deleteAlbum(aid);
-    if (res.status === 204) {
-    }
+    await deleteAlbum(aid);
   }
 
   return (

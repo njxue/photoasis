@@ -88,7 +88,7 @@ const AlbumContainer = ({ albumData }) => {
                       <button
                         onClick={() => setIsDeletingPhotos(true)}
                         disabled={!numSelected}
-                        className="flex flex-row justify-center items-center gap-1 bg-red-700 px-2 py-1 rounded font-bold text-white disabled:opacity-50">
+                        className="flex flex-row justify-center items-center gap-1 bg-red-700 px-2 py-1 rounded font-bold text-white">
                         <img src="/assets/icons/trash.svg" width={20} />
                         Delete <span>({numSelected})</span>
                       </button>
@@ -102,7 +102,7 @@ const AlbumContainer = ({ albumData }) => {
                   )}
 
                   <AlbumMenu
-                    setIsDeletingAlbum={setIsDeletingAlbum}
+                    setIsDeleting={setIsDeletingAlbum}
                     setIsEditing={setIsEditing}
                     setIsAddingPhotos={setIsAddingPhotos}
                   />
