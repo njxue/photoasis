@@ -57,7 +57,7 @@ const getUploadTokens = async (compressedFiles) => {
 
 const uploadPhotosWithWorkers = ({ files, uid, aid }) => {
   return new Promise((resolve, reject) => {
-    const chunkSize = 1; // Number of fetch requests per worker
+    const chunkSize = 10; // Number of fetch requests per worker
     let numChunks = Math.ceil(files.length / chunkSize);
     let completed = 0;
     let uploadedFileIds = [];
