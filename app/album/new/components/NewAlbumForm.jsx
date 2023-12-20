@@ -46,7 +46,7 @@ const NewAlbumForm = () => {
           <DroppableFileInput name="photos" />
         </div>
       </div>
-      <SubmitButton />
+      <SubmitButton text="Create" />
     </form>
   );
 };

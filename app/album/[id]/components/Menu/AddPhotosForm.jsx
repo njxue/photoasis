@@ -26,7 +26,7 @@ const AddPhotosForm = ({ albumData, show, setShow }) => {
           className="flex flex-col gap-3 p-2 w-full h-full justify-between"
           action={handleSubmit}>
           <DroppableFileInput name="photos" />
-          <SubmitButton />
+          <SubmitButton text="Add" />
         </form>
       </ModalBody>
     </Modal>
