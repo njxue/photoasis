@@ -7,6 +7,7 @@ import UpdateAlbumForm from "./Menu/UpdateAlbumForm";
 import AddPhotosForm from "./Menu/AddPhotosForm";
 import deletePhotos from "@actions/deletePhotos";
 import ConfirmationModal from "@app/common/ConfirmationModal";
+import MinimalisticViewToggle from "@app/common/MinimalisticViewToggle";
 
 const AlbumContainer = ({ albumData }) => {
   const [minimalisticView, setMinimalisticView] = useState(false);
@@ -53,13 +54,10 @@ const AlbumContainer = ({ albumData }) => {
 
   return (
     <div className="h-full p-1">
-      <div
-        className="fixed right-5 bottom-5 w-[30px] cursor-pointer z-50 opacity-20 hover:opacity-70 hover:scale-110 transition-opacity ease-in-out duration-200"
-        onClick={() => setMinimalisticView((prev) => !prev)}>
-        <img
-          src={`/assets/icons/${minimalisticView ? "unhide" : "hide"}.svg`}
-        />
-      </div>
+      <MinimalisticViewToggle
+        minimalisticView={minimalisticView}
+        setMinimalisticView={setMinimalisticView}
+      />
       {/** ===================================================== Header ===================================================== */}
       {!minimalisticView && (
         <div className="p-1 mb-3 mt-2 font-light">
