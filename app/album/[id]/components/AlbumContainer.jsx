@@ -71,7 +71,7 @@ const AlbumContainer = ({ albumData }) => {
                 albumData={albumData}
               />
             ) : (
-              <div className="flex flex-row justify-between gap-12 items-center grow max-w-[100%]">
+              <div className="flex flex-row justify-between gap-2 items-center grow max-w-[100%]">
                 <p className="text-ellipsis overflow-hidden text-2xl md:text-3xl">
                   {albumData.name}
                 </p>
