@@ -40,6 +40,7 @@ const AlbumContainer = ({ albumData }) => {
       pids: Object.keys(selectedPhotos),
     });
     if (res.status === 204) {
+      setIsDeletingPhotos(false);
       setIsSelecting(false);
     }
   }
