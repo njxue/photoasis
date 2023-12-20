@@ -54,42 +54,44 @@ const Dashboard = ({ albums }) => {
     <>
       <div>
         <div className="mb-3 flex flex-row items-center justify-between mt-2 flex-wrap gap-2">
-          <div className="flex flex-row items-center gap-3 grow basis-3/4">
+          <div className="flex flex-row items-center gap-3 grow">
             <p className="text-3xl ">Albums</p>
             <Link href="/album/new">
               <img src="/assets/icons/add-album.svg" width={30} />
             </Link>
           </div>
-          {!isSelecting ? (
-            <img
-              src="/assets/icons/select.svg"
-              width={30}
-              className="cursor-pointer"
-              onClick={() => setIsSelecting(true)}
+          <div className="flex flex-row gap-2 items-center flex-wrap max-w-[100%]">
+            {!isSelecting ? (
+              <img
+                src="/assets/icons/select.svg"
+                width={30}
+                className="cursor-pointer"
+                onClick={() => setIsSelecting(true)}
+              />
+            ) : (
+              <div className="flex flex-row justify-center items-center gap-1">
+                <button
+                  onClick={() => setIsDeletingAlbums(true)}
+                  disabled={!numSelected}
+                  className="flex flex-row justify-center items-center gap-1 bg-red-700 px-2 py-1 rounded font-bold text-white disabled:opacity-50">
+                  <img src="/assets/icons/trash.svg" width={20} />
+                  Delete <span>({numSelected})</span>
+                </button>
+                <button
+                  className="flex flex-row justify-center items-center gap-1 bg-white px-2 py-1 rounded font-bold"
+                  onClick={() => setIsSelecting(false)}>
+                  <img src="/assets/icons/cross.svg" width={20} />
+                  Cancel
+                </button>
+              </div>
+            )}
+            <input
+              type="search"
+              onChange={handleChange}
+              placeholder="Find an album..."
+              className="input py-1 px-2 rounded grow w-[300px] max-w-[100%]"
             />
-          ) : (
-            <div className="flex flex-row justify-center items-center gap-1">
-              <button
-                onClick={() => setIsDeletingAlbums(true)}
-                disabled={!numSelected}
-                className="flex flex-row justify-center items-center gap-1 bg-red-700 px-2 py-1 rounded font-bold text-white disabled:opacity-50">
-                <img src="/assets/icons/trash.svg" width={20} />
-                Delete <span>({numSelected})</span>
-              </button>
-              <button
-                className="flex flex-row justify-center items-center gap-1 bg-white px-2 py-1 rounded font-bold"
-                onClick={() => setIsSelecting(false)}>
-                <img src="/assets/icons/cross.svg" width={20} />
-                Cancel
-              </button>
-            </div>
-          )}
-          <input
-            type="search"
-            onChange={handleChange}
-            placeholder="Find an album..."
-            className="input py-1 px-2 rounded grow"
-          />
+          </div>
         </div>
         <hr className="mb-3" />
       </div>
