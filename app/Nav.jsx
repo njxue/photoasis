@@ -9,7 +9,7 @@ import { usePathname } from "next/navigation";
 const Nav = ({}) => {
   const { data: session } = useSession();
   const path = usePathname();
-  
+
   return (
     <div className="flex flex-row justify-between items-center w-full h-full bg-white p-2 shadow-gray-300 shadow-md md:flex-col md:border-b-black">
       <Link href="/">
@@ -33,7 +33,7 @@ const Nav = ({}) => {
               width={30}
             />
           </Link>
-          <Link href="/photos">
+          <Link href="/gallery">
             <img
               src="/assets/icons/gallery.svg"
               className={`${
