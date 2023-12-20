@@ -62,54 +62,52 @@ const AlbumContainer = ({ albumData }) => {
       </div>
       {/** ===================================================== Header ===================================================== */}
       {!minimalisticView && (
-        <div className="p-1">
-          <div className="flex flex-row items-center justify-between mb-3 mt-2 font-light">
-            {isEditing ? (
-              <UpdateAlbumForm
-                onCancel={() => setIsEditing(false)}
-                onSuccess={() => setIsEditing(false)}
-                albumData={albumData}
-              />
-            ) : (
-              <div className="flex flex-row justify-between gap-2 items-center grow max-w-[100%]">
-                <p className="text-ellipsis overflow-hidden text-2xl md:text-3xl">
-                  {albumData.name}
-                </p>
-                <div className="flex flex-row gap-2 min-w-[70px]">
-                  {!isSelecting ? (
-                    <img
-                      src="/assets/icons/select.svg"
-                      width={30}
-                      className="cursor-pointer"
-                      onClick={() => setIsSelecting(true)}
-                    />
-                  ) : (
-                    <div className="flex flex-row justify-center items-center gap-1">
-                      <button
-                        onClick={() => setIsDeletingPhotos(true)}
-                        disabled={!numSelected}
-                        className="flex flex-row justify-center items-center gap-1 bg-red-700 px-2 py-1 rounded font-bold text-white">
-                        <img src="/assets/icons/trash.svg" width={20} />
-                        Delete <span>({numSelected})</span>
-                      </button>
-                      <button
-                        className="flex flex-row justify-center items-center gap-1 bg-white px-2 py-1 rounded font-bold"
-                        onClick={() => setIsSelecting(false)}>
-                        <img src="/assets/icons/cross.svg" width={20} />
-                        Cancel
-                      </button>
-                    </div>
-                  )}
-
-                  <AlbumMenu
-                    setIsDeleting={setIsDeletingAlbum}
-                    setIsEditing={setIsEditing}
-                    setIsAddingPhotos={setIsAddingPhotos}
+        <div className="p-1 mb-3 mt-2 font-light">
+          {isEditing ? (
+            <UpdateAlbumForm
+              onCancel={() => setIsEditing(false)}
+              onSuccess={() => setIsEditing(false)}
+              albumData={albumData}
+            />
+          ) : (
+            <div className="flex flex-row flex-wrap justify-between gap-2 items-center grow max-w-[100%]">
+              <p className="line-clamp-2 text-2xl md:text-3xl basis-10/12 grow">
+                {albumData.name}
+              </p>
+              <div className="flex flex-row justify-end grow gap-2 ">
+                {!isSelecting ? (
+                  <img
+                    src="/assets/icons/select.svg"
+                    width={30}
+                    className="cursor-pointer"
+                    onClick={() => setIsSelecting(true)}
                   />
-                </div>
+                ) : (
+                  <div className="flex flex-row justify-center items-center gap-1">
+                    <button
+                      onClick={() => setIsDeletingPhotos(true)}
+                      disabled={!numSelected}
+                      className="flex flex-row justify-center items-center gap-1 bg-red-700 px-2 py-1 rounded font-bold text-white">
+                      <img src="/assets/icons/trash.svg" width={20} />
+                      Delete <span>({numSelected})</span>
+                    </button>
+                    <button
+                      className="flex flex-row justify-center items-center gap-1 bg-white px-2 py-1 rounded font-bold"
+                      onClick={() => setIsSelecting(false)}>
+                      <img src="/assets/icons/cross.svg" width={20} />
+                      Cancel
+                    </button>
+                  </div>
+                )}
+
+                <AlbumMenu
+                  setIsDeleting={setIsDeletingAlbum}
+                  setIsEditing={setIsEditing}
+                  setIsAddingPhotos={setIsAddingPhotos}
+                />
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
           <hr className="mb-3" />
           <DeleteAlbumForm
