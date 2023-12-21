@@ -40,7 +40,7 @@ const Modal = ({
           ref={modalRef}
           className={`h-[${heights[size] ?? "50%"}] w-[${
             widths[size] ?? "50%"
-          }] min-w-[250px] p-2 rounded fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col items-center justify-center z-50 bg-white`}
+          }] min-w-[250px] max-w-[90vw] max-h-[90vh] p-2 rounded fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col items-center justify-center z-50 bg-white`}
           style={style}>
           {children}
         </div>

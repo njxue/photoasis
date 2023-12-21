@@ -19,9 +19,8 @@ const PhotoCard = ({ photo, minimalisticView, expandable, disableHover }) => {
           }}
           className={`${
             minimalisticView ? "h-full" : "h-5/6"
-          } object-cover w-full  ${
-            !disableHover && "hover:opacity-50"
-          } transition-opacity ease-in-out duration-50`}
+          } object-cover w-full`}
+          hover={!disableHover}
         />
 
         {!minimalisticView && (
@@ -50,21 +49,7 @@ const PhotoCard = ({ photo, minimalisticView, expandable, disableHover }) => {
         closeOnClickOutside
         size="md">
         <ModalBody>
-          <Image
-            src={photo.url}
-            width={0}
-            height={0}
-            style={{
-              height: "100%",
-              width: "100%",
-              objectFit: "contain",
-              maxHeight: "80vh",
-              maxWidth: "90vw",
-            }}
-            alt={photo.name}
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            quality={100}
-          />
+          <OptimisedImage src={photo.url} name={photo.name} />
           <div className="absolute top-0 right-0">
             <PhotoInfo photo={photo} />
           </div>

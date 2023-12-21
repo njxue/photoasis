@@ -11,7 +11,7 @@ const AlbumCard = ({ data }) => {
   return (
     <>
       <div className="card relative">
-        <OptimisedImage src={thumbnail} name={name} />
+        <OptimisedImage src={thumbnail} name={name} hover />
         <div className="absolute bottom-2 px-5 text-white text-border text-xl font-bold text-start line-clamp-2">
           {name}
         </div>
