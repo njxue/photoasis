@@ -21,6 +21,7 @@ const GalleryContainer = ({ photos }) => {
           {photos &&
             photos.map((photo) => (
               <PhotoCard
+                key={photo.pid}
                 photo={photo}
                 expandable
                 minimalisticView={minimalisticView}
