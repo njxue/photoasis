@@ -4,6 +4,7 @@ import { ModalBody } from "@app/common/Modal/ModalBody";
 import Image from "next/image";
 import { useState } from "react";
 import PhotoInfo from "./PhotoInfo";
+import OptimisedImage from "./OptimisedImage";
 
 const PhotoCard = ({ photo, minimalisticView, expandable, disableHover }) => {
   const [expandPhoto, setExpandPhoto] = useState(false);
@@ -11,11 +12,8 @@ const PhotoCard = ({ photo, minimalisticView, expandable, disableHover }) => {
   return (
     <>
       <div className="card  bg-white">
-        <Image
+        <OptimisedImage
           src={photo.url}
-          width={0}
-          height={0}
-          alt={photo.name}
           onClick={() => {
             expandable && setExpandPhoto(true);
           }}
@@ -64,6 +62,8 @@ const PhotoCard = ({ photo, minimalisticView, expandable, disableHover }) => {
               maxWidth: "90vw",
             }}
             alt={photo.name}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            quality={100}
           />
           <div className="absolute top-0 right-0">
             <PhotoInfo photo={photo} />

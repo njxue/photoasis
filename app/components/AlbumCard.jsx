@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/image";
+import OptimisedImage from "@app/common/OptimisedImage";
 const AlbumCard = ({ data }) => {
   let { uid, name, aid, thumbnail } = data;
   if (!thumbnail) {
@@ -11,14 +11,7 @@ const AlbumCard = ({ data }) => {
   return (
     <>
       <div className="card relative">
-        <Image
-          src={thumbnail}
-          width={0}
-          height={0}
-          alt={name}
-          className="hover:opacity-50 transition-opacity ease-in-out duration-50 h-full w-full object-cover"
-        />
-
+        <OptimisedImage src={thumbnail} name={name} />
         <div className="absolute bottom-2 px-5 text-white text-border text-xl font-bold text-start line-clamp-2">
           {name}
         </div>

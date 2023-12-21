@@ -1,4 +1,4 @@
-import { b2GetUploadUrl } from "@actions/b2";
+import { b2GetUploadUrl, b2GetUploadUrls, b2UploadFile } from "@actions/b2";
 import { compressMany } from "./compress";
 
 const formUploadPhotos = async (aid, uid, formdata) => {
@@ -6,22 +6,24 @@ const formUploadPhotos = async (aid, uid, formdata) => {
     (async () => {
       try {
         let fileList = formdata.getAll("photos");
+        fileList = [...fileList];
         const aperture = formdata.getAll("aperture");
         const shutterspeed = formdata.getAll("shutterspeed");
         const iso = formdata.getAll("iso");
 
-        // Compress
-        const compressedFiles = await compressMany([...fileList]); // fileList is a FileList object, not array
+        const uploadUrlsAndTokens = await b2GetUploadUrls(fileList.length)
+        let files = fileList.map((file, i) => ({
+          compressed: file,
+          name: file.name,
+          b2name: `${uid}/${aid}/${encodeURIComponent(file.name)}`,
+          url: uploadUrlsAndTokens[i].url,
+          token: uploadUrlsAndTokens[i].token,
+          idx: i,
+        }));
 
-        // Prepare for upload
-        let files = await getUploadTokens(compressedFiles);
 
-        // Upload with workers
-        let uploadedFileIds = await uploadPhotosWithWorkers({
-          files,
-          uid,
-          aid,
-        });
+        // Upload
+        let uploadedFileIds = await uploadFiles(files);
 
         // Assign photo settings
         const uploadedFiles = uploadedFileIds.map((file) => ({
@@ -40,47 +42,26 @@ const formUploadPhotos = async (aid, uid, formdata) => {
   });
 };
 
-const getUploadTokens = async (compressedFiles) => {
-  let files = compressedFiles.map(async (file, i) => {
-    const { url, token } = await b2GetUploadUrl();
-    return {
-      compressed: file,
-      name: file.name,
-      url,
-      token,
-      idx: i,
-    };
-  });
-  files = await Promise.all(files);
-  return files;
+const uploadFiles = async (files) => {
+  return await Promise.all(files.map(uploadFile));
 };
 
-const uploadPhotosWithWorkers = ({ files, uid, aid }) => {
-  return new Promise((resolve, reject) => {
-    const chunkSize = 10; // Number of fetch requests per worker
-    let numChunks = Math.ceil(files.length / chunkSize);
-    let completed = 0;
-    let uploadedFileIds = [];
-
-    for (let i = 0; i < files.length; i += chunkSize) {
-      const chunk = files.slice(i, i + chunkSize);
-      const worker = new Worker("/worker.js");
-      worker.postMessage({ chunk, uid, aid });
-      worker.onmessage = async (e) => {
-        const res = e.data;
-        const fileId = res.data; // { fileId, idx }
-        uploadedFileIds = uploadedFileIds.concat(fileId);
-        completed++;
-        worker.terminate();
-        if (completed === numChunks) {
-          if (res.status === 200) {
-            resolve(uploadedFileIds);
-          } else {
-            reject();
-          }
-        }
-      };
-    }
+const uploadFile = async (file) => {
+  const res = await fetch(file.url, {
+    method: "POST",
+    headers: {
+      Authorization: file.token,
+      "X-Bz-File-Name": file.b2name,
+      "Content-Type": "b2/x-auto",
+      "X-Bz-Content-Sha1": "do_not_verify",
+    },
+    body: file.compressed,
   });
+  const data = await res.json();
+  return {
+    fileId: data.fileId,
+    idx: file.idx,
+  };
 };
+
 export default formUploadPhotos;
