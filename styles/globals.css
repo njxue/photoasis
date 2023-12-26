@@ -35,6 +35,14 @@
   }
 }
 
+@keyframes slideUp {
+  0% {
+    transform: translateY(20%);
+  }
+  100% {
+  }
+}
+
 .animate-fadeIn {
   animation: fadeIn 1s ease-out;
 }
@@ -45,6 +53,10 @@
 
 .animate-fadeInAndSlideDown {
   animation: fadeInAndSlideDown 1s ease-out;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.2s ease-out;
 }
 
 .text-border {
