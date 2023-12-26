@@ -37,7 +37,7 @@ const Nav = ({}) => {
             <img
               src="/assets/icons/gallery.svg"
               className={`${
-                path === "/photos" &&
+                path === "/gallery" &&
                 "filter invert hue-rotate-180 brightness-200"
               } hover:opacity-50`}
               width={30}
