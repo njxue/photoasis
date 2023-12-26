@@ -116,7 +116,7 @@ const AlbumContainer = ({ albumData }) => {
         </div>
       )}
       {/** ===================================================== Body ===================================================== */}
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
+      <div className="photo-grid">
         {photos.map((photo) => (
           <SelectableItem
             selected={isSelected(photo.pid)}

@@ -3,7 +3,11 @@
 @tailwind utilities;
 
 .card {
-  @apply border border-solid border-gray-200 shadow-lg rounded h-[250px] cursor-pointer;
+  @apply border border-solid border-gray-200 shadow-lg rounded h-[160px] cursor-pointer;
+}
+
+.photo-grid {
+  @apply grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7;
 }
 
 @keyframes fadeIn {
