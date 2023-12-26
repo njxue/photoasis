@@ -15,7 +15,7 @@ const Login = () => {
 
   return (
     <div className="relative w-screen h-screen flex flex-row justify-center items-center bg-[url('/assets/images/polaroid.jpg')] bg-cover bg-center bg-no-repeat">
-      <div class="absolute top-0 left-0 w-full h-full bg-white bg-opacity-60"></div>
+      <div className="absolute top-0 left-0 w-full h-full bg-white bg-opacity-60"></div>
 
       {providers && (
         <div className="flex flex-col justify-center items-center w-[90%] sm:w-1/2 z-50 animate-fadeInAndSlideDown">
