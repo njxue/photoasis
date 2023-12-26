@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useSelect } from "@utils/customHooks";
 import AlbumCard from "./AlbumCard";
 import Link from "next/link";
 import ConfirmationModal from "@app/common/ConfirmationModal";
@@ -8,10 +9,17 @@ import SelectItem from "@app/common/Select/SelectItem";
 
 const Dashboard = ({ albums }) => {
   const [filteredAlbums, setFilteredAlbums] = useState(albums);
-  const [isSelecting, setIsSelecting] = useState(false);
   const [isDeletingAlbums, setIsDeletingAlbums] = useState(false);
 
-  const [selectedAlbums, setSelectedAlbums] = useState({});
+  const {
+    isSelecting,
+    endSelect,
+    beginSelect,
+    selectItem,
+    selectedItems,
+    numSelected,
+    isSelected,
+  } = useSelect();
 
   function handleChange(e) {
     const searchTerm = e.target.value.toUpperCase().trim();
@@ -22,34 +30,13 @@ const Dashboard = ({ albums }) => {
     );
   }
 
-  function handleClickAlbum(aid) {
-    if (!isSelecting) {
-      return;
-    }
-    if (selectedAlbums[aid]) {
-      const newSelectedAlbums = { ...selectedAlbums };
-      delete newSelectedAlbums[aid];
-      setSelectedAlbums(newSelectedAlbums);
-    } else {
-      setSelectedAlbums((prev) => ({ ...prev, [aid]: 1 }));
-    }
-  }
-
   async function handleDeleteAlbums() {
-    const res = await deleteAlbums(Object.keys(selectedAlbums));
+    const res = await deleteAlbums(selectedItems);
     if (res.status === 204) {
       // Temporary fix, since revalidatePath in deleteAlbums is not working for some reason
       window.location.reload();
     }
   }
-
-  useEffect(() => {
-    if (!isSelecting) {
-      setSelectedAlbums({});
-    }
-  }, [isSelecting]);
-
-  const numSelected = Object.keys(selectedAlbums).length;
 
   return (
     <>
@@ -67,7 +54,7 @@ const Dashboard = ({ albums }) => {
                 src="/assets/icons/select.svg"
                 width={30}
                 className="cursor-pointer"
-                onClick={() => setIsSelecting(true)}
+                onClick={beginSelect}
               />
             ) : (
               <div className="flex flex-row justify-center items-center gap-1">
@@ -80,7 +67,7 @@ const Dashboard = ({ albums }) => {
                 </button>
                 <button
                   className="flex flex-row justify-center items-center gap-1 bg-white px-2 py-1 rounded font-bold"
-                  onClick={() => setIsSelecting(false)}>
+                  onClick={endSelect}>
                   <img src="/assets/icons/cross.svg" width={20} />
                   Cancel
                 </button>
@@ -99,19 +86,15 @@ const Dashboard = ({ albums }) => {
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
         {filteredAlbums?.map((album) => (
           <SelectItem
-            handleSelect={() => handleClickAlbum(album.aid)}
+            handleSelect={() => selectItem(album.aid)}
             isSelecting={isSelecting}
-            selected={selectedAlbums[album.aid]}>
+            selected={isSelected(album.aid)}
+            key={album.aid}>
             <Link
               href={`/album/${album.aid}`}
               aria-disabled={isSelecting}
               className={isSelecting && "pointer-events-none"}>
-              <AlbumCard
-                data={album}
-                key={album.aid}
-                selectedAlbums={selectedAlbums}
-                setSelectedAlbums={setSelectedAlbums}
-              />
+              <AlbumCard data={album} />
             </Link>
           </SelectItem>
         ))}

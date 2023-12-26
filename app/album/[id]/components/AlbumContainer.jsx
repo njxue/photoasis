@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import PhotoCard from "../../../common/PhotoCard";
 import DeleteAlbumForm from "./Menu/DeleteAlbumForm";
 import AlbumMenu from "./Menu/AlbumMenu";
@@ -9,50 +9,37 @@ import deletePhotos from "@actions/deletePhotos";
 import ConfirmationModal from "@app/common/ConfirmationModal";
 import MinimalisticViewToggle from "@app/common/MinimalisticViewToggle";
 import SelectItem from "@app/common/Select/SelectItem";
+import { useSelect } from "@utils/customHooks";
 
 const AlbumContainer = ({ albumData }) => {
   const [minimalisticView, setMinimalisticView] = useState(false);
-  const [isSelecting, setIsSelecting] = useState(false);
-  const [selectedPhotos, setSelectedPhotos] = useState({});
-
   const [isEditing, setIsEditing] = useState(false);
   const [isDeletingAlbum, setIsDeletingAlbum] = useState(false);
   const [isDeletingPhotos, setIsDeletingPhotos] = useState(false);
   const [isAddingPhotos, setIsAddingPhotos] = useState(false);
 
-  const { photos, aid } = albumData;
+  const {
+    isSelecting,
+    endSelect,
+    beginSelect,
+    selectItem,
+    selectedItems,
+    numSelected,
+    isSelected,
+  } = useSelect();
 
-  function handleSelect(pid) {
-    if (!isSelecting) {
-      return;
-    }
-    if (selectedPhotos[pid]) {
-      const newSelectedPhotos = { ...selectedPhotos };
-      delete newSelectedPhotos[pid];
-      setSelectedPhotos(newSelectedPhotos);
-    } else {
-      setSelectedPhotos((prev) => ({ ...prev, [pid]: 1 }));
-    }
-  }
+  const { photos, aid } = albumData;
 
   async function handleDeletePhotos() {
     const res = await deletePhotos({
       aid,
-      pids: Object.keys(selectedPhotos),
+      pids: selectedItems,
     });
     if (res.status === 204) {
       setIsDeletingPhotos(false);
-      setIsSelecting(false);
+      endSelect();
     }
   }
-
-  useEffect(() => {
-    if (!isSelecting) {
-      setSelectedPhotos({});
-    }
-  }, [isSelecting]);
-
-  const numSelected = Object.keys(selectedPhotos).length;
 
   return (
     <div className="h-full p-1">
@@ -80,7 +67,7 @@ const AlbumContainer = ({ albumData }) => {
                     src="/assets/icons/select.svg"
                     width={30}
                     className="cursor-pointer"
-                    onClick={() => setIsSelecting(true)}
+                    onClick={beginSelect}
                   />
                 ) : (
                   <div className="flex flex-row justify-center items-center gap-1">
@@ -93,7 +80,7 @@ const AlbumContainer = ({ albumData }) => {
                     </button>
                     <button
                       className="flex flex-row justify-center items-center gap-1 bg-white px-2 py-1 rounded font-bold"
-                      onClick={() => setIsSelecting(false)}>
+                      onClick={endSelect}>
                       <img src="/assets/icons/cross.svg" width={20} />
                       Cancel
                     </button>
@@ -132,9 +119,10 @@ const AlbumContainer = ({ albumData }) => {
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
         {photos.map((photo) => (
           <SelectItem
-            selected={selectedPhotos[photo.pid]}
+            selected={isSelected(photo.pid)}
             isSelecting={isSelecting}
-            handleSelect={() => handleSelect(photo.pid)}>
+            handleSelect={() => selectItem(photo.pid)}
+            key={photo.pid}>
             <PhotoCard
               photo={photo}
               key={photo.pid}
