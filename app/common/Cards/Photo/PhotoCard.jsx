@@ -4,7 +4,7 @@ import { ModalBody } from "@app/common/Modal/ModalBody";
 import Image from "next/image";
 import { useState } from "react";
 import PhotoInfo from "./PhotoInfo";
-import OptimisedImage from "./OptimisedImage";
+import OptimisedImage from "../../OptimisedImage";
 
 const PhotoCard = ({ photo, minimalisticView, expandable, disableHover }) => {
   const [expandPhoto, setExpandPhoto] = useState(false);

@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import PhotoCard from "../../../common/PhotoCard";
+import PhotoCard from "../../../common/Cards/Photo/PhotoCard";
 import DeleteAlbumForm from "./Menu/DeleteAlbumForm";
 import AlbumMenu from "./Menu/AlbumMenu";
 import UpdateAlbumForm from "./Menu/UpdateAlbumForm";

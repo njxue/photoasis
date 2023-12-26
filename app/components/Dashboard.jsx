@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useSelect } from "@utils/customHooks";
-import AlbumCard from "./AlbumCard";
+import AlbumCard from "../common/Cards/Album/AlbumCard";
 import Link from "next/link";
 import ConfirmationModal from "@app/common/ConfirmationModal";
 import deleteAlbums from "@actions/deleteAlbums";

@@ -2,7 +2,7 @@
 import updateAlbum from "@actions/updateAlbum";
 import createAlbum from "@actions/createAlbum";
 import formUploadPhotos from "@utils/formUploadPhotos";
-import DroppableFileInput from "@app/common/DroppableFileInput";
+import DroppableFileInput from "@app/common/ImageUpload/DroppableFileInput";
 import SubmitButton from "@app/common/SubmitButton";
 import { useSession } from "next-auth/react";
 const NewAlbumForm = () => {

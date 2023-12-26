@@ -1,5 +1,5 @@
 import { authOptions } from "@app/api/auth/[...nextauth]/route";
-import PhotoCard from "@app/common/PhotoCard";
+import PhotoCard from "@app/common/Cards/Photo/PhotoCard";
 import prisma from "@prisma/prisma";
 import { getServerSession } from "next-auth";
 import GalleryContainer from "./components/GalleryContainer";

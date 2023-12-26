@@ -1,7 +1,7 @@
 "use client";
 
 import MinimalisticViewToggle from "@app/common/MinimalisticViewToggle";
-import PhotoCard from "@app/common/PhotoCard";
+import PhotoCard from "@app/common/Cards/Photo/PhotoCard";
 import { useState } from "react";
 
 const GalleryContainer = ({ photos }) => {

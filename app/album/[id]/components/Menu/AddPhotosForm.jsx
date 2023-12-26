@@ -5,7 +5,7 @@ import SubmitButton from "@app/common/SubmitButton";
 import { useSession } from "next-auth/react";
 import formUploadPhotos from "@utils/formUploadPhotos";
 import updateAlbum from "@actions/updateAlbum";
-import DroppableFileInput from "@app/common/DroppableFileInput";
+import DroppableFileInput from "@app/common/ImageUpload/DroppableFileInput";
 
 const AddPhotosForm = ({ albumData, show, setShow }) => {
   const { data: session } = useSession();

@@ -1,8 +1,8 @@
 "use client";
 import { useRef, useState } from "react";
-import ImagePreviews from "@app/components/ImagePreviews";
+import ImagePreviews from "@app/common/ImageUpload/ImagePreviews";
 import compressAndReadFileExif from "@utils/compressAndReadFileExif";
-import LoadingSpinner from "./LoadingSpinner";
+import LoadingSpinner from "../LoadingSpinner";
 
 const DroppableFileInput = ({ name, disabled }) => {
   const inputRef = useRef();
