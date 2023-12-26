@@ -1,4 +1,4 @@
-import Nav from "@app/Nav";
+import Nav from "@app/components/Nav/Nav";
 import Provider from "@app/Provider";
 import "@styles/globals.css";
 import { getServerSession } from "next-auth";
