@@ -5,7 +5,7 @@ import AlbumCard from "./AlbumCard";
 import Link from "next/link";
 import ConfirmationModal from "@app/common/ConfirmationModal";
 import deleteAlbums from "@actions/deleteAlbums";
-import SelectItem from "@app/common/Select/SelectItem";
+import SelectableItem from "@app/common/Select/SelectableItem";
 
 const Dashboard = ({ albums }) => {
   const [filteredAlbums, setFilteredAlbums] = useState(albums);
@@ -85,7 +85,7 @@ const Dashboard = ({ albums }) => {
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
         {filteredAlbums?.map((album) => (
-          <SelectItem
+          <SelectableItem
             handleSelect={() => selectItem(album.aid)}
             isSelecting={isSelecting}
             selected={isSelected(album.aid)}
@@ -96,7 +96,7 @@ const Dashboard = ({ albums }) => {
               className={isSelecting && "pointer-events-none"}>
               <AlbumCard data={album} />
             </Link>
-          </SelectItem>
+          </SelectableItem>
         ))}
       </div>
       <ConfirmationModal

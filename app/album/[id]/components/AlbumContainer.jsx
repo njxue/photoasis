@@ -8,7 +8,7 @@ import AddPhotosForm from "./Menu/AddPhotosForm";
 import deletePhotos from "@actions/deletePhotos";
 import ConfirmationModal from "@app/common/ConfirmationModal";
 import MinimalisticViewToggle from "@app/common/MinimalisticViewToggle";
-import SelectItem from "@app/common/Select/SelectItem";
+import SelectableItem from "@app/common/Select/SelectableItem";
 import { useSelect } from "@utils/customHooks";
 
 const AlbumContainer = ({ albumData }) => {
@@ -118,7 +118,7 @@ const AlbumContainer = ({ albumData }) => {
       {/** ===================================================== Body ===================================================== */}
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
         {photos.map((photo) => (
-          <SelectItem
+          <SelectableItem
             selected={isSelected(photo.pid)}
             isSelecting={isSelecting}
             handleSelect={() => selectItem(photo.pid)}
@@ -130,7 +130,7 @@ const AlbumContainer = ({ albumData }) => {
               expandable={!isSelecting}
               disableHover={isSelecting}
             />
-          </SelectItem>
+          </SelectableItem>
         ))}
       </div>
     </div>
