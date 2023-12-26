@@ -4,6 +4,7 @@ import AlbumCard from "./AlbumCard";
 import Link from "next/link";
 import ConfirmationModal from "@app/common/ConfirmationModal";
 import deleteAlbums from "@actions/deleteAlbums";
+import SelectItem from "@app/common/Select/SelectItem";
 
 const Dashboard = ({ albums }) => {
   const [filteredAlbums, setFilteredAlbums] = useState(albums);
@@ -97,36 +98,22 @@ const Dashboard = ({ albums }) => {
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
         {filteredAlbums?.map((album) => (
-          <div
-            key={album.aid}
-            className={`relative ${
-              isSelecting && !selectedAlbums[album.aid]
-                ? "opacity-30"
-                : "opacity-100"
-            }`}
-            onClick={() => {
-              handleClickAlbum(album.aid);
-            }}>
-            <div className="cursor-pointer">
-              <Link
-                href={`/album/${album.aid}`}
-                aria-disabled={isSelecting}
-                className={isSelecting && "pointer-events-none"}>
-                <AlbumCard
-                  data={album}
-                  key={album.aid}
-                  selectedAlbums={selectedAlbums}
-                  setSelectedAlbums={setSelectedAlbums}
-                />
-              </Link>
-            </div>
-
-            {selectedAlbums[album.aid] && (
-              <div className="absolute top-0 right-0 p-1 opacity-60">
-                <img src="/assets/icons/tick-circle.svg" width={30} />
-              </div>
-            )}
-          </div>
+          <SelectItem
+            handleSelect={() => handleClickAlbum(album.aid)}
+            isSelecting={isSelecting}
+            selected={selectedAlbums[album.aid]}>
+            <Link
+              href={`/album/${album.aid}`}
+              aria-disabled={isSelecting}
+              className={isSelecting && "pointer-events-none"}>
+              <AlbumCard
+                data={album}
+                key={album.aid}
+                selectedAlbums={selectedAlbums}
+                setSelectedAlbums={setSelectedAlbums}
+              />
+            </Link>
+          </SelectItem>
         ))}
       </div>
       <ConfirmationModal

@@ -8,6 +8,7 @@ import AddPhotosForm from "./Menu/AddPhotosForm";
 import deletePhotos from "@actions/deletePhotos";
 import ConfirmationModal from "@app/common/ConfirmationModal";
 import MinimalisticViewToggle from "@app/common/MinimalisticViewToggle";
+import SelectItem from "@app/common/Select/SelectItem";
 
 const AlbumContainer = ({ albumData }) => {
   const [minimalisticView, setMinimalisticView] = useState(false);
@@ -21,7 +22,7 @@ const AlbumContainer = ({ albumData }) => {
 
   const { photos, aid } = albumData;
 
-  function handleClickPhoto(pid) {
+  function handleSelect(pid) {
     if (!isSelecting) {
       return;
     }
@@ -70,7 +71,7 @@ const AlbumContainer = ({ albumData }) => {
             />
           ) : (
             <div className="flex flex-row flex-wrap justify-between gap-2 items-center grow max-w-[100%]">
-              <p className="line-clamp-2 text-2xl md:text-3xl basis-10/12 grow">
+              <p className="line-clamp-2 text-2xl md:text-3xl basis-1/2 grow ">
                 {albumData.name}
               </p>
               <div className="flex flex-row justify-end grow gap-2 ">
@@ -130,16 +131,10 @@ const AlbumContainer = ({ albumData }) => {
       {/** ===================================================== Body ===================================================== */}
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
         {photos.map((photo) => (
-          <div
-            key={photo.pid}
-            className={`relative ${
-              isSelecting && !selectedPhotos[photo.pid]
-                ? "opacity-30"
-                : "opacity-100"
-            }`}
-            onClick={() => {
-              handleClickPhoto(photo.pid);
-            }}>
+          <SelectItem
+            selected={selectedPhotos[photo.pid]}
+            isSelecting={isSelecting}
+            handleSelect={() => handleSelect(photo.pid)}>
             <PhotoCard
               photo={photo}
               key={photo.pid}
@@ -147,12 +142,7 @@ const AlbumContainer = ({ albumData }) => {
               expandable={!isSelecting}
               disableHover={isSelecting}
             />
-            {selectedPhotos[photo.pid] && (
-              <div className="absolute top-0 right-0 p-1 opacity-60">
-                <img src="/assets/icons/tick-circle.svg" width={30} />
-              </div>
-            )}
-          </div>
+          </SelectItem>
         ))}
       </div>
     </div>
