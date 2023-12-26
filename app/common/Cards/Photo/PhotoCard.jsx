@@ -1,9 +1,8 @@
 "use client";
 import Modal from "@app/common/Modal/Modal";
 import { ModalBody } from "@app/common/Modal/ModalBody";
-import Image from "next/image";
 import { useState } from "react";
-import PhotoInfo from "./PhotoInfo";
+import ExpandedPhotoInfo from "./ExpandedPhotoInfo";
 import OptimisedImage from "../../OptimisedImage";
 
 const PhotoCard = ({ photo, minimalisticView, expandable, disableHover }) => {
@@ -51,7 +50,7 @@ const PhotoCard = ({ photo, minimalisticView, expandable, disableHover }) => {
         <ModalBody>
           <OptimisedImage src={photo.url} name={photo.name} />
           <div className="absolute top-0 right-0">
-            <PhotoInfo photo={photo} />
+            <ExpandedPhotoInfo photo={photo} />
           </div>
         </ModalBody>
       </Modal>

@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-const PhotoInfo = ({ photo }) => {
+const ExpandedPhotoInfo = ({ photo }) => {
   const [showInfo, setShowInfo] = useState(false);
   return (
     <div className="flex flex-col items-end p-2">
@@ -37,4 +37,4 @@ const PhotoInfo = ({ photo }) => {
   );
 };
 
-export default PhotoInfo;
+export default ExpandedPhotoInfo;
