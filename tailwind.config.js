@@ -11,6 +11,9 @@ module.exports = {
         satoshi: ["Satoshi", "sans-serif"],
         inter: ["Inter", "sans-serif"],
       },
+      screens: {
+        xs: "450px",
+      },
     },
   },
   plugins: [],

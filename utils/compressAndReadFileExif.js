@@ -4,6 +4,7 @@ const compressAndReadFileExif = async (file) => {
   let aperture = null;
   let iso = null;
   let shutterspeed = null;
+  let date = null;
   try {
     const metadata = await ExifReader.load(file);
     aperture = metadata["FNumber"]
@@ -11,6 +12,10 @@ const compressAndReadFileExif = async (file) => {
       : null;
     iso = metadata["ISOSpeedRatings"]?.value;
     shutterspeed = metadata["ShutterSpeedValue"]?.value;
+    const dateTimeStr = metadata["DateTimeOriginal"]?.value;
+    if (dateTimeStr != null) {
+      date = dateTimeStr?.split(" ")[0].replaceAll(":", "-");
+    }
   } catch (err) {
     // No EXIF metadata
   }
@@ -25,6 +30,7 @@ const compressAndReadFileExif = async (file) => {
       aperture,
       shutterspeed,
       iso,
+      date,
       name: file.name,
       url: URL.createObjectURL(compressed),
     };

@@ -1,6 +1,4 @@
-import { b2GetUploadUrl, b2GetUploadUrls, b2UploadFile } from "@actions/b2";
-import { compressMany } from "./compress";
-
+import { b2GetUploadUrls } from "@actions/b2";
 const formUploadPhotos = async (aid, uid, formdata) => {
   return new Promise((resolve, reject) => {
     (async () => {
@@ -10,8 +8,10 @@ const formUploadPhotos = async (aid, uid, formdata) => {
         const aperture = formdata.getAll("aperture");
         const shutterspeed = formdata.getAll("shutterspeed");
         const iso = formdata.getAll("iso");
+        const description = formdata.getAll("description");
+        const date = formdata.getAll("date");
 
-        const uploadUrlsAndTokens = await b2GetUploadUrls(fileList.length)
+        const uploadUrlsAndTokens = await b2GetUploadUrls(fileList.length);
         let files = fileList.map((file, i) => ({
           compressed: file,
           name: file.name,
@@ -20,7 +20,6 @@ const formUploadPhotos = async (aid, uid, formdata) => {
           token: uploadUrlsAndTokens[i].token,
           idx: i,
         }));
-
 
         // Upload
         let uploadedFileIds = await uploadFiles(files);
@@ -31,6 +30,8 @@ const formUploadPhotos = async (aid, uid, formdata) => {
           aperture: aperture[file.idx],
           shutterspeed: shutterspeed[file.idx],
           iso: iso[file.idx],
+          description: description[file.idx],
+          date: date[file.idx],
           fileId: file.fileId,
         }));
 

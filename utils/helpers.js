@@ -6,4 +6,20 @@ const capitalize = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-export { capitalize };
+const parseDate = (str) => {
+  if (!str) {
+    return;
+  }
+  const options = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  };
+  const dateObj = new Date(str);
+  if (dateObj === "Invalid Date") {
+    return;
+  }
+  return dateObj.toLocaleDateString("en-SG", options);
+};
+
+export { capitalize, parseDate };
