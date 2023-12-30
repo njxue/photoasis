@@ -31,7 +31,7 @@ const formUploadPhotos = async (aid, uid, formdata) => {
           shutterspeed: shutterspeed[file.idx],
           iso: iso[file.idx],
           description: description[file.idx],
-          date: date[file.idx],
+          date: date[file.idx] ? date[file.idx] + "T00:00:00Z" : null,
           fileId: file.fileId,
         }));
 
