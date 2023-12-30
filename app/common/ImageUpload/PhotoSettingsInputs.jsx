@@ -5,7 +5,7 @@ const PhotoSettingsInputs = ({ photo }) => {
 
   return (
     <div className="text-xs flex flex-col gap-1 px-1">
-      <p className="mb-2 line text-sm text-start">{photo.name}</p>
+      <p className="mb-2 line-clamp-1 text-sm text-start">{photo.name}</p>
       <div className={rowStyle}>
         <label>
           <img src="/assets/icons/aperture-black.svg" width={20} />

@@ -2,7 +2,6 @@
 import { useState } from "react";
 import ExpandedPhoto from "./ExpandedPhoto";
 import OptimisedImage from "../../OptimisedImage";
-import ExpandedPhotoInfo from "./ExpandedPhotoInfo";
 import PhotoInfo from "./PhotoInfo";
 
 const PhotoCard = ({ photo, minimalisticView, expandable, disableHover }) => {
@@ -10,8 +9,7 @@ const PhotoCard = ({ photo, minimalisticView, expandable, disableHover }) => {
   const [showPhotoInfo, setShowPhotoInfo] = useState(false);
 
   function handleShowPhotoInfo() {
-    console.log("SHOW");
-    setShowPhotoInfo(true);
+    setShowPhotoInfo(!minimalisticView && !disableHover && true);
   }
 
   function handleHidePhotoInfo() {
@@ -33,7 +31,7 @@ const PhotoCard = ({ photo, minimalisticView, expandable, disableHover }) => {
           hover={!disableHover}
         />
 
-        {!minimalisticView && showPhotoInfo && (
+        {showPhotoInfo && (
           <div className="absolute bottom-0 bg-black opacity-70 w-full animate-slideUp">
             <PhotoInfo photo={photo} />
           </div>

@@ -15,7 +15,7 @@ const ImagePreviews = ({ images, withForm }) => {
               <Image
                 className={`hover:opacity-100 ${
                   selectedPhoto === image.name ? "opacity-100" : "opacity-50"
-                } object-cover h-[80px] w-full max-w-[120px]`}
+                } object-cover h-[80px] w-full max-w-[100px]`}
                 width={0}
                 height={0}
                 src={image.url}
