@@ -42,13 +42,14 @@ const Dashboard = ({ albums }) => {
     <>
       <div>
         <div className="mb-3 flex flex-row items-center justify-between mt-2 flex-wrap gap-2">
-          <div className="flex flex-row items-center gap-3 grow">
-            <p className="text-3xl ">Albums</p>
-            <Link href="/album/new">
-              <img src="/assets/icons/add-album.svg" width={30} />
-            </Link>
-          </div>
-          <div className="flex flex-row gap-2 items-center flex-wrap max-w-[100%]">
+          <div className="flex flex-row flex-wrap items-center justify-between gap-3 grow">
+            <div className="flex flex-row items-center gap-3">
+              <p className="text-3xl ">Albums</p>
+              <Link href="/album/new">
+                <img src="/assets/icons/add-album.svg" width={30} />
+              </Link>
+            </div>
+
             {!isSelecting ? (
               <img
                 src="/assets/icons/select.svg"
@@ -73,13 +74,14 @@ const Dashboard = ({ albums }) => {
                 </button>
               </div>
             )}
-            <input
-              type="search"
-              onChange={handleChange}
-              placeholder="Find an album..."
-              className="input py-1 px-2 rounded grow w-[300px] max-w-[100%]"
-            />
           </div>
+
+          <input
+            type="search"
+            onChange={handleChange}
+            placeholder="Find an album..."
+            className=" py-1 px-2 rounded grow basis-[150px]"
+          />
         </div>
         <hr className="mb-3" />
       </div>
