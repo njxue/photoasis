@@ -1,9 +1,9 @@
 const PhotoInfo = ({ photo }) => {
-  const width = 15;
+  const width = 12;
   const itemStyle =
-    "flex flex-row justify-center items-center gap-2 flex-wrap basis-4/12";
+    "flex flex-col justify-center items-center gap-1 basis-4/12 xs:flex-row";
   return (
-    <div className="flex flex-row justify-around items-center p-2 text-white text-xs">
+    <div className="flex flex-row justify-around items-center p-2 gap-1 text-white text-[10px]">
       <div className={itemStyle}>
         <img src="/assets/icons/aperture-white.svg" width={width} />
         <div>{photo.aperture === "" ? "-" : photo.aperture}</div>

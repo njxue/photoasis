@@ -1,6 +1,8 @@
 "use client";
+import { parseDate } from "@utils/helpers";
 import { useState } from "react";
 const ExpandedPhotoInfo = ({ photo }) => {
+  const iconsWidth = 16;
   const [showInfo, setShowInfo] = useState(false);
   return (
     <div className="flex flex-col items-end p-2">
@@ -15,20 +17,25 @@ const ExpandedPhotoInfo = ({ photo }) => {
         }}
       />
       {showInfo && (
-        <div className="flex flex-col items-start bg-black text-white p-3 opacity-70 rounded">
-          <div className="mb-2">{photo.name}</div>
-          <div className="flex flex-row items-center gap-2 flex-wrap">
-            <img src="/assets/icons/aperture-white.svg" width={20} />
-            <div>{photo.aperture === "" ? "-" : photo.aperture}</div>
-          </div>
-          <div className="flex flex-row items-center gap-2 flex-wrap">
-            <img src="/assets/icons/shutterspeed-white.svg" width={20} />
-            <div>{photo.shutterspeed === "" ? "-" : photo.shutterspeed}</div>
-          </div>
-          <div className="flex flex-row items-center gap-2 flex-wrap justify-center">
-            <img src="/assets/icons/iso-white.svg" width={20} />
-            <div>
-              <div>{photo.iso === "" ? "-" : photo.iso}</div>
+        <div className="flex flex-col items-start bg-black text-white p-3 opacity-70 rounded text-sm">
+          {/* <div>{photo.name}</div> */}
+          <div className="mb-1">{photo.description}</div>
+          <div>{parseDate(photo.date)}</div>
+          <hr className="border border-solid border-gray-800 w-full my-2"/>
+          <div className="flex flex-col justify-start items-start text-xs gap-1">
+            <div className="flex flex-row items-center gap-2 flex-wrap">
+              <img src="/assets/icons/aperture-white.svg" width={iconsWidth} />
+              <div>{photo.aperture === "" ? "-" : photo.aperture}</div>
+            </div>
+            <div className="flex flex-row items-center gap-2 flex-wrap">
+              <img src="/assets/icons/shutterspeed-white.svg" width={iconsWidth} />
+              <div>{photo.shutterspeed === "" ? "-" : photo.shutterspeed}</div>
+            </div>
+            <div className="flex flex-row items-center gap-2 flex-wrap justify-center">
+              <img src="/assets/icons/iso-white.svg" width={iconsWidth} />
+              <div>
+                <div>{photo.iso === "" ? "-" : photo.iso}</div>
+              </div>
             </div>
           </div>
         </div>

@@ -5,30 +5,31 @@ generator client {
 datasource db {
   provider  = "postgresql"
   url       = env("DIRECT_URL") // Investigate
-  directUrl = env("DIRECT_URL") 
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
-  id          Int          @id @default(autoincrement())
-  name        String
-  email       String       @unique
-  image       String?
-  createdAt   DateTime     @default(now())
-  albums Album[]
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  image     String?
+  createdAt DateTime @default(now())
+  albums    Album[]
 }
 
 model Photo {
-  pid                    String      @id
-  name                   String
-  uid                    Int
-  aid                    Int?
-  aperture               Decimal?
-  iso                    Int?
-  shutterspeed           String?
-  thumbnailForAlbum Album? @relation("thumbnail")
-  album             Album? @relation(fields: [aid, uid], references: [aid, uid])
-
- }
+  pid               String    @id
+  name              String
+  uid               Int
+  aid               Int?
+  aperture          Decimal?
+  iso               Int?
+  shutterspeed      String?
+  thumbnailForAlbum Album?    @relation("thumbnail")
+  album             Album?    @relation(fields: [aid, uid], references: [aid, uid])
+  description       String?
+  date              DateTime?
+}
 
 model Album {
   aid          Int     @default(autoincrement())
