@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import PhotoSettingsInputs from "./PhotoSettingsInputs";
+import OptimisedImage from "../OptimisedImage";
 
 const ImagePreviews = ({ images, withForm }) => {
   const [selectedPhoto, setSelectedPhoto] = useState(null);
@@ -12,18 +13,13 @@ const ImagePreviews = ({ images, withForm }) => {
         <div className="absolute top-0 left-0 w-full flex flex-row gap-1 md:grid md:grid-cols-2">
           {images &&
             images.map((image) => (
-              <Image
-                className={`hover:opacity-100 ${
-                  selectedPhoto === image.name ? "opacity-100" : "opacity-50"
-                } object-cover h-[80px] w-full max-w-[100px]`}
-                width={0}
-                height={0}
+              <OptimisedImage
+                className={`${selectedPhoto === image.name && "opacity-50 border-4 border-solid border-black"} h-[80px] w-full max-w-[100px]`}
                 src={image.url}
                 onClick={(e) => setSelectedPhoto(e.target.id)}
                 key={image.name}
-                id={image.name}
-                alt={image.name}
-                priority={true}
+                name={image.name}
+                hover
               />
             ))}
         </div>

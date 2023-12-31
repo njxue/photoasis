@@ -51,7 +51,7 @@ const DroppableFileInput = ({ name, disabled }) => {
   return (
     <div className="flex flex-col h-full md:flex-row">
       <div
-        className="border border-dashed border-black h-full w-full rounded flex flex-col justify-center items-center gap-5 opacity-50 text-center text-lg cursor-pointer"
+        className="border border-dashed border-black h-full w-full rounded flex flex-col justify-center items-center gap-5 opacity-50 text-center text-lg cursor-pointer p-3"
         onClick={handleClick}
         onDrop={handleDrop}
         onDragOver={handleDragOver}>
