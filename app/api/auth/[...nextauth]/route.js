@@ -1,6 +1,7 @@
 import prisma from "@prisma/prisma";
 import NextAuth from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
+import { revalidatePath } from "next/cache";
 
 const authOptions = {
   providers: [
@@ -38,7 +39,7 @@ const authOptions = {
             },
           });
         }
-
+        revalidatePath("/", "layout");
         return true;
       } catch (err) {
         console.log(err);
