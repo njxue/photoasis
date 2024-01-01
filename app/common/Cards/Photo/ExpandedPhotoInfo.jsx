@@ -19,11 +19,15 @@ const ExpandedPhotoInfo = ({ photo }) => {
       {showInfo && (
         <div className="flex flex-col items-start bg-black text-white p-3 opacity-70 rounded text-sm max-w-full">
           {/* <div>{photo.name}</div> */}
-          <p className="mb-1 text-ellipsis overflow-hidden max-w-full">
-            {photo.description}
-          </p>
-          <p>{parseDate(photo.date)}</p>
-          <hr className="border border-solid border-gray-800 w-full my-2" />
+          {(photo.description || photo.date) && (
+            <>
+              <p className="mb-1 text-ellipsis overflow-hidden max-w-full">
+                {photo.description}
+              </p>
+              <p>{parseDate(photo.date)}</p>
+              <hr className="border border-solid border-gray-800 w-full my-2" />
+            </>
+          )}
           <div className="flex flex-col justify-start items-start text-xs gap-1">
             <div className="flex flex-row items-center gap-2 flex-wrap">
               <img src="/assets/icons/aperture-white.svg" width={iconsWidth} />
