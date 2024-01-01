@@ -1,5 +1,3 @@
-"use client";
-
 import Tab from "./Tab";
 import Logout from "./Logout";
 import ProfilePic from "./ProfilePic";
