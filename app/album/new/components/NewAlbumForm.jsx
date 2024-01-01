@@ -5,12 +5,10 @@ import formUploadPhotos from "@utils/formUploadPhotos";
 import DroppableFileInput from "@app/common/ImageUpload/DroppableFileInput";
 import SubmitButton from "@app/common/SubmitButton";
 import { useSession } from "next-auth/react";
-import { useFormStatus } from "react-dom";
 
 const NewAlbumForm = () => {
   const { data: session } = useSession();
   const uid = session?.user.id;
-  const { pending } = useFormStatus();
 
   async function handleCreateAlbum(formdata) {
     try {
@@ -30,8 +28,6 @@ const NewAlbumForm = () => {
     }
   }
 
-  console.log(pending);
-
   return (
     <form
       className="flex flex-col gap-3 p-2 w-full h-full justify-between"
@@ -48,10 +44,10 @@ const NewAlbumForm = () => {
           />
         </div>
         <div className="grow max-h-[100%]">
-          <DroppableFileInput name="photos" disabled={pending} />
+          <DroppableFileInput name="photos" />
         </div>
       </div>
-      <SubmitButton text="Create" pending={pending} />
+      <SubmitButton text="Create" />
     </form>
   );
 };
