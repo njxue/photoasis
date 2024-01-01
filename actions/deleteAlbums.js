@@ -78,13 +78,12 @@ async function deleteAlbums(albumIds) {
   });
 
   try {
-    const res = await Promise.all(deleteRequests);
-    revalidatePath("/");
-    return { status: 204, message: "Success" };
+    await Promise.all(deleteRequests);
+    revalidatePath("/", "layout");
+    return { status: 204, message: "Successfully deleted albums" };
   } catch (err) {
     console.log(err);
-    revalidatePath("/");
-    return { status: 404 };
+    return { status: 404, message: "Unable to delete albums" };
   }
 }
 

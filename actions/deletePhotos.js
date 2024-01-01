@@ -79,11 +79,11 @@ const deletePhotos = async ({ aid, pids }) => {
       })
     );
 
-    const res = await Promise.all(deleteRequests);
-    revalidatePath(`/album/${aid}`);
-    return { status: 204, message: "Success" };
+    await Promise.all(deleteRequests);
+    revalidatePath("/", "layout");
+    return { status: 204, message: "Successfully deleted photos" };
   } catch (err) {
-    return { status: 204, message: "File not found" };
+    return { status: 204, message: "Photo(s) not found" };
   }
 };
 

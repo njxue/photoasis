@@ -33,7 +33,7 @@ const Dashboard = ({ albums }) => {
   async function handleDeleteAlbums() {
     const res = await deleteAlbums(selectedItems);
     if (res.status === 204) {
-      // Temporary fix, since revalidatePath in deleteAlbums is not working for some reason
+      // Temp fix; revalidatePath is not working fsr
       window.location.reload();
     }
   }

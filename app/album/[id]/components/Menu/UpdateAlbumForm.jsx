@@ -3,8 +3,10 @@ const UpdateAlbumForm = ({ albumData, onCancel, onSuccess }) => {
   const { aid } = albumData;
   async function handleUpdateAlbum(formdata) {
     const albumName = formdata.get("albumName");
-    await updateAlbum({ aid, albumName });
-    onSuccess && onSuccess();
+    const res = await updateAlbum({ aid, albumName });
+    if (res.status === 200) {
+      onSuccess && onSuccess();
+    }
   }
   return (
     <form

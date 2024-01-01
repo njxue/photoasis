@@ -5,11 +5,12 @@ import formUploadPhotos from "@utils/formUploadPhotos";
 import DroppableFileInput from "@app/common/ImageUpload/DroppableFileInput";
 import SubmitButton from "@app/common/SubmitButton";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const NewAlbumForm = () => {
   const { data: session } = useSession();
   const uid = session?.user.id;
-
+  const router = useRouter();
   async function handleCreateAlbum(formdata) {
     try {
       const albumName = formdata.get("albumName");
@@ -22,7 +23,10 @@ const NewAlbumForm = () => {
       }
       const aid = albumRes.data.aid;
       const fileInfos = await formUploadPhotos(aid, uid, formdata);
-      await updateAlbum({ aid, photos: fileInfos });
+      const res = await updateAlbum({ aid, photos: fileInfos });
+      if (res.status === 200) {
+        router.push(`/album/${aid}`);
+      }
     } catch (err) {
       console.log(err);
     }

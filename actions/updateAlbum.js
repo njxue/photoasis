@@ -74,11 +74,9 @@ async function updateAlbum(data) {
   });
 
   if (res.status === 200) {
-    revalidatePath(`/album/${aid}`);
-    redirect(`/album/${aid}`);
-  } else {
-    throw new Error("Unable to update album");
+    revalidatePath("/", "layout");
   }
+  return res;
 }
 
 export default updateAlbum;

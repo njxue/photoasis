@@ -2,15 +2,21 @@
 
 import deleteAlbum from "@actions/deleteAlbum";
 import ConfirmationModal from "@app/common/ConfirmationModal";
+import { useRouter } from "next/navigation";
+
 const DeleteAlbumForm = ({
   albumData,
   isDeletingAlbum,
   setIsDeletingAlbum,
 }) => {
   const { aid } = albumData;
-
+  const router = useRouter();
+  
   async function handleDeleteAlbum() {
-    await deleteAlbum(aid);
+    const res = await deleteAlbum(aid);
+    if (res.status === 204) {
+      router.push("/");
+    }
   }
 
   return (
