@@ -9,7 +9,7 @@ const ProfilePic = async () => {
       width={0}
       height={0}
       className="rounded-full w-7 h-7"
-      alt="profile-pic"
+      name="profile-pic"
     />
   );
 };
