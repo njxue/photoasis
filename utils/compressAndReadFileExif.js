@@ -20,22 +20,18 @@ const compressAndReadFileExif = async (file) => {
     // No EXIF metadata
   }
 
-  try {
-    const compressed = await compress(file, {
-      maxSizeMB: 0.3,
-      maxWidthOrHeight: 100,
-    });
+  const compressed = await compress(file, {
+    maxSizeMB: 0.3,
+    maxWidthOrHeight: 100,
+  });
 
-    return {
-      aperture,
-      shutterspeed,
-      iso,
-      date,
-      name: file.name,
-      url: URL.createObjectURL(compressed),
-    };
-  } catch (err) {
-    console.log(err);
-  }
+  return {
+    aperture,
+    shutterspeed,
+    iso,
+    date,
+    name: file.name,
+    url: URL.createObjectURL(compressed),
+  };
 };
 export default compressAndReadFileExif;
