@@ -127,8 +127,7 @@ const AlbumContainer = ({ albumData }) => {
               photo={photo}
               key={photo.pid}
               minimalisticView={minimalisticView}
-              expandable={!isSelecting}
-              disableHover={isSelecting}
+              disablePointer={isSelecting}
             />
           </SelectableItem>
         ))}
