@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import ImagePreviews from "@app/common/ImageUpload/ImagePreviews";
 import compressAndReadFileExif from "@utils/compressAndReadFileExif";
 import LoadingSpinner from "../LoadingSpinner";
+import { toast } from "react-toastify";
 
 const DroppableFileInput = ({ name, disabled }) => {
   const inputRef = useRef();
@@ -39,9 +40,10 @@ const DroppableFileInput = ({ name, disabled }) => {
         previews.push(compressAndReadFileExif(fileList[i]));
       }
       const compressedPreviews = await Promise.all(previews);
+
       setImages(compressedPreviews);
     } catch (err) {
-      console.log(err);
+      toast.error("Invalid image file");
       setImages([]);
     } finally {
       setIsLoadingPreview(false);

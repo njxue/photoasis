@@ -6,8 +6,10 @@ import DroppableFileInput from "@app/common/ImageUpload/DroppableFileInput";
 import SubmitButton from "@app/common/SubmitButton";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 const NewAlbumForm = () => {
+  const errorMessage = "Unable to create album. Please try again later";
   const { data: session } = useSession();
   const uid = session?.user.id;
   const router = useRouter();
@@ -19,16 +21,21 @@ const NewAlbumForm = () => {
       });
 
       if (albumRes.status !== 200) {
-        // Handle error
+        toast.error(errorMessage);
+        return;
       }
       const aid = albumRes.data.aid;
       const fileInfos = await formUploadPhotos(aid, uid, formdata);
       const res = await updateAlbum({ aid, photos: fileInfos });
       if (res.status === 200) {
         router.push(`/album/${aid}`);
+        toast.success(`Album "${albumName}" successfully created!`);
+      } else {
+        toast.error(errorMessage);
       }
     } catch (err) {
       console.log(err);
+      toast.error(errorMessage);
     }
   }
 

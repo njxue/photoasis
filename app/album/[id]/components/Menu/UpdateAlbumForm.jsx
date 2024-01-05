@@ -1,4 +1,6 @@
 import updateAlbum from "@actions/updateAlbum";
+import { toast } from "react-toastify";
+
 const UpdateAlbumForm = ({ albumData, onCancel, onSuccess }) => {
   const { aid } = albumData;
   async function handleUpdateAlbum(formdata) {
@@ -6,6 +8,9 @@ const UpdateAlbumForm = ({ albumData, onCancel, onSuccess }) => {
     const res = await updateAlbum({ aid, albumName });
     if (res.status === 200) {
       onSuccess && onSuccess();
+      toast.success("Album successfully updated");
+    } else {
+      toast.error("Unable to update album. Please try again later");
     }
   }
   return (

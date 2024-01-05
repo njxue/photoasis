@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/route";
 import { inter } from "@styles/fonts";
 import Login from "./components/Login";
+import ToastContainerWrapper from "./ToastContainerWrapper";
 
 export const metadata = {
   title: "Photoasis",
@@ -31,6 +32,7 @@ const Layout = async ({ children }) => {
               <Login />
             )}
           </main>
+          <ToastContainerWrapper />
         </Provider>
       </body>
     </html>

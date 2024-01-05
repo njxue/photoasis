@@ -6,6 +6,7 @@ import Link from "next/link";
 import ConfirmationModal from "@app/common/ConfirmationModal";
 import deleteAlbums from "@actions/deleteAlbums";
 import SelectableItem from "@app/common/Select/SelectableItem";
+import { toast } from "react-toastify";
 
 const Dashboard = ({ albums }) => {
   const [filteredAlbums, setFilteredAlbums] = useState(albums);
@@ -30,6 +31,9 @@ const Dashboard = ({ albums }) => {
     const res = await deleteAlbums(selectedItems);
     if (res.status === 204) {
       endSelect();
+      toast.success("Album(s) deleted successfully");
+    } else {
+      toast.error("Unable to delete selected album(s). Please try again later");
     }
   }
 

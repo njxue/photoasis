@@ -6,8 +6,10 @@ import { useSession } from "next-auth/react";
 import formUploadPhotos from "@utils/formUploadPhotos";
 import updateAlbum from "@actions/updateAlbum";
 import DroppableFileInput from "@app/common/ImageUpload/DroppableFileInput";
+import { toast } from "react-toastify";
 
 const AddPhotosForm = ({ albumData, show, setShow }) => {
+  const errorMessage = "Unable to add photo(s). Please try again later";
   const { data: session } = useSession();
   const { aid } = albumData;
   async function handleSubmit(formdata) {
@@ -16,9 +18,13 @@ const AddPhotosForm = ({ albumData, show, setShow }) => {
       const res = await updateAlbum({ aid, photos: fileInfos });
       if (res.status === 200) {
         setShow(false);
+        toast.success("New photo(s) added!");
+      } else {
+        toast.error(errorMessage);
       }
     } catch (err) {
       console.log(err);
+      toast.error(errorMessage);
     }
   }
   return (
