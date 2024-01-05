@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelect } from "@utils/customHooks";
 import AlbumCard from "../common/Cards/Album/AlbumCard";
 import Link from "next/link";
@@ -9,6 +9,7 @@ import SelectableItem from "@app/common/Select/SelectableItem";
 
 const Dashboard = ({ albums }) => {
   const [filteredAlbums, setFilteredAlbums] = useState(albums);
+  const [searchTerm, setSearchTerm] = useState("");
   const [isDeletingAlbums, setIsDeletingAlbums] = useState(false);
 
   const {
@@ -21,22 +22,24 @@ const Dashboard = ({ albums }) => {
     isSelected,
   } = useSelect();
 
-  function handleChange(e) {
-    const searchTerm = e.target.value.toUpperCase().trim();
-    setFilteredAlbums(
-      albums.filter((album) =>
-        album.name.toUpperCase().trim().includes(searchTerm)
-      )
-    );
+  function handleSearchTermChange(e) {
+    setSearchTerm(e.target.value.toUpperCase().trim());
   }
 
   async function handleDeleteAlbums() {
     const res = await deleteAlbums(selectedItems);
     if (res.status === 204) {
-      // Temp fix; revalidatePath is not working fsr
-      window.location.reload();
+      endSelect();
     }
   }
+
+  useEffect(() => {
+    setFilteredAlbums(
+      albums.filter((album) =>
+        album.name.toUpperCase().trim().includes(searchTerm)
+      )
+    );
+  }, [albums, searchTerm]);
 
   return (
     <>
@@ -78,7 +81,7 @@ const Dashboard = ({ albums }) => {
 
           <input
             type="search"
-            onChange={handleChange}
+            onChange={handleSearchTermChange}
             placeholder="Find an album..."
             className=" py-1 px-2 rounded grow basis-[150px]"
           />
