@@ -4,12 +4,12 @@ import ExpandedPhoto from "./ExpandedPhoto";
 import OptimisedImage from "../../OptimisedImage";
 import PhotoInfo from "./PhotoInfo";
 
-const PhotoCard = ({ photo, minimalisticView, expandable, disableHover }) => {
+const PhotoCard = ({ photo, minimalisticView, disablePointer }) => {
   const [expandPhoto, setExpandPhoto] = useState(false);
   const [showPhotoInfo, setShowPhotoInfo] = useState(false);
 
   function handleShowPhotoInfo() {
-    setShowPhotoInfo(!minimalisticView && !disableHover && true);
+    setShowPhotoInfo(!minimalisticView && !disablePointer);
   }
 
   function handleHidePhotoInfo() {
@@ -19,16 +19,18 @@ const PhotoCard = ({ photo, minimalisticView, expandable, disableHover }) => {
   return (
     <>
       <div
-        className="card relative bg-white"
+        className={`card relative bg-white ${
+          disablePointer && "pointer-events-none"
+        } `}
         onMouseEnter={handleShowPhotoInfo}
         onMouseLeave={handleHidePhotoInfo}>
         <OptimisedImage
           src={photo.url}
           onClick={() => {
-            expandable && setExpandPhoto(true);
+            setExpandPhoto(true);
           }}
           className="object-cover h-full w-full"
-          hover={!disableHover}
+          hover
         />
 
         {showPhotoInfo && (
