@@ -95,7 +95,9 @@ const Dashboard = ({ albums }) => {
             <Link
               href={`/album/${album.aid}`}
               aria-disabled={isSelecting}
-              className={isSelecting && "pointer-events-none"}>
+              className={
+                isSelecting ? "pointer-events-none" : "cursor-pointer"
+              }>
               <AlbumCard data={album} />
             </Link>
           </SelectableItem>
