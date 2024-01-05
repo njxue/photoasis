@@ -25,6 +25,14 @@ const NewAlbumForm = () => {
         return;
       }
       const aid = albumRes.data.aid;
+
+      // No  photos
+      if (formdata.getAll("photos")[0].name === "") {
+        router.push(`/album/${aid}`);
+        toast.success(`Album "${albumName}" successfully created!`);
+        return;
+      }
+
       const fileInfos = await formUploadPhotos(aid, uid, formdata);
       const res = await updateAlbum({ aid, photos: fileInfos });
       if (res.status === 200) {
