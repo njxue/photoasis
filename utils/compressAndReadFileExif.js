@@ -11,8 +11,10 @@ const compressAndReadFileExif = async (file) => {
       ? metadata["FNumber"].value[0] / metadata["FNumber"].value[1]
       : null;
     iso = metadata["ISOSpeedRatings"]?.value;
-    shutterspeed = metadata["ShutterSpeedValue"]?.value;
-    const dateTimeStr = metadata["DateTimeOriginal"]?.value;
+    shutterspeed =
+      metadata["ShutterSpeedValue"]?.description ||
+      metadata["ExposureTime"]?.description;
+    const dateTimeStr = metadata["DateTimeOriginal"]?.description;
     if (dateTimeStr != null) {
       date = dateTimeStr?.split(" ")[0].replaceAll(":", "-");
     }
