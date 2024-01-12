@@ -10,6 +10,14 @@
   @apply grid grid-cols-2 xs:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7;
 }
 
+.text-border {
+  text-shadow: 2px 2px 3px black;
+}
+
+.page-heading {
+  @apply text-3xl p-1 mt-2;
+}
+
 @keyframes fadeIn {
   0% {
     opacity: 0;
@@ -61,8 +69,4 @@
 
 .animate-slideUp {
   animation: slideUp 0.2s ease-out;
-}
-
-.text-border {
-  text-shadow: 2px 2px 3px black;
 }

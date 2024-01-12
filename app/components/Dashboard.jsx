@@ -48,10 +48,10 @@ const Dashboard = ({ albums }) => {
   return (
     <>
       <div>
-        <div className="mb-3 flex flex-row items-center justify-between mt-2 flex-wrap gap-2">
+        <div className="mb-3 flex flex-row items-center justify-between  flex-wrap gap-2">
           <div className="flex flex-row flex-wrap items-center justify-between gap-3 grow">
-            <div className="flex flex-row items-center gap-3">
-              <p className="text-3xl ">Albums</p>
+            <div className="flex flex-row items-center gap-3 page-heading">
+              <p>Albums</p>
               <Link href="/album/new">
                 <img src="/assets/icons/add-album.svg" width={30} />
               </Link>
