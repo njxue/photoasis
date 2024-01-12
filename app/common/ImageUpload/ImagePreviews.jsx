@@ -13,7 +13,7 @@ const ImagePreviews = ({ images, setImages }) => {
 
   return (
     <div className="flex flex-col py-3 md:px-1 md:py-0 h-full">
-      <div className="relative h-[90px] overflow-auto md:h-full">
+      <div className="relative min-h-[90px] overflow-auto md:h-full">
         <div className="absolute top-0 left-0 w-full flex flex-row gap-1 md:grid md:grid-cols-2">
           {images &&
             images.map((image) => (

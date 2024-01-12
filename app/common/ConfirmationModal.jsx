@@ -12,7 +12,7 @@ const ConfirmationModal = ({
   prompt,
 }) => {
   return (
-    <Modal isOpen={isOpen} setOpen={setIsOpen} size="sm">
+    <Modal isOpen={isOpen} setOpen={setIsOpen}>
       <ModalHeader>{prompt}</ModalHeader>
       <ModalBody>
         <form

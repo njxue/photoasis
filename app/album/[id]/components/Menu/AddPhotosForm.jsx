@@ -28,14 +28,16 @@ const AddPhotosForm = ({ albumData, show, setShow }) => {
     }
   }
   return (
-    <Modal isOpen={show} setOpen={setShow} closeOnClickOutside size="lg">
+    <Modal isOpen={show} setOpen={setShow} closeOnClickOutside>
       <ModalBody>
-        <form
-          className="flex flex-col gap-3 p-2 w-full h-full justify-between"
-          action={handleSubmit}>
-          <DroppableFileInput name="photos" />
-          <SubmitButton text="Add" />
-        </form>
+        <div className="h-[90vh] w-[80vw]">
+          <form
+            className="flex flex-col gap-3 p-2 w-full h-full justify-between"
+            action={handleSubmit}>
+            <DroppableFileInput name="photos" />
+            <SubmitButton text="Add" />
+          </form>
+        </div>
       </ModalBody>
     </Modal>
   );

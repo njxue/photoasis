@@ -9,7 +9,7 @@ const ExpandedPhoto = ({ expandPhoto, setExpandPhoto, photo }) => {
       setOpen={setExpandPhoto}
       style={{ width: "auto", height: "auto", padding: "1px" }}
       closeOnClickOutside
-      size="md">
+      >
       <ModalBody>
         <OptimisedImage src={photo.url} name={photo.name} />
         <div className="absolute top-0 right-0">
