@@ -8,9 +8,9 @@ const GalleryContainer = ({ photos }) => {
   const [minimalisticView, setMinimalisticView] = useState(false);
   return (
     <>
-      <div className="page-heading">
+      <div>
         {!minimalisticView && (
-          <div>
+          <div className="page-heading">
             <div className="flex flex-row items-center gap-3 mb-3 ">
               <p>Gallery</p>
             </div>
