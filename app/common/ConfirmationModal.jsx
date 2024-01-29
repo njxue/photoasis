@@ -38,7 +38,7 @@ const ConfirmationModal = ({
             <button
               onClick={handleCancel}
               disabled={isSubmitting}
-              className="bg-red-700 rounded text-white w-full disabled:opacity-50">
+              className="btn-red w-full font-bold">
               No
             </button>
           </div>

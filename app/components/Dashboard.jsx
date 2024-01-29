@@ -69,12 +69,12 @@ const Dashboard = ({ albums }) => {
                 <button
                   onClick={() => setIsDeletingAlbums(true)}
                   disabled={!numSelected}
-                  className="flex flex-row justify-center items-center gap-1 bg-red-700 px-2 py-1 rounded font-bold text-white disabled:opacity-50">
+                  className="btn-red font-bold">
                   <img src="/assets/icons/trash.svg" width={20} />
                   Delete <span>({numSelected})</span>
                 </button>
                 <button
-                  className="flex flex-row justify-center items-center gap-1 bg-white px-2 py-1 rounded font-bold"
+                  className="btn-white font-bold"
                   onClick={endSelect}>
                   <img src="/assets/icons/cross.svg" width={20} />
                   Cancel
