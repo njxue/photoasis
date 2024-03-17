@@ -16,11 +16,13 @@ const ConfirmationModal = ({
   function handleConfirm() {
     setIsOpen(false);
     onConfirm && onConfirm();
+    setIsSubmitting(false)
   }
 
   function handleCancel() {
     setIsOpen(false);
     onCancel && onCancel();
+    setIsSubmitting(false)
   }
 
   return (
