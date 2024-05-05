@@ -3,15 +3,14 @@ import { useEffect, useState } from "react";
 import { useSelect } from "@utils/customHooks";
 import AlbumCard from "../common/Cards/Album/AlbumCard";
 import Link from "next/link";
-import ConfirmationModal from "@app/common/ConfirmationModal";
 import deleteAlbums from "@actions/deleteAlbums";
 import SelectableItem from "@app/common/Select/SelectableItem";
+import SelectControls from "@app/common/Select/SelectControls";
 import { toast } from "react-toastify";
 
 const Dashboard = ({ albums }) => {
   const [filteredAlbums, setFilteredAlbums] = useState(albums);
   const [searchTerm, setSearchTerm] = useState("");
-  const [isDeletingAlbums, setIsDeletingAlbums] = useState(false);
 
   const {
     isSelecting,
@@ -57,30 +56,14 @@ const Dashboard = ({ albums }) => {
               </Link>
             </div>
 
-            {!isSelecting ? (
-              <img
-                src="/assets/icons/select.svg"
-                width={30}
-                className="cursor-pointer"
-                onClick={beginSelect}
-              />
-            ) : (
-              <div className="flex flex-row justify-center items-center gap-1">
-                <button
-                  onClick={() => setIsDeletingAlbums(true)}
-                  disabled={!numSelected}
-                  className="btn-red font-bold">
-                  <img src="/assets/icons/trash.svg" width={20} />
-                  Delete <span>({numSelected})</span>
-                </button>
-                <button
-                  className="btn-white font-bold"
-                  onClick={endSelect}>
-                  <img src="/assets/icons/cross.svg" width={20} />
-                  Cancel
-                </button>
-              </div>
-            )}
+            <SelectControls
+              isSelecting={isSelecting}
+              beginSelect={beginSelect}
+              endSelect={endSelect}
+              numSelected={numSelected}
+              handleSubmit={handleDeleteAlbums}
+              prompt={`Are you sure you want to delete ${numSelected} albums?`}
+            />
           </div>
 
           <input
@@ -103,12 +86,6 @@ const Dashboard = ({ albums }) => {
           </SelectableItem>
         ))}
       </div>
-      <ConfirmationModal
-        isOpen={isDeletingAlbums}
-        setIsOpen={setIsDeletingAlbums}
-        onConfirm={handleDeleteAlbums}
-        prompt={`Are you sure you want to delete ${numSelected} albums?`}
-      />
     </>
   );
 };

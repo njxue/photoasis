@@ -9,6 +9,7 @@ import deletePhotos from "@actions/deletePhotos";
 import ConfirmationModal from "@app/common/ConfirmationModal";
 import MinimalisticViewToggle from "@app/common/MinimalisticViewToggle";
 import SelectableItem from "@app/common/Select/SelectableItem";
+import SelectControls from "@app/common/Select/SelectControls";
 import { useSelect } from "@utils/customHooks";
 
 const AlbumContainer = ({ albumData }) => {
@@ -62,30 +63,14 @@ const AlbumContainer = ({ albumData }) => {
                 {albumData.name}
               </p>
               <div className="flex flex-row justify-end grow gap-2 ">
-                {!isSelecting ? (
-                  <img
-                    src="/assets/icons/select.svg"
-                    width={30}
-                    className="cursor-pointer"
-                    onClick={beginSelect}
-                  />
-                ) : (
-                  <div className="flex flex-row justify-center items-center gap-1">
-                    <button
-                      onClick={() => setIsDeletingPhotos(true)}
-                      disabled={!numSelected}
-                      className="btn-red font-bold">
-                      <img src="/assets/icons/trash.svg" width={20} />
-                      Delete <span>({numSelected})</span>
-                    </button>
-                    <button
-                      className="btn-white font-bold"
-                      onClick={endSelect}>
-                      <img src="/assets/icons/cross.svg" width={20} />
-                      Cancel
-                    </button>
-                  </div>
-                )}
+                <SelectControls
+                  isSelecting={isSelecting}
+                  beginSelect={beginSelect}
+                  endSelect={endSelect}
+                  numSelected={numSelected}
+                  handleSubmit={handleDeletePhotos}
+                  prompt={`Are you sure you want to delete ${numSelected} photos?`}
+                />
 
                 <AlbumMenu
                   setIsDeleting={setIsDeletingAlbum}
