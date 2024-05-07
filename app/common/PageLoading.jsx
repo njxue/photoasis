@@ -7,7 +7,7 @@ const PageLoading = () => {
         src="/assets/images/logo.png"
         className="w-1/4 min-w-[200px] opacity-20"
       />
-      <div class="loader"></div>
+      <div className="loader"></div>
     </div>
   );
 };
