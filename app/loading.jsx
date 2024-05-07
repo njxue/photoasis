@@ -1,5 +1,6 @@
+import PageLoading from "@app/common/PageLoading";
 const Loading = () => {
-  return <div>Loading.........</div>;
+  return <PageLoading />;
 };
 
 export default Loading;
