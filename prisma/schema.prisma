@@ -22,7 +22,7 @@ model Photo {
   name              String
   uid               Int
   aid               Int?
-  aperture          Decimal?
+  aperture          Float?
   iso               Int?
   shutterspeed      String?
   thumbnailForAlbum Album?    @relation("thumbnail")
