@@ -2,6 +2,8 @@
 import deletePhotos from "@actions/deletePhotos";
 import { useSelectContext } from "@app/common/Select/SelectContext";
 import SelectControls from "@app/common/Select/SelectControls";
+import { toast } from "react-toastify";
+
 function AlbumSelect({ albumData }) {
   const { selectedItems, numSelected } = useSelectContext();
 
@@ -10,6 +12,11 @@ function AlbumSelect({ albumData }) {
       aid: albumData.aid,
       pids: selectedItems,
     });
+    if (res.status === 204) {
+      toast.success("Photo(s) deleted successfully");
+    } else {
+      toast.error("Unable to delete selected photo(s). Please try again later");
+    }
   }
 
   return (
