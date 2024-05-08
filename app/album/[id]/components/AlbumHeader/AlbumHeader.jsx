@@ -1,15 +1,10 @@
 "use client";
-import AlbumSelect from "./AlbumSelect";
+import { useSelectContext } from "@app/common/Select/SelectContext";
+import AlbumSelect from "./PhotoSelect";
 import AlbumMenu from "./Menu/AlbumMenu";
 import UpdateAlbumForm from "./Menu/UpdateAlbumForm";
 import { useState } from "react";
-function AlbumHeader({
-  albumData,
-  isSelecting,
-  beginSelect,
-  endSelect,
-  selectedItems,
-}) {
+function AlbumHeader({ albumData }) {
   const [isEditing, setIsEditing] = useState(false);
 
   return (
@@ -22,13 +17,7 @@ function AlbumHeader({
             {albumData.name}
           </p>
           <div className="flex flex-row justify-end grow gap-2 ">
-            <AlbumSelect
-              isSelecting={isSelecting}
-              beginSelect={beginSelect}
-              endSelect={endSelect}
-              selectedItems={selectedItems}
-              albumData={albumData}
-            />
+            <AlbumSelect albumData={albumData} />
             <AlbumMenu setIsEditing={setIsEditing} albumData={albumData} />
           </div>
         </div>

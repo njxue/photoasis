@@ -4,12 +4,12 @@ import ExpandedPhoto from "./ExpandedPhoto";
 import OptimisedImage from "../../OptimisedImage";
 import PhotoInfo from "./PhotoInfo";
 
-const PhotoCard = ({ photo, minimalisticView, disablePointer }) => {
+const PhotoCard = ({ photo, minimalisticView }) => {
   const [expandPhoto, setExpandPhoto] = useState(false);
   const [showPhotoInfo, setShowPhotoInfo] = useState(false);
 
   function handleShowPhotoInfo() {
-    setShowPhotoInfo(!minimalisticView && !disablePointer);
+    setShowPhotoInfo(!minimalisticView);
   }
 
   function handleHidePhotoInfo() {
@@ -19,9 +19,7 @@ const PhotoCard = ({ photo, minimalisticView, disablePointer }) => {
   return (
     <>
       <div
-        className={`card relative bg-white ${
-          disablePointer && "pointer-events-none"
-        } `}
+        className="card relative bg-white"
         onMouseEnter={handleShowPhotoInfo}
         onMouseLeave={handleHidePhotoInfo}>
         <OptimisedImage

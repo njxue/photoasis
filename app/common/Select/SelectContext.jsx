@@ -1,6 +1,13 @@
-import { useState, useEffect } from "react";
+"use client";
 
-const useSelect = () => {
+import { createContext, useContext, useState, useEffect } from "react";
+
+const SelectContext = createContext();
+export const useSelectContext = () => {
+  return useContext(SelectContext);
+};
+
+export const SelectProvider = ({ children }) => {
   const [isSelecting, setIsSelecting] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
 
@@ -8,7 +15,10 @@ const useSelect = () => {
     if (!isSelecting) setSelectedItems([]);
   }, [isSelecting]);
 
-  const endSelect = () => setIsSelecting(false);
+  const endSelect = () => {
+    setIsSelecting(false);
+    setSelectedItems([]);
+  };
   const beginSelect = () => setIsSelecting(true);
   const selectItem = (item) => {
     if (selectedItems.includes(item)) {
@@ -20,15 +30,16 @@ const useSelect = () => {
   const numSelected = selectedItems.length;
   const isSelected = (item) => selectedItems.includes(item);
 
-  return {
+  const value = {
     isSelecting,
-    endSelect,
-    beginSelect,
-    selectItem,
     selectedItems,
+    beginSelect,
+    endSelect,
+    selectItem,
     numSelected,
     isSelected,
   };
+  return (
+    <SelectContext.Provider value={value}>{children}</SelectContext.Provider>
+  );
 };
-
-export { useSelect };

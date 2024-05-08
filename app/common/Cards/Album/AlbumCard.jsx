@@ -2,7 +2,7 @@
 import OptimisedImage from "@app/common/OptimisedImage";
 import Link from "next/link";
 
-const AlbumCard = ({ data, disablePointer }) => {
+const AlbumCard = ({ data }) => {
   let { uid, name, aid, thumbnail } = data;
   if (!thumbnail) {
     thumbnail = "/assets/images/placeholder.png";
@@ -12,10 +12,7 @@ const AlbumCard = ({ data, disablePointer }) => {
 
   return (
     <>
-      <Link
-        href={`/album/${aid}`}
-        aria-disabled={disablePointer}
-        className={disablePointer ? "pointer-events-none" : "cursor-pointer"}>
+      <Link href={`/album/${aid}`} className="cursor-pointer">
         <div className="card relative">
           <OptimisedImage src={thumbnail} name={name} hover />
           <div className="absolute bottom-2 px-5 text-white text-border text-xl font-bold text-start line-clamp-2">
