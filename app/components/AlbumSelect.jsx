@@ -5,7 +5,7 @@ import { useSelectContext } from "@app/common/Select/SelectContext";
 import { toast } from "react-toastify";
 import SelectControls from "@app/common/Select/SelectControls";
 function AlbumSelect() {
-  const { selectedItems } = useSelectContext();
+  const { selectedItems, numSelected } = useSelectContext();
 
   async function handleDeleteAlbums() {
     const res = await deleteAlbums(selectedItems);
