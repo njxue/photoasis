@@ -1,45 +1,23 @@
 "use client";
 import { useState } from "react";
 import PhotoCard from "../../../common/Cards/Photo/PhotoCard";
-import DeleteAlbumForm from "./Menu/DeleteAlbumForm";
-import AlbumMenu from "./Menu/AlbumMenu";
-import UpdateAlbumForm from "./Menu/UpdateAlbumForm";
-import AddPhotosForm from "./Menu/AddPhotosForm";
-import deletePhotos from "@actions/deletePhotos";
-import ConfirmationModal from "@app/common/ConfirmationModal";
 import MinimalisticViewToggle from "@app/common/MinimalisticViewToggle";
 import SelectableItem from "@app/common/Select/SelectableItem";
 import { useSelect } from "@utils/customHooks";
+import AlbumHeader from "./AlbumHeader/AlbumHeader";
 
 const AlbumContainer = ({ albumData }) => {
   const [minimalisticView, setMinimalisticView] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [isDeletingAlbum, setIsDeletingAlbum] = useState(false);
-  const [isDeletingPhotos, setIsDeletingPhotos] = useState(false);
-  const [isAddingPhotos, setIsAddingPhotos] = useState(false);
-
   const {
     isSelecting,
     endSelect,
     beginSelect,
     selectItem,
     selectedItems,
-    numSelected,
     isSelected,
   } = useSelect();
 
-  const { photos, aid } = albumData;
-
-  async function handleDeletePhotos() {
-    const res = await deletePhotos({
-      aid,
-      pids: selectedItems,
-    });
-    if (res.status === 204) {
-      setIsDeletingPhotos(false);
-      endSelect();
-    }
-  }
+  const { photos } = albumData;
 
   return (
     <div className="h-full p-1">
@@ -47,75 +25,15 @@ const AlbumContainer = ({ albumData }) => {
         minimalisticView={minimalisticView}
         setMinimalisticView={setMinimalisticView}
       />
-      {/** ===================================================== Header ===================================================== */}
       {!minimalisticView && (
-        <div className="p-1 mb-3 mt-2 font-light">
-          {isEditing ? (
-            <UpdateAlbumForm
-              onCancel={() => setIsEditing(false)}
-              onSuccess={() => setIsEditing(false)}
-              albumData={albumData}
-            />
-          ) : (
-            <div className="flex flex-row flex-wrap justify-between gap-2 items-center grow max-w-[100%]">
-              <p className="line-clamp-2 text-2xl md:text-3xl basis-1/2 grow ">
-                {albumData.name}
-              </p>
-              <div className="flex flex-row justify-end grow gap-2 ">
-                {!isSelecting ? (
-                  <img
-                    src="/assets/icons/select.svg"
-                    width={30}
-                    className="cursor-pointer"
-                    onClick={beginSelect}
-                  />
-                ) : (
-                  <div className="flex flex-row justify-center items-center gap-1">
-                    <button
-                      onClick={() => setIsDeletingPhotos(true)}
-                      disabled={!numSelected}
-                      className="btn-red font-bold">
-                      <img src="/assets/icons/trash.svg" width={20} />
-                      Delete <span>({numSelected})</span>
-                    </button>
-                    <button
-                      className="btn-white font-bold"
-                      onClick={endSelect}>
-                      <img src="/assets/icons/cross.svg" width={20} />
-                      Cancel
-                    </button>
-                  </div>
-                )}
-
-                <AlbumMenu
-                  setIsDeleting={setIsDeletingAlbum}
-                  setIsEditing={setIsEditing}
-                  setIsAddingPhotos={setIsAddingPhotos}
-                />
-              </div>
-            </div>
-          )}
-
-          <hr className="mb-3" />
-          <DeleteAlbumForm
-            albumData={albumData}
-            isDeletingAlbum={isDeletingAlbum}
-            setIsDeletingAlbum={setIsDeletingAlbum}
-          />
-          <AddPhotosForm
-            albumData={albumData}
-            show={isAddingPhotos}
-            setShow={setIsAddingPhotos}
-          />
-          <ConfirmationModal
-            isOpen={isDeletingPhotos}
-            setIsOpen={setIsDeletingPhotos}
-            prompt={`Are you sure you want to delete ${numSelected} photos?`}
-            onConfirm={handleDeletePhotos}
-          />
-        </div>
+        <AlbumHeader
+          albumData={albumData}
+          beginSelect={beginSelect}
+          endSelect={endSelect}
+          isSelecting={isSelecting}
+          selectedItems={selectedItems}
+        />
       )}
-      {/** ===================================================== Body ===================================================== */}
       <div className="photo-grid">
         {photos.map((photo) => (
           <SelectableItem

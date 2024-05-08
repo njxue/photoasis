@@ -1,13 +1,13 @@
 import updateAlbum from "@actions/updateAlbum";
 import { toast } from "react-toastify";
 
-const UpdateAlbumForm = ({ albumData, onCancel, onSuccess }) => {
+const UpdateAlbumForm = ({ albumData, setIsEditing }) => {
   const { aid } = albumData;
   async function handleUpdateAlbum(formdata) {
     const albumName = formdata.get("albumName");
     const res = await updateAlbum({ aid, albumName });
     if (res.status === 200) {
-      onSuccess && onSuccess();
+      setIsEditing(false);
       toast.success("Album successfully updated");
     } else {
       toast.error("Unable to update album. Please try again later");
@@ -34,7 +34,7 @@ const UpdateAlbumForm = ({ albumData, onCancel, onSuccess }) => {
           <img
             src="/assets/icons/cross.svg"
             className="h-[30px] cursor-pointer"
-            onClick={onCancel}
+            onClick={() => setIsEditing(false)}
           />
         </button>
       </div>
