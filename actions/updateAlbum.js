@@ -4,15 +4,22 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@app/api/auth/[...nextauth]/route";
 import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
-async function updateAlbum(data) {
+async function updateAlbum(data, revalidate = true) {
   const prisma = new PrismaClient();
   const session = await getServerSession(authOptions);
   const uid = session?.user.id;
-  const { aid, photos, albumName } = data;
+
+  // Only aid is compulsory
+  const { aid, photos, albumName, photoOrder } = data;
   const res = await prisma.$transaction(async (prisma) => {
+    // If updated album name
     let albumData = albumName ? { name: albumName } : {};
+
+    // If updated photoOrder
+    if (photoOrder) {
+      albumData = { ...albumData, photoOrder };
+    }
 
     if (photos) {
       // Insert photos
@@ -73,7 +80,7 @@ async function updateAlbum(data) {
     return { status: 200, message: "Success", data: updatedAlbum };
   });
 
-  if (res.status === 200) {
+  if (res.status === 200 && revalidate) {
     revalidatePath("/", "layout");
   }
   return res;
