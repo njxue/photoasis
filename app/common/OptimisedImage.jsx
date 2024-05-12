@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const OptimisedImage = ({ src, name, onClick, className, hover }) => {
   const hoverStyles =
-    "hover:opacity-50 transition-opacity ease-in-out duration-50 ";
+    "hover:opacity-50 transition-opacity ease-in-out duration-50";
   const dimensions = "h-full w-full max-w-[90vw] max-h-[90vh]";
   return (
     <Image
@@ -13,7 +13,7 @@ const OptimisedImage = ({ src, name, onClick, className, hover }) => {
       alt={name}
       id={name}
       className={`
-        object-cover 
+        object-cover cursor-pointer 
         ${hover && hoverStyles}
         ${className ?? dimensions}
       `}

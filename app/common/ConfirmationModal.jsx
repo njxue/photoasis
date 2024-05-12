@@ -16,19 +16,19 @@ const ConfirmationModal = ({
   function handleConfirm() {
     setIsOpen(false);
     onConfirm && onConfirm();
-    setIsSubmitting(false)
+    setIsSubmitting(false);
   }
 
   function handleCancel() {
     setIsOpen(false);
     onCancel && onCancel();
-    setIsSubmitting(false)
+    setIsSubmitting(false);
   }
 
   return (
     <Modal isOpen={isOpen} setOpen={setIsOpen}>
-      <ModalHeader>{prompt}</ModalHeader>
       <ModalBody>
+        <div className="text-xl mb-2">{prompt}</div>
         <form
           className="w-full"
           action={handleConfirm}

@@ -71,7 +71,7 @@ const DroppableFileInput = ({ name, disabled }) => {
         />
       </div>
       {(images.length > 0 || isLoadingPreview) && (
-        <div className="md:w-[230px] h-full">
+        <div className="md:w-[300px] h-full">
           {isLoadingPreview ? (
             <div className="h-full flex flex-col justify-center items-center">
               <LoadingSpinner text="Preparing your photos..." />

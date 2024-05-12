@@ -20,20 +20,20 @@ const ImagePreviews = ({ images, setImages }) => {
               <div className="relative min-w-[80px]" key={image.name}>
                 <OptimisedImage
                   className={`${
-                    selectedPhoto === image.name &&
-                    "opacity-50 border-4 border-solid border-black"
+                    selectedPhoto === image.name && "opacity-30"
                   } h-[80px] w-full`}
                   src={image.url}
                   onClick={(e) => setSelectedPhoto(e.target.id)}
                   name={image.name}
                   hover
                 />
-                <img
-                  src="/assets/icons/cross-circle.svg"
-                  width={16}
-                  className="absolute right-0 top-0 cursor-pointer opacity-0 hover:opacity-100"
-                  onClick={() => handleRemoveImage(image.name)}
-                />
+                <div className="bg-black absolute right-0 top-0 cursor-pointer opacity-0 hover:opacity-70">
+                  <img
+                    src="/assets/icons/cross-white.svg"
+                    width={16}
+                    onClick={() => handleRemoveImage(image.name)}
+                  />
+                </div>
               </div>
             ))}
         </div>

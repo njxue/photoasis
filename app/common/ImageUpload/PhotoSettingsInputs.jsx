@@ -1,7 +1,6 @@
 const PhotoSettingsInputs = ({ photo }) => {
-  const rowStyle = "flex flex-rows items-center justify-between gap-2";
-  const inputStyle =
-    "border border-solid border-gray-600 rounded p-1 grow md:max-w-[80%]";
+  const rowStyle = "flex flex-rows items-center justify-around gap-2";
+  const inputStyle = "input grow md:max-w-[80%]";
 
   return (
     <div className="text-xs flex flex-col gap-1 px-1">

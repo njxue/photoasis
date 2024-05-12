@@ -55,7 +55,7 @@ const NewAlbumForm = () => {
         <div>
           <label htmlFor="albumName">Album Name: </label>
           <input
-            className="w-full block border border-solid border-gray-600 rounded p-1"
+            className="input w-full"
             type="text"
             name="albumName"
             placeholder="Album Name"

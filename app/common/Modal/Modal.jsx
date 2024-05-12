@@ -5,8 +5,8 @@ import { ModalProvider } from "./ModalContext";
 import { createPortal } from "react-dom";
 
 const MODAL_STYLES =
-  "min-w-[250px] max-w-[90vw] max-h-[90vh] rounded fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-50 flex flex-col items-center justify-center bg-white";
-const OVERLAY_STYLES = "fixed inset-0 bg-gray-700 bg-opacity-50 z-50";
+  "min-w-[300px]  rounded fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-50 flex flex-col items-center justify-center bg-gray-50";
+const OVERLAY_STYLES = "fixed inset-0 bg-gray-300 bg-opacity-70 z-50";
 const Modal = ({ isOpen, setOpen, closeOnClickOutside, children }) => {
   const modalRef = useRef();
   useEffect(() => {
