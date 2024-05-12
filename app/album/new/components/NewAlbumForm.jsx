@@ -7,6 +7,7 @@ import SubmitButton from "@app/common/SubmitButton";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import FancyInput from "@app/common/FancyInput";
 
 const NewAlbumForm = () => {
   const errorMessage = "Unable to create album. Please try again later";
@@ -53,14 +54,7 @@ const NewAlbumForm = () => {
       action={handleCreateAlbum}>
       <div className="flex flex-col h-full gap-2">
         <div>
-          <label htmlFor="albumName">Album Name: </label>
-          <input
-            className="input w-full"
-            type="text"
-            name="albumName"
-            placeholder="Album Name"
-            required
-          />
+          <FancyInput name="albumName" label="Album Name" required />
         </div>
         <div className="grow max-h-[100%]">
           <DroppableFileInput name="photos" />

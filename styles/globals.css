@@ -35,7 +35,7 @@
 }
 
 .input {
-  @apply border border-solid border-gray-400 rounded p-1;
+  @apply border border-solid border-gray-300 rounded p-1;
 }
 
 @keyframes fadeIn {
