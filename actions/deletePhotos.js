@@ -10,6 +10,11 @@ const deletePhotos = async ({ aid, pids }) => {
   const session = await getServerSession(authOptions);
   const uid = session?.user.id;
   let photosToDelete = [];
+  const error = {
+    status: 500,
+    message: "Unable to delete photo",
+  };
+  let newAlbumData = {};
   await prisma.$transaction(async (prisma) => {
     // Get the album information
     const album = await prisma.album.findUniqueOrThrow({
@@ -35,10 +40,7 @@ const deletePhotos = async ({ aid, pids }) => {
     });
 
     if (res.count < 1 || !album) {
-      return {
-        status: 500,
-        message: "Unable to delete photo",
-      };
+      return error;
     }
 
     // Update thumbnail
@@ -47,18 +49,32 @@ const deletePhotos = async ({ aid, pids }) => {
         (photo) => !pids.includes(photo.pid)
       );
       if (existingPhotos.length > 0) {
-        await prisma.album.update({
-          where: {
-            aid_uid: { aid, uid },
-          },
-          data: {
-            thumbnail: {
-              connect: {
-                pid: existingPhotos[0].pid,
-              },
+        newAlbumData = {
+          ...newAlbumData,
+          thumbnail: {
+            connect: {
+              pid: existingPhotos[0].pid,
             },
           },
-        });
+        };
+      }
+    }
+
+    // Remove deleted photos from photoOrder array
+    if (album.photoOrder) {
+      const updatedPhotoOrder = album.photoOrder.filter(
+        (pid) => !pids.includes(pid)
+      );
+
+      newAlbumData = { ...newAlbumData, photoOrder: updatedPhotoOrder };
+
+      const updatedAlbum = await prisma.album.update({
+        where: { aid_uid: { aid, uid } },
+        data: newAlbumData,
+      });
+
+      if (!updatedAlbum) {
+        return error;
       }
     }
   });
