@@ -34,7 +34,7 @@ const AddPhotosForm = ({ albumData, show, setShow }) => {
           <form
             className="flex flex-col gap-3 p-2 w-full h-full justify-between"
             action={handleSubmit}>
-            <DroppableFileInput name="photos" />
+            <DroppableFileInput name="photos" required />
             <SubmitButton text="Add Photos" />
           </form>
         </div>

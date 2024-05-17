@@ -5,7 +5,7 @@ import compressAndReadFileExif from "@utils/compressAndReadFileExif";
 import LoadingSpinner from "../LoadingSpinner";
 import { toast } from "react-toastify";
 
-const DroppableFileInput = ({ name, disabled }) => {
+const DroppableFileInput = ({ name, required }) => {
   const inputRef = useRef();
   const [images, setImages] = useState([]);
   const [isLoadingPreview, setIsLoadingPreview] = useState(false);
@@ -67,7 +67,7 @@ const DroppableFileInput = ({ name, disabled }) => {
           ref={inputRef}
           onChange={handleChange}
           accept="image/*"
-          disabled={disabled}
+          required={required}
         />
       </div>
       {(images.length > 0 || isLoadingPreview) && (
