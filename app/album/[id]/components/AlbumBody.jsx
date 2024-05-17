@@ -37,7 +37,7 @@ function AlbumBody({ photos, minimalisticView }) {
     async function updateSortOrder() {
       const aid = sortedPhotos[0]?.aid;
       const sortedPids = sortedPhotos.map((photo) => photo.pid);
-      const res = await updateAlbum({ aid, photoOrder: sortedPids }, false);
+      const res = await updateAlbum({ aid, photoOrder: sortedPids });
     }
     if (shouldUpdateSortOrder) {
       updateSortOrder();

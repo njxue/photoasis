@@ -38,7 +38,7 @@ function DashboardBody({ albums }) {
     async function updateSortOrder() {
       const aid = sortedAlbums[0]?.aid;
       const sortedAids = sortedAlbums.map((album) => album.aid);
-      const res = await updateUser({ aid, albumOrder: sortedAids }, false);
+      const res = await updateUser({ aid, albumOrder: sortedAids });
     }
     if (shouldUpdateSortOrder) {
       updateSortOrder();
