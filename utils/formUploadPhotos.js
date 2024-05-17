@@ -4,12 +4,14 @@ const formUploadPhotos = async (aid, uid, formdata) => {
     (async () => {
       try {
         let fileList = formdata.getAll("photos");
-        fileList = [...fileList];
+        //fileList = [...fileList];
         const aperture = formdata.getAll("aperture");
         const shutterspeed = formdata.getAll("shutterspeed");
         const iso = formdata.getAll("iso");
         const description = formdata.getAll("description");
         const date = formdata.getAll("date");
+        const focalLength = formdata.getAll("focalLength");
+        const meteringMode = formdata.getAll("meteringMode");
 
         const uploadUrlsAndTokens = await b2GetUploadUrls(fileList.length);
         let files = fileList.map((file, i) => ({
