@@ -42,6 +42,7 @@ function FancyInput({ label, name, required, type, min, step, defaultValue }) {
           className={INPUT_STYLE}
           name={name}
           required={required}
+          onFocus={() => setIsFocused(true)}
         />
       ) : (
         <input
@@ -53,6 +54,7 @@ function FancyInput({ label, name, required, type, min, step, defaultValue }) {
           className={INPUT_STYLE}
           name={name}
           required={required}
+          onFocus={() => setIsFocused(true)}
         />
       )}
       <div
