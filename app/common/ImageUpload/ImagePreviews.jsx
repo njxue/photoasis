@@ -30,8 +30,13 @@ const ImagePreviews = ({ images, setImages }) => {
                 <div className="bg-black absolute right-0 top-0 cursor-pointer opacity-0 hover:opacity-70">
                   <img
                     src="/assets/icons/cross-white.svg"
+                    alt="Remove"
                     width={16}
-                    onClick={() => handleRemoveImage(image.name)}
+                    onClick={(e) => {
+                      // Stops modal from closing once the image (and this img tag) is removed from the DOM
+                      e.stopPropagation();
+                      handleRemoveImage(image.name);
+                    }}
                   />
                 </div>
               </div>
