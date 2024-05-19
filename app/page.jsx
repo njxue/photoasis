@@ -4,40 +4,44 @@ import { getServerSession } from "next-auth";
 import Dashboard from "./components/Dashboard";
 import { unstable_cache } from "next/cache";
 
-const fetchAlbums = async () => {
-  try {
-    const session = await getServerSession(authOptions);
-    const uid = session?.user.id;
+const fetchAlbums = unstable_cache(
+  async () => {
+    try {
+      const session = await getServerSession(authOptions);
+      const uid = session?.user.id;
 
-    let albums = await prisma.album.findMany({
-      where: {
-        uid: uid,
-      },
-      include: {
-        thumbnail: true,
-      },
-    });
+      let albums = await prisma.album.findMany({
+        where: {
+          uid: uid,
+        },
+        include: {
+          thumbnail: true,
+        },
+      });
 
-    let user = await prisma.user.findUnique({
-      where: { id: uid },
-    });
+      let user = await prisma.user.findUnique({
+        where: { id: uid },
+      });
 
-    const albumOrder = user.albumOrder;
+      const albumOrder = user.albumOrder;
 
-    if (albumOrder) {
-      albums.sort(
-        (a1, a2) => albumOrder.indexOf(a1.aid) - albumOrder.indexOf(a2.aid)
-      );
+      if (albumOrder) {
+        albums.sort(
+          (a1, a2) => albumOrder.indexOf(a1.aid) - albumOrder.indexOf(a2.aid)
+        );
+      }
+
+      return {
+        data: albums,
+        status: 200,
+      };
+    } catch (err) {
+      return { status: 500 };
     }
-
-    return {
-      data: albums,
-      status: 200,
-    };
-  } catch (err) {
-    return { status: 500 };
-  }
-};
+  },
+  ["albums"],
+  { revalidate: 3600 }
+);
 
 const Home = async () => {
   const res = await fetchAlbums();
