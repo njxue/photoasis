@@ -1,6 +1,8 @@
 import MeteringMode from "./MeteringMode";
+import { useState } from "react";
 
-function MeteringInput({ meteringMode, setMeteringMode }) {
+function MeteringInput({ defaultValue}) {
+  const [meteringMode, setMeteringMode] = useState(defaultValue);
   function handleClick(mode) {
     if (meteringMode === mode) {
       setMeteringMode(null);

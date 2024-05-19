@@ -11,7 +11,7 @@ function FancyInput({ label, name, required, type, min, step, defaultValue }) {
     "h-fit -translate-y-2/4 translate-x-2 scale-75 origin-left bg-white rounded px-1 font-bold transition-all duration-300";
   const LABEL_STYLE_UNFOCUSED =
     "bg-transparent text-gray-500 px-2 transition-all duration-300";
-  const INPUT_STYLE = "p-2 w-full border border-gray-300 rounded";
+  const INPUT_STYLE = "p-2 h-[33px] w-full border border-gray-300 rounded";
   useEffect(() => {
     const handleClick = (e) => {
       // Clicked on label or input field

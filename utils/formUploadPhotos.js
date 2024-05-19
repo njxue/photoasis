@@ -12,6 +12,22 @@ const formUploadPhotos = async (aid, uid, formdata) => {
         const date = formdata.getAll("date");
         const focalLength = formdata.getAll("focalLength");
         const meteringMode = formdata.getAll("meteringMode");
+        const exposureMode = formdata.getAll("exposureMode");
+        const lensModel = formdata.getAll("lensModel");
+        const cameraModel = formdata.getAll("cameraModel");
+        const editingSoftware = formdata.getAll("editingSoftware");
+
+        console.log(aperture);
+        console.log(shutterspeed);
+        console.log(iso);
+        console.log(description);
+        console.log(date);
+        console.log(focalLength);
+        console.log(meteringMode);
+        console.log(exposureMode);
+        console.log(lensModel);
+        console.log(cameraModel);
+        console.log(editingSoftware);
 
         const uploadUrlsAndTokens = await b2GetUploadUrls(fileList.length);
         let files = fileList.map((file, i) => ({
@@ -34,6 +50,12 @@ const formUploadPhotos = async (aid, uid, formdata) => {
           iso: iso[file.idx],
           description: description[file.idx],
           date: date[file.idx] ? date[file.idx] + "T00:00:00Z" : null,
+          focalLength: focalLength[file.idx],
+          meteringMode: meteringMode[file.idx],
+          exposureMode: exposureMode[file.idx],
+          lensModel: lensModel[file.idx],
+          cameraModel: cameraModel[file.idx],
+          editingSoftware: editingSoftware[file.idx],
           fileId: file.fileId,
         }));
 

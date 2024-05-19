@@ -12,8 +12,8 @@ const ImagePreviews = ({ images, setImages }) => {
   }
 
   return (
-    <div className="flex flex-col py-3 md:px-1 md:py-0 h-full">
-      <div className="relative min-h-[90px] overflow-auto md:h-full">
+    <div className="flex flex-col py-3 md:py-0 md:px-1 h-full">
+      <div className="relative min-h-[90px] overflow-auto grow">
         <div className="absolute top-0 left-0 w-full flex flex-row gap-1 md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {images &&
             images.map((image) => (
@@ -43,15 +43,17 @@ const ImagePreviews = ({ images, setImages }) => {
             ))}
         </div>
       </div>
-      {images &&
-        images.map((photo) => (
-          <div
-            hidden={selectedPhoto !== photo.name}
-            className="h-fit mt-2"
-            key={photo.name}>
-            <PhotoSettingsInputs photo={photo} />
-          </div>
-        ))}
+      <div className="min-h-[150px] mt-6" hidden={selectedPhoto == null}>
+        {images &&
+          images.map((photo) => (
+            <div
+              hidden={selectedPhoto !== photo.name}
+              className="h-full"
+              key={photo.name}>
+              <PhotoSettingsInputs photo={photo} />
+            </div>
+          ))}
+      </div>
     </div>
   );
 };

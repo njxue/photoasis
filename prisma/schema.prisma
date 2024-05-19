@@ -26,6 +26,12 @@ model Photo {
   aperture          Float?
   iso               Int?
   shutterspeed      String?
+  focalLength       Int?
+  meteringMode      String?
+  exposureMode      String?
+  lensModel         String?
+  cameraModel       String?
+  editingSoftware   String?
   thumbnailForAlbum Album?    @relation("thumbnail")
   album             Album?    @relation(fields: [aid, uid], references: [aid, uid])
   description       String?
