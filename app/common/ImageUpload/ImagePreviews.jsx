@@ -14,7 +14,7 @@ const ImagePreviews = ({ images, setImages }) => {
   return (
     <div className="flex flex-col py-3 md:py-0 md:px-1 h-full">
       <div className="relative min-h-[90px] overflow-auto grow">
-        <div className="absolute top-0 left-0 w-full flex flex-row gap-1 md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        <div className="absolute top-0 left-0 w-full grid gap-1 grid-cols-3 xs:grid-cols-4 sm:grid-cols-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {images &&
             images.map((image) => (
               <div className="relative min-w-[80px]" key={image.name}>
