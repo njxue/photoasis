@@ -49,7 +49,7 @@ const METERING_MODES = [
   {
     label: "Spot",
     value: "Spot",
-    icon: "/assets/icons/Spot-metering.svg",
+    icon: "/assets/icons/spot-metering.svg",
   },
   {
     label: "Center Weighted",
