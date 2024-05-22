@@ -1,5 +1,6 @@
 import ExposureMode from "./ExposureMode";
 import { useState } from "react";
+import { EXPOSURE_MODES } from "@utils/helpers";
 function ExposureModeInput({ defaultValue }) {
   const [exposureMode, setExposureMode] = useState(defaultValue);
   function handleClick(mode) {
@@ -33,31 +34,4 @@ function ExposureModeInput({ defaultValue }) {
   );
 }
 
-const EXPOSURE_MODES = [
-  {
-    label: "Program",
-    value: "Normal program",
-    icon: "P",
-  },
-  {
-    label: "Aperture Priority",
-    value: "Aperture priority",
-    icon: "A/Av",
-  },
-  {
-    label: "Shutter Priority",
-    value: "Shutter priority",
-    icon: "S/Tv",
-  },
-  {
-    label: "Manual",
-    value: "Manual",
-    icon: "M",
-  },
-  {
-    label: "Auto",
-    value: "FullAuto",
-    icon: "Auto",
-  },
-];
 export default ExposureModeInput;

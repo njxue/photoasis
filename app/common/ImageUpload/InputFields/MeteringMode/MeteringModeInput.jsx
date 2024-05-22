@@ -1,7 +1,8 @@
 import MeteringMode from "./MeteringMode";
 import { useState } from "react";
+import { METERING_MODES } from "@utils/helpers";
 
-function MeteringInput({ defaultValue}) {
+function MeteringInput({ defaultValue }) {
   const [meteringMode, setMeteringMode] = useState(defaultValue);
   function handleClick(mode) {
     if (meteringMode === mode) {
@@ -24,7 +25,7 @@ function MeteringInput({ defaultValue}) {
             <MeteringMode
               label={mode.label}
               value={mode.value}
-              icon={mode.icon}
+              icon={`/assets/icons/${mode.icon}`}
               handleClick={() => handleClick(mode.value)}
               isSelected={meteringMode == mode.value}
             />
@@ -35,26 +36,4 @@ function MeteringInput({ defaultValue}) {
   );
 }
 
-const METERING_MODES = [
-  {
-    label: "Matrix",
-    value: "Pattern",
-    icon: "/assets/icons/matrix-metering.svg",
-  },
-  {
-    label: "Partial",
-    value: "Partial",
-    icon: "/assets/icons/partial-metering.svg",
-  },
-  {
-    label: "Spot",
-    value: "Spot",
-    icon: "/assets/icons/spot-metering.svg",
-  },
-  {
-    label: "Center Weighted",
-    value: "CenterWeightedAverage",
-    icon: "/assets/icons/cwa-metering.svg",
-  },
-];
 export default MeteringInput;

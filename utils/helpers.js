@@ -22,4 +22,55 @@ const parseDate = (str) => {
   return dateObj.toLocaleDateString("en-SG", options);
 };
 
-export { capitalize, parseDate };
+const METERING_MODES = [
+  {
+    label: "Matrix",
+    value: "Pattern",
+    icon: "matrix-metering.svg",
+  },
+  {
+    label: "Partial",
+    value: "Partial",
+    icon: "partial-metering.svg",
+  },
+  {
+    label: "Spot",
+    value: "Spot",
+    icon: "spot-metering.svg",
+  },
+  {
+    label: "Center Weighted",
+    value: "CenterWeightedAverage",
+    icon: "cwa-metering.svg",
+  },
+];
+
+const EXPOSURE_MODES = [
+  {
+    label: "Program",
+    value: "Normal program",
+    icon: "P",
+  },
+  {
+    label: "Aperture Priority",
+    value: "Aperture priority",
+    icon: "A/Av",
+  },
+  {
+    label: "Shutter Priority",
+    value: "Shutter priority",
+    icon: "S/Tv",
+  },
+  {
+    label: "Manual",
+    value: "Manual",
+    icon: "M",
+  },
+  {
+    label: "Auto",
+    value: "FullAuto",
+    icon: "Auto",
+  },
+];
+
+export { capitalize, parseDate, METERING_MODES, EXPOSURE_MODES };
