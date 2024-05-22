@@ -1,11 +1,30 @@
 "use client";
-import { parseDate } from "@utils/helpers";
+import { parseDate, METERING_MODES, EXPOSURE_MODES } from "@utils/helpers";
 import { useState } from "react";
+import MetaDataItem from "./MetaDataItem";
 const ExpandedPhotoInfo = ({ photo }) => {
-  const iconsWidth = 16;
   const [showInfo, setShowInfo] = useState(false);
+  const [anchorInfo, setAnchorInfo] = useState(false);
+  const meteringMode = METERING_MODES.find(
+    (mode) => mode.value === photo.meteringMode
+  );
+  const exposureMode = EXPOSURE_MODES.find(
+    (mode) => mode.value === photo.exposureMode
+  );
+
+  function handleClick() {
+    // Remain open if clicked
+    setAnchorInfo((prev) => !prev);
+    if (!anchorInfo) {
+      setShowInfo(false);
+    }
+  }
+
+  const DIVIDER = (
+    <div className="col-span-2 bg-gray-500 h-[1px] w-full my-1"></div>
+  );
   return (
-    <div className="flex flex-col items-end p-2 max-w-[250px]">
+    <div className="flex flex-col items-end p-2 text-xs text-white">
       <img
         src="/assets/icons/info.svg"
         className="block w-7 opacity-50 p-1 hover:opacity-100 cursor-pointer"
@@ -15,40 +34,87 @@ const ExpandedPhotoInfo = ({ photo }) => {
         onMouseOut={() => {
           setShowInfo(false);
         }}
+        onClick={handleClick}
       />
-      {showInfo && (
-        <div className="flex flex-col items-start bg-black text-white p-3 opacity-70 rounded text-sm max-w-full">
-          {/* <div>{photo.name}</div> */}
-          {(photo.description || photo.date) && (
-            <>
-              <p className="mb-1 text-ellipsis overflow-hidden max-w-full">
-                {photo.description}
-              </p>
-              <p>{parseDate(photo.date)}</p>
-              <hr className="border border-solid border-gray-800 w-full my-2" />
-            </>
-          )}
-          <div className="flex flex-col justify-start items-start text-xs gap-1">
-            <div className="flex flex-row items-center gap-2 flex-wrap">
-              <img src="/assets/icons/aperture-white.svg" width={iconsWidth} />
-              <div>{photo.aperture === "" ? "-" : photo.aperture}</div>
-            </div>
-            <div className="flex flex-row items-center gap-2 flex-wrap">
-              <img
-                src="/assets/icons/shutterspeed-white.svg"
-                width={iconsWidth}
-              />
-              <div>{photo.shutterspeed === "" ? "-" : photo.shutterspeed}</div>
-            </div>
-            <div className="flex flex-row items-center gap-2 flex-wrap justify-center">
-              <img src="/assets/icons/iso-white.svg" width={iconsWidth} />
-              <div>
-                <div>{photo.iso === "" ? "-" : photo.iso}</div>
-              </div>
-            </div>
+
+      <div
+        className={`max-h-[400px] max-w-[310px] overflow-auto grid grid-cols-2 gap-2 bg-black p-3 rounded opacity-0 ${
+          (showInfo || anchorInfo) &&
+          "opacity-90 transition-opacity ease-in duration-200"
+        }`}>
+        {photo.date && (
+          <div className="col-span-2 text-sm">{parseDate(photo.date)}</div>
+        )}
+        {photo.description && (
+          <div className="col-span-2">
+            <MetaDataItem label="Description" value={photo.description} />
           </div>
+        )}
+
+        {DIVIDER}
+
+        <MetaDataItem
+          label="Aperture"
+          value={photo.aperture}
+          icon="aperture.svg"
+          invertIcon
+        />
+        <MetaDataItem
+          label="Focal Length"
+          value={photo.aperture}
+          icon="focal-length.svg"
+          invertIcon
+        />
+        <MetaDataItem
+          label="Shutter Speed"
+          value={photo.shutterspeed}
+          icon="shutterspeed.svg"
+          invertIcon
+        />
+        <div className="flex flex-row items-center gap-2">
+          {meteringMode && (
+            <img
+              src={`/assets/icons/${meteringMode.icon}`}
+              width={16}
+              alt={meteringMode.label}
+              className="invert"
+            />
+          )}
+          <p>{meteringMode?.label ?? "Metering: -"}</p>
         </div>
-      )}
+        <MetaDataItem label="ISO" value={photo.iso} icon="iso.svg" invertIcon />
+        <div className="flex flex-row gap-2 items-center">
+          {exposureMode && exposureMode.icon}
+          <p>{exposureMode?.label ?? "Exp. Mode: -"}</p>
+        </div>
+
+        {DIVIDER}
+
+        <div className="col-span-2">
+          <MetaDataItem
+            label="Lens Model"
+            value={photo.lensModel}
+            icon="lens.svg"
+            invertIcon
+          />
+        </div>
+        <div className="col-span-2">
+          <MetaDataItem
+            label="Camera Model"
+            value={photo.cameraModel}
+            icon="camera.svg"
+            invertIcon
+          />
+        </div>
+        <div className="col-span-2">
+          <MetaDataItem
+            label="Editing Software"
+            value={photo.editingSoftware}
+            icon="lightroom.svg"
+            invertIcon
+          />
+        </div>
+      </div>
     </div>
   );
 };
