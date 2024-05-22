@@ -29,7 +29,7 @@ const ImagePreviews = ({ images, setImages }) => {
                 />
                 <div className="bg-black absolute right-0 top-0 cursor-pointer opacity-0 hover:opacity-70">
                   <img
-                    src="/assets/icons/cross-white.svg"
+                    src="/assets/icons/cross.svg"
                     alt="Remove"
                     width={16}
                     onClick={(e) => {
@@ -37,6 +37,7 @@ const ImagePreviews = ({ images, setImages }) => {
                       e.stopPropagation();
                       handleRemoveImage(image.name);
                     }}
+                    className="invert"
                   />
                 </div>
               </div>

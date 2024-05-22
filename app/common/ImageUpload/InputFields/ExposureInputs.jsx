@@ -11,7 +11,7 @@ function ExposureInputs({ photo }) {
       <div className={colStyle}>
         <div className={rowStyle}>
           <label>
-            <img src="/assets/icons/aperture-black.svg" width={20} />
+            <img src="/assets/icons/aperture.svg" width={20} />
           </label>
           <FancyInput
             type="number"
@@ -24,7 +24,7 @@ function ExposureInputs({ photo }) {
         </div>
         <div className={rowStyle}>
           <label>
-            <img src="/assets/icons/shutterspeed-black.svg" width={20} />
+            <img src="/assets/icons/shutterspeed.svg" width={20} />
           </label>
           <FancyInput
             type="text"
@@ -35,7 +35,7 @@ function ExposureInputs({ photo }) {
         </div>
         <div className={rowStyle}>
           <label>
-            <img src="/assets/icons/iso-black.svg" width={20} />
+            <img src="/assets/icons/iso.svg" width={20} />
           </label>
           <FancyInput
             type="number"
