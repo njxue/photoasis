@@ -3,8 +3,15 @@
 import MinimalisticViewToggle from "@app/common/MinimalisticViewToggle";
 import PhotoCard from "@app/common/Cards/Photo/PhotoCard";
 import { useState } from "react";
+import { notFound } from "next/navigation";
 
 const GalleryContainer = ({ photos }) => {
+  if (!photos) {
+    toast.error("Unable to fetch photos. Please try again later", {
+      toastId: "Error: Fetch gallery",
+    });
+    notFound();
+  }
   const [minimalisticView, setMinimalisticView] = useState(false);
   return (
     <>

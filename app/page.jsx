@@ -31,12 +31,10 @@ const fetchAlbums = unstable_cache(
         );
       }
 
-      return {
-        data: albums,
-        status: 200,
-      };
+      return albums;
     } catch (err) {
-      return { status: 500 };
+      console.log(err);
+      return null;
     }
   },
   ["albums"],
@@ -44,10 +42,10 @@ const fetchAlbums = unstable_cache(
 );
 
 const Home = async () => {
-  const res = await fetchAlbums();
+  const albums = await fetchAlbums();
   return (
     <div className="flex flex-center flex-col h-full w-full">
-      <Dashboard albums={res.data} />
+      <Dashboard albums={albums} />
     </div>
   );
 };

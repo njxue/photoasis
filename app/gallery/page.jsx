@@ -6,17 +6,22 @@ import { unstable_cache } from "next/cache";
 
 const fetchPhotos = unstable_cache(
   async (uid) => {
-    let photos = await prisma.photo.findMany({
-      where: {
-        uid,
-      },
-      distinct: ["name"],
-    });
-    photos = photos.map((photo) => ({
-      ...photo,
-      url: `${process.env.NEXT_PUBLIC_CLOUDFLARE_URL}/${uid}/${photo.aid}/${photo.name}`,
-    }));
-    return photos;
+    try {
+      let photos = await prisma.photo.findMany({
+        where: {
+          uid,
+        },
+        distinct: ["name"],
+      });
+      photos = photos.map((photo) => ({
+        ...photo,
+        url: `${process.env.NEXT_PUBLIC_CLOUDFLARE_URL}/${uid}/${photo.aid}/${photo.name}`,
+      }));
+      return photos;
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
   },
   ["gallery"],
   { revalidate: 3600 }
