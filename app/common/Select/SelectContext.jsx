@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState } from "react";
 
 const SelectContext = createContext();
 export const useSelectContext = () => {
@@ -10,10 +10,6 @@ export const useSelectContext = () => {
 export const SelectProvider = ({ children }) => {
   const [isSelecting, setIsSelecting] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
-
-  useEffect(() => {
-    if (!isSelecting) setSelectedItems([]);
-  }, [isSelecting]);
 
   const endSelect = () => {
     setIsSelecting(false);

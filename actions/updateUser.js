@@ -24,9 +24,9 @@ async function updateUser(data, revalidate = true) {
     if (revalidate) {
       revalidatePath("/", "layout");
     }
-    return { status: 204 };
+    return { status: 204, ok: true };
   }
-  return { status: 400 };
+  return { status: 400, ok: false };
 }
 
 export default updateUser;

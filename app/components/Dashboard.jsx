@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SelectProvider } from "@app/common/Select/SelectContext";
 import DashboardHeader from "./DashboardHeader";
 import DashboardBody from "./DashboardBody";
@@ -7,7 +7,6 @@ import { notFound } from "next/navigation";
 import { toast } from "react-toastify";
 
 const Dashboard = ({ albums }) => {
-  const [filteredAlbums, setFilteredAlbums] = useState(albums);
   const [searchTerm, setSearchTerm] = useState("");
 
   if (!albums) {
@@ -17,17 +16,13 @@ const Dashboard = ({ albums }) => {
     notFound();
   }
 
+  const filteredAlbums = albums.filter((album) =>
+    album.name.toUpperCase().trim().includes(searchTerm)
+  );
+
   function handleSearchTermChange(e) {
     setSearchTerm(e.target.value.toUpperCase().trim());
   }
-
-  useEffect(() => {
-    setFilteredAlbums(
-      albums.filter((album) =>
-        album.name.toUpperCase().trim().includes(searchTerm)
-      )
-    );
-  }, [albums, searchTerm]);
 
   return (
     <>

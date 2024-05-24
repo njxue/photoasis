@@ -26,6 +26,7 @@ const AlbumContainer = ({ albumData }) => {
         <AlbumBody
           photos={albumData.photos}
           minimalisticView={minimalisticView}
+          key={albumData.photos}
         />
       </SelectProvider>
     </div>

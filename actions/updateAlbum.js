@@ -48,7 +48,7 @@ async function updateAlbum(data, revalidate = true) {
       );
 
       if (!newPhotos || newPhotos.count === 0) {
-        return { status: 400, message: "Unable to create photos" };
+        return { status: 400, message: "Unable to create photos", ok: false };
       }
 
       // Update thumbnail
@@ -60,7 +60,7 @@ async function updateAlbum(data, revalidate = true) {
       });
 
       if (!thumbnail) {
-        return { status: 404, message: "Thumbnail not found" };
+        return { status: 404, message: "Thumbnail not found", ok: false };
       }
 
       albumData = {
@@ -81,12 +81,12 @@ async function updateAlbum(data, revalidate = true) {
       },
     });
     if (!updatedAlbum) {
-      return { status: 400, message: "Unable to update album " };
+      return { status: 400, message: "Unable to update album", ok: false };
     }
-    return { status: 200, message: "Success", data: updatedAlbum };
+    return { status: 200, message: "Success", data: updatedAlbum, ok: true };
   });
 
-  if (res.status === 200 && revalidate) {
+  if (res.ok && revalidate) {
     revalidatePath("/", "layout");
   }
   return res;

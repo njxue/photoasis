@@ -1,12 +1,13 @@
 "use client";
 import SelectableItem from "@app/common/Select/SelectableItem";
 import PhotoCard from "@app/common/Cards/Photo/PhotoCard";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import DraggableAndDroppable from "@app/common/DragAndDrop/DraggableAndDroppable";
 import updateAlbum from "@actions/updateAlbum";
+import { toast } from "react-toastify";
 function AlbumBody({ photos, minimalisticView }) {
   const [sortedPhotos, setSortedPhotos] = useState(photos);
-  const [shouldUpdateSortOrder, setShouldUpdateSortOrder] = useState(false);
+  const aid = photos && photos[0]?.aid;
   function handleDrop(e, pidFrom) {
     const pidTo = e.dataTransfer.getData("pid");
     if (pidTo === pidFrom) {
@@ -25,29 +26,25 @@ function AlbumBody({ photos, minimalisticView }) {
     sortedPhotos[fromIndex] = sortedPhotos[toIndex];
     sortedPhotos[toIndex] = tmp;
 
-    setSortedPhotos([...sortedPhotos]);
-    setShouldUpdateSortOrder(true);
+    const newlySortedPhotos = [...sortedPhotos];
+    setSortedPhotos(newlySortedPhotos);
+
+    updateSortOrder(newlySortedPhotos);
   }
 
   function handleDrag(e, pid) {
     e.dataTransfer.setData("pid", pid);
   }
 
-  useEffect(() => {
-    async function updateSortOrder() {
-      const aid = sortedPhotos[0]?.aid;
-      const sortedPids = sortedPhotos.map((photo) => photo.pid);
-      const res = await updateAlbum({ aid, photoOrder: sortedPids });
+  async function updateSortOrder(sorted) {
+    const sortedPids = sorted.map((photo) => photo.pid);
+    const res = await updateAlbum({ aid, photoOrder: sortedPids });
+    if (!res.ok) {
+      toast.error(res.message, {
+        toastId: "Error: Update photos sort order",
+      });
     }
-    if (shouldUpdateSortOrder) {
-      updateSortOrder();
-      setShouldUpdateSortOrder(false);
-    }
-  }, [shouldUpdateSortOrder]);
-
-  useEffect(() => {
-    setSortedPhotos(photos);
-  }, [photos]);
+  }
 
   return (
     <div className="photo-grid">
