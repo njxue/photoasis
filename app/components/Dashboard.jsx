@@ -28,7 +28,7 @@ const Dashboard = ({ albums }) => {
     <>
       <SelectProvider>
         <DashboardHeader handleSearchTermChange={handleSearchTermChange} />
-        <DashboardBody albums={filteredAlbums} />
+        <DashboardBody albums={filteredAlbums} key={filteredAlbums} />
       </SelectProvider>
     </>
   );
