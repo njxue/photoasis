@@ -12,7 +12,7 @@ function AlbumSelect({ albumData }) {
       aid: albumData.aid,
       pids: selectedItems,
     });
-    if (res.status === 204) {
+    if (res.ok) {
       toast.success("Photo(s) deleted successfully");
     } else {
       toast.error("Unable to delete selected photo(s). Please try again later");

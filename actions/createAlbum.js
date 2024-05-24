@@ -59,13 +59,18 @@ async function createAlbum(data) {
     }
 
     if (!album) {
-      return { status: 400, message: "Unable to create album" };
+      return { status: 400, message: "Unable to create album", ok: false };
     } else {
-      return { status: 200, message: "Success", data: album };
+      return {
+        status: 200,
+        message: "Successfully created album",
+        data: album,
+        ok: true,
+      };
     }
   });
 
-  if (res.status === 200) {
+  if (res.ok) {
     revalidatePath("/", "layout");
   }
   return res;

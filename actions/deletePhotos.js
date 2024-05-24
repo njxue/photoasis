@@ -13,6 +13,7 @@ const deletePhotos = async ({ aid, pids }) => {
   const error = {
     status: 500,
     message: "Unable to delete photo",
+    ok: false,
   };
   let newAlbumData = {};
   await prisma.$transaction(async (prisma) => {
@@ -97,9 +98,9 @@ const deletePhotos = async ({ aid, pids }) => {
 
     await Promise.all(deleteRequests);
     revalidatePath("/", "layout");
-    return { status: 204, message: "Successfully deleted photos" };
+    return { status: 204, message: "Successfully deleted photos", ok: true };
   } catch (err) {
-    return { status: 204, message: "Photo(s) not found" };
+    return { status: 204, message: "Photo(s) not found", ok: true };
   }
 };
 

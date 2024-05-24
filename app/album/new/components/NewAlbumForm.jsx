@@ -21,8 +21,8 @@ const NewAlbumForm = () => {
         albumName,
       });
 
-      if (albumRes.status !== 200) {
-        toast.error(errorMessage);
+      if (!albumRes.ok) {
+        toast.error(res.message);
         return;
       }
       const aid = albumRes.data.aid;
@@ -36,11 +36,11 @@ const NewAlbumForm = () => {
 
       const fileInfos = await formUploadPhotos(aid, uid, formdata);
       const res = await updateAlbum({ aid, photos: fileInfos });
-      if (res.status === 200) {
+      if (res.ok) {
         router.push(`/album/${aid}`);
         toast.success(`Album "${albumName}" successfully created!`);
       } else {
-        toast.error(errorMessage);
+        toast.error(res.message);
       }
     } catch (err) {
       console.log(err);

@@ -16,7 +16,7 @@ const AddPhotosForm = ({ albumData, show, setShow }) => {
     try {
       const fileInfos = await formUploadPhotos(aid, session?.user.id, formdata);
       const res = await updateAlbum({ aid, photos: fileInfos });
-      if (res.status === 200) {
+      if (res.ok) {
         setShow(false);
         toast.success("New photo(s) added!");
       } else {

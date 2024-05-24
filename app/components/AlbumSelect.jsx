@@ -9,7 +9,7 @@ function AlbumSelect() {
 
   async function handleDeleteAlbums() {
     const res = await deleteAlbums(selectedItems);
-    if (res.status === 204) {
+    if (res.ok) {
       toast.success("Album(s) deleted successfully");
     } else {
       toast.error("Unable to delete selected album(s). Please try again later");

@@ -11,7 +11,7 @@ async function deleteAlbums(albumIds) {
   const uid = session?.user.id;
 
   if (uid == null) {
-    return { status: 500, message: "Authentication error" };
+    return { status: 500, message: "Authentication error", ok: false };
   }
 
   // List all photos to delete, for b2 deletion
@@ -38,6 +38,7 @@ async function deleteAlbums(albumIds) {
       return {
         status: 500,
         message: "Unable to delete photos in this colelction",
+        ok: false,
       };
     }
 
@@ -51,16 +52,17 @@ async function deleteAlbums(albumIds) {
     });
 
     if (!deletedAlbums) {
-      return { status: 500, message: "Unable to delete albums" };
+      return { status: 500, message: "Unable to delete albums", ok: false };
     }
     return {
       status: 200,
       message: "Success",
+      ok: true,
       data: { photos: photosToDelete },
     };
   });
 
-  if (dbDeleteRes.status !== 200) {
+  if (!dbDeleteRes.ok) {
     return dbDeleteRes;
   }
 
@@ -80,10 +82,10 @@ async function deleteAlbums(albumIds) {
   try {
     await Promise.all(deleteRequests);
     revalidatePath("/", "layout");
-    return { status: 204, message: "Successfully deleted albums" };
+    return { status: 204, message: "Successfully deleted albums", ok: true };
   } catch (err) {
     console.log(err);
-    return { status: 404, message: "Unable to delete albums" };
+    return { status: 404, message: "Unable to delete albums", ok: false };
   }
 }
 

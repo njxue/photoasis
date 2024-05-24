@@ -6,7 +6,7 @@ const UpdateAlbumForm = ({ albumData, setIsEditing }) => {
   async function handleUpdateAlbum(formdata) {
     const albumName = formdata.get("albumName");
     const res = await updateAlbum({ aid, albumName });
-    if (res.status === 200) {
+    if (res.ok) {
       setIsEditing(false);
       toast.success("Album successfully updated");
     } else {

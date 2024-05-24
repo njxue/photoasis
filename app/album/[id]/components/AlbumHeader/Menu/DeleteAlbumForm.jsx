@@ -15,7 +15,7 @@ const DeleteAlbumForm = ({
 
   async function handleDeleteAlbum() {
     const res = await deleteAlbum(aid);
-    if (res.status === 204) {
+    if (res.ok) {
       router.push("/");
       toast.success(`Album "${name}" deleted`);
     } else {
