@@ -10,7 +10,7 @@ const SubmitButton = ({ text, preventBrowserRefresh }) => {
       return;
     }
     const showAlert = (e) => {
-      if (true) {
+      if (pending) {
         e.preventDefault();
       }
     };
