@@ -17,18 +17,6 @@ const formUploadPhotos = async (aid, uid, formdata) => {
         const cameraModel = formdata.getAll("cameraModel");
         const editingSoftware = formdata.getAll("editingSoftware");
 
-        console.log(aperture);
-        console.log(shutterspeed);
-        console.log(iso);
-        console.log(description);
-        console.log(date);
-        console.log(focalLength);
-        console.log(meteringMode);
-        console.log(exposureMode);
-        console.log(lensModel);
-        console.log(cameraModel);
-        console.log(editingSoftware);
-
         const uploadUrlsAndTokens = await b2GetUploadUrls(fileList.length);
         let files = fileList.map((file, i) => ({
           compressed: file,

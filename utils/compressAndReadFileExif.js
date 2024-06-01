@@ -14,7 +14,6 @@ const compressAndReadFileExif = async (file) => {
 
   try {
     const metadata = await ExifReader.load(file);
-    console.log(metadata);
     // Aperture
     aperture = metadata["FNumber"]
       ? metadata["FNumber"].value[0] / metadata["FNumber"].value[1]
