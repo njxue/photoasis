@@ -15,6 +15,7 @@ function SelectControls({ text, onConfirm, prompt }) {
   return !isSelecting ? (
     <img
       src="/assets/icons/select.svg"
+      alt="select"
       width={30}
       className="cursor-pointer"
       onClick={beginSelect}
@@ -27,11 +28,11 @@ function SelectControls({ text, onConfirm, prompt }) {
         }}
         disabled={!numSelected}
         className="btn-red font-bold">
-        <img src="/assets/icons/trash.svg" width={20} />
+        <img src="/assets/icons/trash.svg" width={20} alt="trash" />
         {text ?? "Submit"} <span>({numSelected})</span>
       </button>
       <button className="btn-white font-bold" onClick={endSelect}>
-        <img src="/assets/icons/cross.svg" width={20} />
+        <img src="/assets/icons/cross.svg" width={20} alt="cross" />
         Cancel
       </button>
       <ConfirmationModal

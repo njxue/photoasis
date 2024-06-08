@@ -63,7 +63,11 @@ const DroppableFileInput = ({ name, required }) => {
         onDrop={handleDrop}
         onDragOver={handleDragOver}>
         <p>Drag or click to upload files</p>
-        <img src="/assets/icons/upload.svg" className="w-[35px]" />
+        <img
+          src="/assets/icons/upload.svg"
+          className="w-[35px]"
+          alt="uploadIcon"
+        />
         <input
           type="file"
           name={name}

@@ -27,6 +27,7 @@ const PhotoCard = ({ photo, minimalisticView }) => {
           onClick={() => {
             setExpandPhoto(true);
           }}
+          name={photo.name}
           className="object-cover h-full w-full"
           hover
         />

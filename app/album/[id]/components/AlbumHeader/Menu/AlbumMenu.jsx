@@ -25,6 +25,7 @@ const AlbumMenu = ({ setIsEditing, albumData }) => {
       <div className="relative">
         <img
           src="/assets/icons/vertical-dots.svg"
+          alt="settings"
           className="min-w-[30px] w-[30px] cursor-pointer"
           onClick={() => {
             setShowMenuItems((prev) => !prev);

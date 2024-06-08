@@ -27,6 +27,7 @@ const ExpandedPhotoInfo = ({ photo }) => {
     <div className="flex flex-col items-end p-2 text-xs text-white">
       <img
         src="/assets/icons/info.svg"
+        alt="info"
         className="block w-7 opacity-50 p-1 hover:opacity-100 cursor-pointer"
         onMouseOver={() => {
           setShowInfo(true);

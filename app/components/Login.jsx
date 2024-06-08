@@ -22,6 +22,7 @@ const Login = () => {
           <img
             src="/assets/images/logo.png"
             className="w-[70%] min-w-[250px] md:w-[40%] pointer-events-none"
+            alt="photoasisLogo"
           />
 
           <div className="text-xl text-justify text-gray-700 font-serif tracking-wider leading-8 mt-6 md:w-9/12">
@@ -41,6 +42,7 @@ const Login = () => {
                 <img
                   src={`/assets/icons/${provider.id}.svg`}
                   className="h-full pointer-events-none"
+                  alt={provider.id}
                 />
                 <p>Sign in with {capitalize(provider.id)}</p>
               </button>

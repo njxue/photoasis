@@ -13,7 +13,7 @@ const SelectableItem = ({ children, item }) => {
       </div>
       {isSelecting && isSelected(item) && (
         <div className="absolute top-0 right-0 p-1 bg-green-500 opacity-90">
-          <img src="/assets/icons/bold-tick.svg" width={16} />
+          <img src="/assets/icons/bold-tick.svg" width={16} alt="tick" />
         </div>
       )}
     </div>

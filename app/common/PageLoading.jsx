@@ -6,6 +6,7 @@ const PageLoading = () => {
       <OptimisedImage
         src="/assets/images/logo.png"
         className="w-1/4 min-w-[200px] opacity-20"
+        name="loading-state"
       />
       <div className="loader"></div>
     </div>

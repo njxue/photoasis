@@ -21,6 +21,7 @@ const PhotoSettingsInputs = ({ photo }) => {
         <div className="flex flex-row gap-2">
           <img
             src="/assets/icons/sun.svg"
+            alt="exposure"
             width={20}
             onClick={() => setTab(EXPOSURE_TAB)}
             className={`${tab !== EXPOSURE_TAB && "opacity-20"} cursor-pointer`}
@@ -28,6 +29,7 @@ const PhotoSettingsInputs = ({ photo }) => {
           <img
             src="/assets/icons/camera.svg"
             width={20}
+            alt="build"
             onClick={() => setTab(BUILD_TAB)}
             className={`${tab !== BUILD_TAB && "opacity-20"} cursor-pointer`}
           />

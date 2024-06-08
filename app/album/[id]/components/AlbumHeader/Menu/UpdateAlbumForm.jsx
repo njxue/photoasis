@@ -28,11 +28,13 @@ const UpdateAlbumForm = ({ albumData, setIsEditing }) => {
           <img
             src="/assets/icons/tick.svg"
             className="h-[30px] cursor-pointer"
+            alt="tick"
           />
         </button>
         <button className="h-full w-1/2">
           <img
             src="/assets/icons/cross.svg"
+            alt="cross"
             className="h-[30px] cursor-pointer"
             onClick={() => setIsEditing(false)}
           />

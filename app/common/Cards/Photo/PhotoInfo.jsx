@@ -10,6 +10,7 @@ const PhotoInfo = ({ photo }) => {
           src="/assets/icons/aperture.svg"
           width={width}
           className="invert"
+          alt="aperture"
         />
         <div>{photo.aperture ? photo.aperture : "-"}</div>
       </div>
@@ -18,13 +19,19 @@ const PhotoInfo = ({ photo }) => {
           src="/assets/icons/shutterspeed.svg"
           width={width}
           className="invert"
+          alt="shutterspeed"
         />
         <div className="overflow-hidden">
           {photo.shutterspeed ? photo.shutterspeed : "-"}
         </div>
       </div>
       <div className={itemStyle}>
-        <img src="/assets/icons/iso.svg" width={width} className="invert" />
+        <img
+          src="/assets/icons/iso.svg"
+          width={width}
+          className="invert"
+          alt="iso"
+        />
         <div>{photo.iso ? photo.iso : "-"}</div>
       </div>
     </div>

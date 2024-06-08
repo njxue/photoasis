@@ -8,7 +8,11 @@ function DashboardHeader({ handleSearchTermChange }) {
           <div className="flex flex-row items-center gap-3 page-heading">
             <p>Albums</p>
             <Link href="/album/new">
-              <img src="/assets/icons/add-album.svg" width={30} />
+              <img
+                src="/assets/icons/add-album.svg"
+                width={30}
+                alt="addAlbum"
+              />
             </Link>
           </div>
           <AlbumSelect />
