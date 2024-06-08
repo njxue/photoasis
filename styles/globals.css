@@ -19,7 +19,7 @@
 }
 
 .btn {
-  @apply px-2 py-1 rounded flex flex-row justify-center items-center gap-1 disabled:opacity-50  transition-opacity duration-100  hover:opacity-70;
+  @apply px-2 py-1 rounded flex flex-row justify-center items-center gap-1 disabled:opacity-50  transition-opacity duration-100 shadow-sm hover:opacity-70;
 }
 
 .btn-red {
@@ -27,7 +27,7 @@
 }
 
 .btn-white {
-  @apply btn bg-white;
+  @apply btn bg-gray-200;
 }
 
 .btn-green {

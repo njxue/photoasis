@@ -4,6 +4,7 @@ import { ModalHeader } from "@app/common/Modal/ModalHeader";
 import { ModalBody } from "@app/common/Modal/ModalBody";
 import SubmitButton from "@app/common/SubmitButton";
 import { useState } from "react";
+import CancelButton from "./CancelButton";
 
 const ConfirmationModal = ({
   isOpen,
@@ -36,13 +37,8 @@ const ConfirmationModal = ({
             setIsSubmitting(true);
           }}>
           <div className="flex flex-row gap-1 w-full mt-1">
+            <CancelButton onCancel={handleCancel} />
             <SubmitButton text="Yes" />
-            <button
-              onClick={handleCancel}
-              disabled={isSubmitting}
-              className="btn-red w-full font-bold">
-              No
-            </button>
           </div>
         </form>
       </ModalBody>

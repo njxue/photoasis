@@ -4,11 +4,13 @@ import ImagePreviews from "@app/common/ImageUpload/ImagePreviews";
 import compressAndReadFileExif from "@utils/compressAndReadFileExif";
 import LoadingSpinner from "../LoadingSpinner";
 import { toast } from "react-toastify";
+import { useFormStatus } from "react-dom";
 
 const DroppableFileInput = ({ name, required }) => {
   const inputRef = useRef();
   const [images, setImages] = useState([]);
   const [isLoadingPreview, setIsLoadingPreview] = useState(false);
+  const { pending } = useFormStatus();
 
   function handleClick() {
     inputRef.current && inputRef.current.click();
@@ -25,6 +27,9 @@ const DroppableFileInput = ({ name, required }) => {
 
   function handleDrop(e) {
     e.preventDefault();
+    if (pending) {
+      return;
+    }
     const fileList = e.dataTransfer.files;
     if (inputRef?.current) {
       inputRef.current.files = fileList;
@@ -68,6 +73,7 @@ const DroppableFileInput = ({ name, required }) => {
           onChange={handleChange}
           accept="image/*"
           required={required}
+          disabled={pending}
         />
       </div>
       {(images.length > 0 || isLoadingPreview) && (
