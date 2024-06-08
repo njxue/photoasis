@@ -69,7 +69,8 @@
 
 @keyframes slideUp {
   0% {
-    transform: translateY(20%);
+    transform: translateY(5%);
+    opacity: 0;
   }
   100% {
   }
@@ -101,6 +102,18 @@
   border-radius: 9999px;
   background-color: #aaaaaa;
 }
+
+/* Animate triangle lines */
+@keyframes move {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.line {
+  animation: move 0.5s linear forwards;
+}
+
 
 /* https://css-loaders.com/dots/ */
 .loader {

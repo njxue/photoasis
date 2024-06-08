@@ -1,11 +1,14 @@
+import Triangle from "./Triangle";
+
 const PhotoInfo = ({ photo }) => {
   // Display '-' for missing values (hence, use '?' and not '??')
-  const width = 12;
+  const width = 20;
   const itemStyle =
-    "flex flex-col justify-center items-start gap-1 w-1/3 xs:flex-row";
+    "flex flex-col justify-center items-center gap-1 text-white text-xs truncate";
+
   return (
-    <div className="flex flex-row justify-around items-start max-h-[30px] overflow-hidden p-2 gap-1 text-white text-[10px]">
-      <div className={itemStyle}>
+    <div className="grid gid-cols-2 grid-rows-2 auto-cols-fr h-full overflow-hidden px-2">
+      <div className={`${itemStyle} col-span-2`}>
         <img
           src="/assets/icons/aperture.svg"
           width={width}
@@ -14,7 +17,8 @@ const PhotoInfo = ({ photo }) => {
         />
         <div>{photo.aperture ? photo.aperture : "-"}</div>
       </div>
-      <div className={itemStyle}>
+
+      <div className={`${itemStyle} col-span-1`}>
         <img
           src="/assets/icons/shutterspeed.svg"
           width={width}
@@ -25,7 +29,8 @@ const PhotoInfo = ({ photo }) => {
           {photo.shutterspeed ? photo.shutterspeed : "-"}
         </div>
       </div>
-      <div className={itemStyle}>
+
+      <div className={`${itemStyle} col-span-1`}>
         <img
           src="/assets/icons/iso.svg"
           width={width}
@@ -34,6 +39,7 @@ const PhotoInfo = ({ photo }) => {
         />
         <div>{photo.iso ? photo.iso : "-"}</div>
       </div>
+      <Triangle />
     </div>
   );
 };

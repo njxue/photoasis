@@ -17,23 +17,23 @@ const PhotoCard = ({ photo, minimalisticView }) => {
   }
 
   return (
-    <>
+    <div
+      onClick={() => {
+        setExpandPhoto(true);
+      }}>
       <div
         className="card relative bg-white"
         onMouseEnter={handleShowPhotoInfo}
         onMouseLeave={handleHidePhotoInfo}>
         <OptimisedImage
           src={photo.url}
-          onClick={() => {
-            setExpandPhoto(true);
-          }}
           name={photo.name}
           className="object-cover h-full w-full"
           hover
         />
 
         {showPhotoInfo && (
-          <div className="absolute bottom-0 bg-black opacity-70 w-full animate-slideUp">
+          <div className="absolute bottom-0 bg-black opacity-70 w-full h-full animate-slideUp">
             <PhotoInfo photo={photo} />
           </div>
         )}
@@ -43,7 +43,7 @@ const PhotoCard = ({ photo, minimalisticView }) => {
         setExpandPhoto={setExpandPhoto}
         photo={photo}
       />
-    </>
+    </div>
   );
 };
 
