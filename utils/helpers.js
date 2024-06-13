@@ -22,6 +22,24 @@ const parseDate = (str) => {
   return dateObj.toLocaleDateString("en-SG", options);
 };
 
+const base64ToBlob = async ({ content, mimeType }) => {
+  const base64EncodedData = await fetch(`data:${mimeType};base64,${content}`);
+  const blob = await base64EncodedData.blob();
+  return blob;
+};
+
+const downloadBlob = ({ blob, fileName }) => {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.style.display = "none";
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  URL.revokeObjectURL(url);
+  document.body.removeChild(a);
+};
+
 const METERING_MODES = [
   {
     label: "Matrix",
@@ -73,4 +91,11 @@ const EXPOSURE_MODES = [
   },
 ];
 
-export { capitalize, parseDate, METERING_MODES, EXPOSURE_MODES };
+export {
+  capitalize,
+  parseDate,
+  base64ToBlob,
+  downloadBlob,
+  METERING_MODES,
+  EXPOSURE_MODES,
+};
