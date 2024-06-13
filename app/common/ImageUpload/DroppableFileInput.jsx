@@ -83,8 +83,11 @@ const DroppableFileInput = ({ name, required }) => {
       {(images.length > 0 || isLoadingPreview) && (
         <div className="w-full h-full">
           {isLoadingPreview ? (
-            <div className="h-full flex flex-col justify-center items-center">
-              <LoadingSpinner text="Preparing your photos..." />
+            <div className="h-full flex flex-col justify-center items-center gap-5 text-gray-500 text-wrap text-center">
+              <div className="w-8">
+                <LoadingSpinner />
+              </div>
+              <p>Preparing your photos...</p>
             </div>
           ) : (
             <ImagePreviews images={images} setImages={setImages} />
