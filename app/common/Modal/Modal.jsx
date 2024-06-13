@@ -1,8 +1,15 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { ModalProvider } from "./ModalContext";
 import { createPortal } from "react-dom";
+import dynamic from "next/dynamic";
+
+const DynamicModalProvider = dynamic(
+  () => import("./ModalContext").then((mod) => mod.ModalProvider),
+  {
+    ssr: false,
+  }
+);
 
 const MODAL_STYLES =
   "min-w-[300px]  rounded fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-50 flex flex-col items-center justify-center bg-gray-50";
@@ -28,12 +35,12 @@ const Modal = ({ isOpen, setOpen, closeOnClickOutside, children }) => {
   return (
     isOpen &&
     createPortal(
-      <ModalProvider setOpen={setOpen}>
+      <DynamicModalProvider setOpen={setOpen}>
         <div className={OVERLAY_STYLES}></div>
         <div ref={modalRef} className={MODAL_STYLES}>
           {children}
         </div>
-      </ModalProvider>,
+      </DynamicModalProvider>,
       document.body
     )
   );
