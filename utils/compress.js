@@ -4,6 +4,7 @@ const defaultOptions = {
   maxSizeMB: 0.3,
   useWebWorker: true,
   maxIteration: 10,
+  preserveExif: true,
 };
 
 const compress = async (file, options = defaultOptions) => {

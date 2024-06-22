@@ -56,7 +56,7 @@ const compressAndReadFileExif = async (file) => {
 
   const compressed = await compress(file, {
     maxSizeMB: 0.3,
-    maxWidthOrHeight: 100,
+    maxWidthOrHeight: 200, // Intrinsic size
   });
 
   return {
