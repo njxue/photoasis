@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
 import PhotoSettingsInputs from "./PhotoSettingsInputs";
-import OptimisedImage from "../OptimisedImage";
+import OptimisedImage from "../Image/OptimisedImage";
+import { QUALITY_LOW } from "../Image/constants";
 
 const ImagePreviews = ({ images, setImages }) => {
   const [selectedPhoto, setSelectedPhoto] = useState(null);
@@ -25,6 +26,7 @@ const ImagePreviews = ({ images, setImages }) => {
                   src={image.url}
                   onClick={(e) => setSelectedPhoto(e.target.id)}
                   name={image.name}
+                  quality={QUALITY_LOW}
                   hover
                 />
                 <div className="bg-black absolute right-0 top-0 cursor-pointer opacity-0 hover:opacity-70">

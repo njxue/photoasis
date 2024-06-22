@@ -1,8 +1,9 @@
 "use client";
 import { useState } from "react";
 import ExpandedPhoto from "./ExpandedPhoto";
-import OptimisedImage from "../../OptimisedImage";
+import OptimisedImage from "../../Image/OptimisedImage";
 import PhotoInfo from "./PhotoInfo";
+import { QUALITY_MID } from "@app/common/Image/constants";
 
 const PhotoCard = ({ photo, minimalisticView }) => {
   const [expandPhoto, setExpandPhoto] = useState(false);
@@ -29,6 +30,7 @@ const PhotoCard = ({ photo, minimalisticView }) => {
           src={photo.url}
           name={photo.name}
           className="object-cover h-full w-full"
+          quality={QUALITY_MID}
           hover
         />
 

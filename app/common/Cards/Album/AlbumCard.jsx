@@ -1,5 +1,6 @@
 "use client";
-import OptimisedImage from "@app/common/OptimisedImage";
+import { QUALITY_LOW, QUALITY_MID } from "@app/common/Image/constants";
+import OptimisedImage from "@app/common/Image/OptimisedImage";
 import Link from "next/link";
 
 const AlbumCard = ({ data }) => {
@@ -14,7 +15,12 @@ const AlbumCard = ({ data }) => {
     <>
       <Link href={`/album/${aid}`} className="cursor-pointer">
         <div className="card relative">
-          <OptimisedImage src={thumbnail} name={name} hover />
+          <OptimisedImage
+            src={thumbnail}
+            name={name}
+            quality={QUALITY_MID}
+            hover
+          />
           <div className="absolute bottom-2 px-5 text-white text-border text-xl font-bold text-start line-clamp-2">
             {name}
           </div>

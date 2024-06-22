@@ -1,7 +1,15 @@
 "use client";
 import Image from "next/image";
+import { QUALITY_MAX } from "./constants";
 
-const OptimisedImage = ({ src, name, onClick, className, hover }) => {
+const OptimisedImage = ({
+  src,
+  name,
+  onClick,
+  className,
+  hover,
+  quality = QUALITY_MAX,
+}) => {
   const hoverStyles =
     "hover:opacity-50 transition-opacity ease-in-out duration-50";
   const dimensions = "h-full w-full max-w-[90vw] max-h-[90vh]";
@@ -18,7 +26,7 @@ const OptimisedImage = ({ src, name, onClick, className, hover }) => {
         ${className ?? dimensions}
       `}
       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
-      quality={100}
+      quality={quality}
       onClick={onClick}
     />
   );

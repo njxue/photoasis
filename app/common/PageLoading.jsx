@@ -1,4 +1,5 @@
-import OptimisedImage from "./OptimisedImage";
+import { QUALITY_MID } from "./Image/constants";
+import OptimisedImage from "./Image/OptimisedImage";
 
 const PageLoading = () => {
   return (
@@ -7,6 +8,7 @@ const PageLoading = () => {
         src="/assets/images/logo.png"
         className="w-1/4 min-w-[200px] opacity-20"
         name="loading-state"
+        quality={QUALITY_MID}
       />
       <div className="loader"></div>
     </div>
