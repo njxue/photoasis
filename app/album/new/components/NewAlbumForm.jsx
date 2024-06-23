@@ -1,6 +1,7 @@
 "use client";
 import updateAlbum from "@actions/updateAlbum";
 import createAlbum from "@actions/createAlbum";
+import deleteAlbum from "@actions/deleteAlbum";
 import formUploadPhotos from "@utils/formUploadPhotos";
 import DroppableFileInput from "@app/common/ImageUpload/DroppableFileInput";
 import SubmitButton from "@app/common/SubmitButton";
@@ -27,20 +28,29 @@ const NewAlbumForm = () => {
       }
       const aid = albumRes.data.aid;
 
-      // No  photos
+      // No photos
       if (formdata.getAll("photos")[0].name === "") {
         router.push(`/album/${aid}`);
         toast.success(`Album "${albumName}" successfully created!`);
         return;
       }
 
-      const fileInfos = await formUploadPhotos(aid, uid, formdata);
+      const b2UploadRes = await formUploadPhotos(aid, uid, formdata);
+      if (b2UploadRes.status !== 200) {
+        toast.error(b2UploadRes.message);
+        // Rollback album creation
+        await deleteAlbum(aid);
+        return;
+      }
+      
+      const fileInfos = b2UploadRes.data;
       const res = await updateAlbum({ aid, photos: fileInfos });
       if (res.ok) {
         router.push(`/album/${aid}`);
         toast.success(`Album "${albumName}" successfully created!`);
       } else {
-        toast.error(res.message);
+        toast.error(errorMessage);
+        await deleteAlbum(aid);
       }
     } catch (err) {
       console.log(err);

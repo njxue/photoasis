@@ -22,6 +22,7 @@ async function updateAlbum(data, revalidate = true) {
     }
 
     if (photos) {
+      console.log(photos)
       // Insert photos
       const newPhotos = await prisma.photo.createMany(
         {

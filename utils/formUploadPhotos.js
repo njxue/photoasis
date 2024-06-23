@@ -3,8 +3,12 @@ const formUploadPhotos = async (aid, uid, formdata) => {
   return new Promise((resolve, reject) => {
     (async () => {
       try {
-        let fileList = formdata.getAll("photos");
-        //fileList = [...fileList];
+        let fileList = formdata.getAll("photos").map((file, i) => ({
+          file: file,
+          idx: i,
+          name: file.name,
+        }));
+
         const aperture = formdata.getAll("aperture");
         const shutterspeed = formdata.getAll("shutterspeed");
         const iso = formdata.getAll("iso");
@@ -17,22 +21,49 @@ const formUploadPhotos = async (aid, uid, formdata) => {
         const cameraModel = formdata.getAll("cameraModel");
         const editingSoftware = formdata.getAll("editingSoftware");
 
-        const uploadUrlsAndTokens = await b2GetUploadUrls(fileList.length);
-        let files = fileList.map((file, i) => ({
-          compressed: file,
-          name: file.name,
-          b2name: `${uid}/${aid}/${encodeURIComponent(file.name)}`,
-          url: uploadUrlsAndTokens[i].url,
-          token: uploadUrlsAndTokens[i].token,
-          idx: i,
-        }));
+        const MAX_RETRIES = 5;
+        let num_tries = 0;
+        const successfullyUploadedFiles = [];
+        while (fileList.length > 0 && num_tries < MAX_RETRIES) {
+          if (process.env.NODE_ENV === "development") {
+            console.log(
+              `Attempt #${num_tries + 1} with ${fileList.length} files`
+            );
+          }
 
-        // Upload
-        let uploadedFileIds = await uploadFiles(files);
+          const uploadUrlsAndTokens = await b2GetUploadUrls(fileList.length);
+          let files = fileList.map((file, i) => ({
+            ...file,
+            b2name: `${uid}/${aid}/${encodeURIComponent(file.name)}`,
+            url: uploadUrlsAndTokens[i].url,
+            token: uploadUrlsAndTokens[i].token,
+          }));
+
+          // Attempt to upload
+          let uploadedFileIds = await uploadFiles(files);
+
+          // Success
+          successfullyUploadedFiles.push(
+            ...uploadedFileIds.filter((file) => file.status === 200)
+          );
+
+          // Failed
+          fileList = uploadedFileIds.filter((file) => file.status === 503);
+          num_tries++;
+        }
+
+        // Did not manage to upload all
+        if (fileList.length > 0) {
+          return resolve({
+            status: 503,
+            message:
+              "Server experiencing high load. Please try again later, or upload your images in smaller batches",
+          });
+        }
 
         // Assign photo settings
-        const uploadedFiles = uploadedFileIds.map((file) => ({
-          name: fileList[file.idx].name,
+        const uploadedFiles = successfullyUploadedFiles.map((file) => ({
+          name: file.name,
           aperture: aperture[file.idx],
           shutterspeed: shutterspeed[file.idx],
           iso: iso[file.idx],
@@ -47,9 +78,9 @@ const formUploadPhotos = async (aid, uid, formdata) => {
           fileId: file.fileId,
         }));
 
-        resolve(uploadedFiles);
+        resolve({ status: 200, data: uploadedFiles });
       } catch (err) {
-        reject(err);
+        reject({ status: 500, message: err });
       }
     })();
   });
@@ -68,13 +99,13 @@ const uploadFile = async (file) => {
       "Content-Type": "b2/x-auto",
       "X-Bz-Content-Sha1": "do_not_verify",
     },
-    body: file.compressed,
+    body: file.file,
   });
   const data = await res.json();
   return {
+    ...file,
     fileId: data.fileId,
-    idx: file.idx,
+    status: res.status,
   };
 };
-
 export default formUploadPhotos;

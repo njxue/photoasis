@@ -16,7 +16,17 @@ const AddPhotosForm = ({ albumData, show, setShow }) => {
 
   async function handleSubmit(formdata) {
     try {
-      const fileInfos = await formUploadPhotos(aid, session?.user.id, formdata);
+      const b2UploadRes = await formUploadPhotos(
+        aid,
+        session?.user.id,
+        formdata
+      );
+
+      if (b2UploadRes.status !== 200) {
+        toast.error(b2UploadRes.message);
+        return;
+      }
+      const fileInfos = b2UploadRes.data;
       const res = await updateAlbum({ aid, photos: fileInfos });
       if (res.ok) {
         setShow(false);
