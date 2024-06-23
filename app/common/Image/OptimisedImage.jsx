@@ -9,6 +9,7 @@ const OptimisedImage = ({
   className,
   hover,
   quality = QUALITY_MAX,
+  priority = false,
 }) => {
   const hoverStyles =
     "hover:opacity-50 transition-opacity ease-in-out duration-50";
@@ -28,6 +29,7 @@ const OptimisedImage = ({
       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
       quality={quality}
       onClick={onClick}
+      priority={priority}
     />
   );
 };

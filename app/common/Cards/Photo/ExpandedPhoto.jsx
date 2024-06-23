@@ -6,7 +6,12 @@ import { QUALITY_MAX } from "@app/common/Image/constants";
 const ExpandedPhoto = ({ expandPhoto, setExpandPhoto, photo }) => {
   return (
     <Modal isOpen={expandPhoto} setOpen={setExpandPhoto} closeOnClickOutside>
-      <OptimisedImage src={photo.url} name={photo.name} quality={QUALITY_MAX} />
+      <OptimisedImage
+        src={photo.url}
+        name={photo.name}
+        quality={QUALITY_MAX}
+        priority
+      />
       <div className="absolute top-0 right-0">
         <ExpandedPhotoInfo photo={photo} />
       </div>
