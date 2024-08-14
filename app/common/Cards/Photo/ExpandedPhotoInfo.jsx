@@ -62,7 +62,7 @@ const ExpandedPhotoInfo = ({ photo }) => {
         />
         <MetaDataItem
           label="Focal Length"
-          value={photo.aperture}
+          value={photo.focalLength}
           icon="focal-length.svg"
           invertIcon
         />
