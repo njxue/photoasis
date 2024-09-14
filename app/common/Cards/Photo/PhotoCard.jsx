@@ -3,7 +3,7 @@ import { useState } from "react";
 import ExpandedPhoto from "./ExpandedPhoto";
 import OptimisedImage from "../../Image/OptimisedImage";
 import PhotoInfo from "./PhotoInfo";
-import { QUALITY_MID } from "@app/common/Image/constants";
+import { QUALITY_MAX } from "@app/common/Image/constants";
 
 const PhotoCard = ({ photo, minimalisticView }) => {
   const [expandPhoto, setExpandPhoto] = useState(false);
@@ -30,8 +30,9 @@ const PhotoCard = ({ photo, minimalisticView }) => {
           src={photo.url}
           name={photo.name}
           className="object-cover h-full w-full"
-          quality={QUALITY_MID}
           hover
+          sizes="200px"
+          quality={QUALITY_MAX}
         />
 
         {showPhotoInfo && (
@@ -40,11 +41,13 @@ const PhotoCard = ({ photo, minimalisticView }) => {
           </div>
         )}
       </div>
-      <ExpandedPhoto
-        expandPhoto={expandPhoto}
-        setExpandPhoto={setExpandPhoto}
-        photo={photo}
-      />
+      {expandPhoto && (
+        <ExpandedPhoto
+          expandPhoto={expandPhoto}
+          setExpandPhoto={setExpandPhoto}
+          photo={photo}
+        />
+      )}
     </div>
   );
 };
