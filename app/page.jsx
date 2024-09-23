@@ -5,11 +5,8 @@ import Dashboard from "./components/Dashboard";
 import { unstable_cache } from "next/cache";
 
 const fetchAlbums = unstable_cache(
-  async () => {
+  async (uid) => {
     try {
-      const session = await getServerSession(authOptions);
-      const uid = session?.user.id;
-
       let albums = await prisma.album.findMany({
         where: {
           uid: uid,
@@ -42,7 +39,10 @@ const fetchAlbums = unstable_cache(
 );
 
 const Home = async () => {
-  const albums = await fetchAlbums();
+  const session = await getServerSession(authOptions);
+  const uid = session?.user.id;
+
+  const albums = await fetchAlbums(uid);
   return (
     <div className="flex flex-center flex-col h-full w-full">
       <Dashboard albums={albums} />

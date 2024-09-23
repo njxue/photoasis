@@ -2,7 +2,7 @@ import Modal from "@app/common/Modal/Modal";
 import ExpandedPhotoInfo from "./ExpandedPhotoInfo";
 import OptimisedImage from "../../Image/OptimisedImage";
 import DownloadPhoto from "./DownloadPhoto";
-import { QUALITY_MAX } from "@app/common/Image/constants";
+import { QUALITY_MAX, QUALITY_MID } from "@app/common/Image/constants";
 import { useState } from "react";
 const ExpandedPhoto = ({ expandPhoto, setExpandPhoto, photo }) => {
   const [showButtons, setShowButtons] = useState(false);
@@ -16,7 +16,7 @@ const ExpandedPhoto = ({ expandPhoto, setExpandPhoto, photo }) => {
       <OptimisedImage
         src={photo.url}
         name={photo.name}
-        quality={QUALITY_MAX}
+        quality={QUALITY_MID}
         priority
         sizes="100vw"
         showLoader
