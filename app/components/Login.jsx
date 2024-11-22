@@ -20,7 +20,7 @@ const Login = () => {
       {providers && (
         <div className="flex flex-col justify-center items-center w-[90%] sm:w-1/2 z-50 animate-fadeInAndSlideDown">
           <img
-            src="/assets/images/logo.png"
+            src="/assets/images/logoNew.png"
             className="w-[70%] min-w-[250px] md:w-[40%] pointer-events-none"
             alt="photoasisLogo"
           />
