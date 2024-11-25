@@ -11,7 +11,7 @@ const fetchPhotos = unstable_cache(
         where: {
           uid,
         },
-        distinct: ["name"],
+        distinct: ["pid"],
       });
       photos = photos.map((photo) => ({
         ...photo,
