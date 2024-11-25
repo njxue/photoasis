@@ -1,6 +1,6 @@
 import { authOptions } from "@app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import prisma from "@prisma/prisma";
 import AlbumContainer from "./components/AlbumContainer";
 import { unstable_cache } from "next/cache";
@@ -43,6 +43,9 @@ const Page = async ({ params }) => {
   }
 
   const albumData = await fetchAlbumData(parseInt(params.id), session.user.id);
+  if (!albumData) {
+    return notFound();
+  }
   return <AlbumContainer albumData={albumData} />;
 };
 
