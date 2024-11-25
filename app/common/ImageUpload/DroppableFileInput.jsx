@@ -1,14 +1,14 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ImagePreviews from "@app/common/ImageUpload/ImagePreviews";
 import compressAndReadFileExif from "@utils/compressAndReadFileExif";
 import LoadingSpinner from "../LoadingSpinner";
 import { toast } from "react-toastify";
 import { useFormStatus } from "react-dom";
 
-const DroppableFileInput = ({ name, required }) => {
+const DroppableFileInput = ({ name, required, onChange, files }) => {
   const inputRef = useRef();
-  const [images, setImages] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
   const [isLoadingPreview, setIsLoadingPreview] = useState(false);
   const { pending } = useFormStatus();
 
@@ -17,8 +17,8 @@ const DroppableFileInput = ({ name, required }) => {
   }
 
   function handleChange(e) {
-    const fileList = e.target.files;
-    handlePreview(fileList);
+    const newFiles = Array.from(e.target.files);
+    onChange(newFiles);
   }
 
   function handleDragOver(e) {
@@ -30,11 +30,8 @@ const DroppableFileInput = ({ name, required }) => {
     if (pending) {
       return;
     }
-    const fileList = e.dataTransfer.files;
-    if (inputRef?.current) {
-      inputRef.current.files = fileList;
-    }
-    handlePreview(fileList);
+    const newFiles = Array.from(e.dataTransfer.files);
+    onChange(newFiles);
   }
 
   async function handlePreview(fileList) {
@@ -46,14 +43,20 @@ const DroppableFileInput = ({ name, required }) => {
       }
       const compressedPreviews = await Promise.all(previews);
 
-      setImages(compressedPreviews);
+      setImagePreviews(compressedPreviews);
     } catch (err) {
       toast.error("Invalid image file");
-      setImages([]);
+      setImagePreviews([]);
     } finally {
       setIsLoadingPreview(false);
     }
   }
+
+  useEffect(() => {
+    if (files) {
+      handlePreview(files);
+    }
+  }, [files]);
 
   return (
     <div className="flex flex-col h-full md:flex-row">
@@ -78,9 +81,12 @@ const DroppableFileInput = ({ name, required }) => {
           accept="image/*"
           required={required}
           disabled={pending}
+          onClick={(e) => {
+            e.target.value = null;
+          }}
         />
       </div>
-      {(images.length > 0 || isLoadingPreview) && (
+      {(imagePreviews.length > 0 || isLoadingPreview) && (
         <div className="w-full h-full">
           {isLoadingPreview ? (
             <div className="h-full flex flex-col justify-center items-center gap-5 text-gray-500 text-wrap text-center">
@@ -90,7 +96,10 @@ const DroppableFileInput = ({ name, required }) => {
               <p>Preparing your photos...</p>
             </div>
           ) : (
-            <ImagePreviews images={images} setImages={setImages} />
+            <ImagePreviews
+              images={imagePreviews}
+              setImages={setImagePreviews}
+            />
           )}
         </div>
       )}

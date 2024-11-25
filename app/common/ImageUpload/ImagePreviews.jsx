@@ -19,14 +19,16 @@ const ImagePreviews = ({ images, setImages }) => {
       <div className="relative min-h-[90px] overflow-auto grow">
         <div className="absolute top-0 left-0 w-full grid gap-1 grid-cols-3 xs:grid-cols-4 sm:grid-cols-6 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
           {images?.map((image) => (
-            <div className="relative min-w-[80px]" key={image.name}>
+            <div className="relative min-w-[80px]" key={image.id}>
               <OptimisedImage
                 className={`${
                   selectedPhoto === image.name && "opacity-30"
                 } h-[80px] w-full`}
                 src={image.url}
-                onClick={(e) => setSelectedPhoto(e.target.id)}
-                name={image.name}
+                onClick={(e) => {
+                  setSelectedPhoto(e.target.id);
+                }}
+                name={image.id}
                 quality={QUALITY_LOW}
                 hover
               />
@@ -51,12 +53,12 @@ const ImagePreviews = ({ images, setImages }) => {
       </div>
       <div className="min-h-[150px] mt-6" hidden={selectedPhoto == null}>
         {images &&
-          images.map((photo) => (
+          images.map((image) => (
             <div
-              hidden={selectedPhoto !== photo.name}
+              hidden={selectedPhoto !== image.id}
               className="h-full"
-              key={photo.name}>
-              <PhotoSettingsInputs photo={photo} />
+              key={image.id}>
+              <PhotoSettingsInputs photo={image} />
             </div>
           ))}
       </div>

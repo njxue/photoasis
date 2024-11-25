@@ -8,18 +8,22 @@ import updateAlbum from "@actions/updateAlbum";
 import DroppableFileInput from "@app/common/ImageUpload/DroppableFileInput";
 import { toast } from "react-toastify";
 import CancelButton from "@app/common/CancelButton";
+import { useState } from "react";
+import { formatFormData } from "@utils/formatFormData";
 
 const AddPhotosForm = ({ albumData, show, setShow }) => {
   const errorMessage = "Unable to add photo(s). Please try again later";
   const { data: session } = useSession();
   const { aid } = albumData;
+  const [files, setFiles] = useState([]);
 
   async function handleSubmit(formdata) {
     try {
+      const formattedFormData = formatFormData(formdata, files);
       const b2UploadRes = await formUploadPhotos(
         aid,
         session?.user.id,
-        formdata
+        formattedFormData
       );
 
       if (b2UploadRes.status !== 200) {
@@ -46,7 +50,14 @@ const AddPhotosForm = ({ albumData, show, setShow }) => {
           <form
             className="flex flex-col gap-3 p-2 w-full h-full justify-between"
             action={handleSubmit}>
-            <DroppableFileInput name="photos" required />
+            <DroppableFileInput
+              name="photos"
+              required
+              onChange={(newFiles) => {
+                setFiles([...files, ...newFiles]);
+              }}
+              files={files}
+            />
             <div className="flex flex-row gap-2">
               <CancelButton onCancel={() => setShow(false)} />
               <SubmitButton text="Add Photos" preventBrowserRefresh />

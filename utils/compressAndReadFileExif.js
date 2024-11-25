@@ -1,5 +1,6 @@
 import ExifReader from "exifreader";
 import { compress } from "./compress";
+import { v4 as uuidv4 } from "uuid";
 const compressAndReadFileExif = async (file) => {
   let aperture = null;
   let iso = null;
@@ -60,6 +61,7 @@ const compressAndReadFileExif = async (file) => {
   });
 
   return {
+    id: uuidv4(),
     aperture,
     shutterspeed,
     iso,

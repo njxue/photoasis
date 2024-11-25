@@ -9,15 +9,18 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import FancyInput from "@app/common/FancyInput";
-
+import { useState } from "react";
+import { formatFormData } from "@utils/formatFormData";
 const NewAlbumForm = () => {
   const errorMessage = "Unable to create album. Please try again later";
   const { data: session } = useSession();
   const uid = session?.user.id;
   const router = useRouter();
+  const [files, setFiles] = useState([]);
   async function handleCreateAlbum(formdata) {
     try {
-      const albumName = formdata.get("albumName");
+      const formattedFormData = formatFormData(formdata, files);
+      const albumName = formattedFormData.get("albumName");
       const albumRes = await createAlbum({
         albumName,
       });
@@ -29,20 +32,20 @@ const NewAlbumForm = () => {
       const aid = albumRes.data.aid;
 
       // No photos
-      if (formdata.getAll("photos")[0].name === "") {
+      if (formattedFormData.getAll("photos")[0].name === "") {
         router.push(`/album/${aid}`);
         toast.success(`Album "${albumName}" successfully created!`);
         return;
       }
 
-      const b2UploadRes = await formUploadPhotos(aid, uid, formdata);
+      const b2UploadRes = await formUploadPhotos(aid, uid, formattedFormData);
       if (b2UploadRes.status !== 200) {
         toast.error(b2UploadRes.message);
         // Rollback album creation
         await deleteAlbum(aid);
         return;
       }
-      
+
       const fileInfos = b2UploadRes.data;
       const res = await updateAlbum({ aid, photos: fileInfos });
       if (res.ok) {
@@ -67,7 +70,13 @@ const NewAlbumForm = () => {
           <FancyInput name="albumName" label="Album Name" required />
         </div>
         <div className="grow max-h-[100%]">
-          <DroppableFileInput name="photos" />
+          <DroppableFileInput
+            name="photos"
+            onChange={(newFiles) => {
+              setFiles([...files, ...newFiles]);
+            }}
+            files={files}
+          />
         </div>
       </div>
       <SubmitButton text="Create" preventBrowserRefresh />

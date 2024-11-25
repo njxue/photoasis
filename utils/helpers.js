@@ -91,11 +91,22 @@ const EXPOSURE_MODES = [
   },
 ];
 
+function arrayToFileList(filesArray) {
+  const dataTransfer = new DataTransfer();
+
+  filesArray.forEach((file) => {
+    dataTransfer.items.add(file);
+  });
+
+  return dataTransfer.files;
+}
+
 export {
   capitalize,
   parseDate,
   base64ToBlob,
   downloadBlob,
+  arrayToFileList,
   METERING_MODES,
   EXPOSURE_MODES,
 };
