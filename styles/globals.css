@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 .card {
-  @apply border border-solid border-gray-200 shadow-lg rounded h-[160px] cursor-pointer;
+  @apply border border-solid border-gray-200 shadow-lg rounded h-[100px] xs:h-[160px] cursor-pointer;
 }
 
 .photo-grid {
-  @apply grid gap-1 grid-cols-2 xs:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7;
+  @apply grid gap-1 grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7;
 }
 
 .text-border {
@@ -113,7 +113,6 @@
 .line {
   animation: move 0.5s linear forwards;
 }
-
 
 /* https://css-loaders.com/dots/ */
 .loader {

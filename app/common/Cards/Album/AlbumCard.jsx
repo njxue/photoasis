@@ -21,7 +21,7 @@ const AlbumCard = ({ data }) => {
             quality={QUALITY_MID}
             hover
           />
-          <div className="absolute bottom-2 px-5 text-white text-border text-xl font-bold text-start line-clamp-2">
+          <div className="absolute bottom-2 px-[0.5em] text-white text-border font-bold text-start line-clamp-2 text-sm xs:text-lg sm:text-xl  sm:px-5">
             {name}
           </div>
         </div>
