@@ -3,13 +3,12 @@ import Modal from "@app/common/Modal/Modal";
 import { ModalBody } from "@app/common/Modal/ModalBody";
 import SubmitButton from "@app/common/SubmitButton";
 import { useSession } from "next-auth/react";
-import formUploadPhotos from "@utils/formUploadPhotos";
+import { formUploadPhotos } from "@utils/imageUploadUtils";
 import updateAlbum from "@actions/updateAlbum";
 import DroppableFileInput from "@app/common/ImageUpload/DroppableFileInput";
 import { toast } from "react-toastify";
 import CancelButton from "@app/common/CancelButton";
-import { useState } from "react";
-import { formatFormData } from "@utils/formatFormData";
+import { formatFormData } from "@utils/imageUploadUtils";
 import { useImageUploadContext } from "@app/common/ImageUpload/ImageUploadContext";
 
 const AddPhotosForm = ({ albumData, show, setShow }) => {
@@ -53,7 +52,7 @@ const AddPhotosForm = ({ albumData, show, setShow }) => {
           <form
             className="flex flex-col gap-3 p-2 w-full h-full justify-between"
             action={handleSubmit}>
-            <DroppableFileInput name="photos" required />
+            <DroppableFileInput required />
             <div className="flex flex-row gap-2">
               <CancelButton onCancel={() => setShow(false)} />
               <SubmitButton text="Add Photos" preventBrowserRefresh />

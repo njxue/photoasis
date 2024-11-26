@@ -2,14 +2,13 @@
 import updateAlbum from "@actions/updateAlbum";
 import createAlbum from "@actions/createAlbum";
 import deleteAlbum from "@actions/deleteAlbum";
-import formUploadPhotos from "@utils/formUploadPhotos";
 import DroppableFileInput from "@app/common/ImageUpload/DroppableFileInput";
 import SubmitButton from "@app/common/SubmitButton";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import FancyInput from "@app/common/FancyInput";
-import { formatFormData } from "@utils/formatFormData";
+import { formatFormData, formUploadPhotos } from "@utils/imageUploadUtils";
 import { useImageUploadContext } from "@app/common/ImageUpload/ImageUploadContext";
 const NewAlbumForm = () => {
   const errorMessage = "Unable to create album. Please try again later";
@@ -72,7 +71,7 @@ const NewAlbumForm = () => {
           <FancyInput name="albumName" label="Album Name" required />
         </div>
         <div className="grow max-h-[100%]">
-          <DroppableFileInput name="photos" />
+          <DroppableFileInput />
         </div>
       </div>
       <SubmitButton text="Create" preventBrowserRefresh />

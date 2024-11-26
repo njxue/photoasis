@@ -1,5 +1,5 @@
 "use client";
-import compressAndReadFileExif from "@utils/compressAndReadFileExif";
+import { compressAndReadFileExif } from "@utils/imageUploadUtils";
 import { createContext, useContext, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
