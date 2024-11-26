@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import DeleteAlbumForm from "./DeleteAlbumForm";
 import AddPhotosForm from "./AddPhotosForm";
+import ImageUploadProvider from "@app/common/ImageUpload/ImageUploadContext";
 const AlbumMenu = ({ setIsEditing, albumData }) => {
   const [showMenuItems, setShowMenuItems] = useState(false);
   const [isDeletingAlbum, setIsDeletingAlbum] = useState(false);
@@ -60,11 +61,13 @@ const AlbumMenu = ({ setIsEditing, albumData }) => {
         isDeletingAlbum={isDeletingAlbum}
         setIsDeletingAlbum={setIsDeletingAlbum}
       />
-      <AddPhotosForm
-        albumData={albumData}
-        show={isAddingPhotos}
-        setShow={setIsAddingPhotos}
-      />
+      <ImageUploadProvider>
+        <AddPhotosForm
+          albumData={albumData}
+          show={isAddingPhotos}
+          setShow={setIsAddingPhotos}
+        />
+      </ImageUploadProvider>
     </>
   );
 };

@@ -4,15 +4,17 @@ import PhotoSettingsInputs from "./PhotoSettingsInputs";
 import OptimisedImage from "../Image/OptimisedImage";
 import { QUALITY_LOW } from "../Image/constants";
 import { useFormStatus } from "react-dom";
+import { useImageUploadContext } from "./ImageUploadContext";
 
-const ImagePreviews = ({ images, setImages }) => {
-  const [selectedPhoto, setSelectedPhoto] = useState(null);
+const ImagePreviews = () => {
   const { pending } = useFormStatus();
 
-  function handleRemoveImage(imageId) {
-    const newImages = images.filter((i) => i.id !== imageId);
-    setImages(newImages);
-  }
+  const {
+    handleClickImagePreview,
+    handleRemoveFile,
+    selectedFile,
+    imagePreviews: images,
+  } = useImageUploadContext();
 
   return (
     <div className="flex flex-col py-3 md:py-0 md:px-1 h-full">
@@ -22,17 +24,17 @@ const ImagePreviews = ({ images, setImages }) => {
             <div className="relative min-w-[80px]" key={image.id}>
               <OptimisedImage
                 className={`${
-                  selectedPhoto === image.name && "opacity-30"
+                  selectedFile === image.id && "opacity-30"
                 } h-[80px] w-full`}
                 src={image.url}
                 onClick={(e) => {
-                  setSelectedPhoto(e.target.id);
+                  handleClickImagePreview(e.target.id);
                 }}
                 name={image.id}
                 quality={QUALITY_LOW}
                 hover
               />
-              {!pending && false && (
+              {!pending && (
                 <div className="bg-black absolute right-0 top-0 cursor-pointer opacity-0 hover:opacity-70">
                   <img
                     src="/assets/icons/cross.svg"
@@ -41,7 +43,7 @@ const ImagePreviews = ({ images, setImages }) => {
                     onClick={(e) => {
                       // Stops modal from closing once the image (and this img tag) is removed from the DOM
                       e.stopPropagation();
-                      handleRemoveImage(image.id);
+                      handleRemoveFile(image.id);
                     }}
                     className="invert"
                   />
@@ -51,11 +53,11 @@ const ImagePreviews = ({ images, setImages }) => {
           ))}
         </div>
       </div>
-      <div className="min-h-[150px] mt-6" hidden={selectedPhoto == null}>
+      <div className="min-h-[150px] mt-6" hidden={selectedFile == null}>
         {images &&
           images.map((image) => (
             <div
-              hidden={selectedPhoto !== image.id}
+              hidden={selectedFile !== image.id}
               className="h-full"
               key={image.id}>
               <PhotoSettingsInputs photo={image} />

@@ -10,16 +10,18 @@ import { toast } from "react-toastify";
 import CancelButton from "@app/common/CancelButton";
 import { useState } from "react";
 import { formatFormData } from "@utils/formatFormData";
+import { useImageUploadContext } from "@app/common/ImageUpload/ImageUploadContext";
 
 const AddPhotosForm = ({ albumData, show, setShow }) => {
   const errorMessage = "Unable to add photo(s). Please try again later";
   const { data: session } = useSession();
   const { aid } = albumData;
-  const [files, setFiles] = useState([]);
+
+  const { filesForUpload, resetFiles } = useImageUploadContext();
 
   async function handleSubmit(formdata) {
     try {
-      const formattedFormData = formatFormData(formdata, files);
+      const formattedFormData = formatFormData(formdata, filesForUpload);
       const b2UploadRes = await formUploadPhotos(
         aid,
         session?.user.id,
@@ -35,6 +37,7 @@ const AddPhotosForm = ({ albumData, show, setShow }) => {
       if (res.ok) {
         setShow(false);
         toast.success("New photo(s) added!");
+        resetFiles();
       } else {
         toast.error(errorMessage);
       }
@@ -50,14 +53,7 @@ const AddPhotosForm = ({ albumData, show, setShow }) => {
           <form
             className="flex flex-col gap-3 p-2 w-full h-full justify-between"
             action={handleSubmit}>
-            <DroppableFileInput
-              name="photos"
-              required
-              onChange={(newFiles) => {
-                setFiles([...files, ...newFiles]);
-              }}
-              files={files}
-            />
+            <DroppableFileInput name="photos" required />
             <div className="flex flex-row gap-2">
               <CancelButton onCancel={() => setShow(false)} />
               <SubmitButton text="Add Photos" preventBrowserRefresh />

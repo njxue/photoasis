@@ -9,17 +9,19 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import FancyInput from "@app/common/FancyInput";
-import { useState } from "react";
 import { formatFormData } from "@utils/formatFormData";
+import { useImageUploadContext } from "@app/common/ImageUpload/ImageUploadContext";
 const NewAlbumForm = () => {
   const errorMessage = "Unable to create album. Please try again later";
   const { data: session } = useSession();
   const uid = session?.user.id;
   const router = useRouter();
-  const [files, setFiles] = useState([]);
+
+  const { filesForUpload } = useImageUploadContext();
+
   async function handleCreateAlbum(formdata) {
     try {
-      const formattedFormData = formatFormData(formdata, files);
+      const formattedFormData = formatFormData(formdata, filesForUpload);
       const albumName = formattedFormData.get("albumName");
       const albumRes = await createAlbum({
         albumName,
@@ -70,13 +72,7 @@ const NewAlbumForm = () => {
           <FancyInput name="albumName" label="Album Name" required />
         </div>
         <div className="grow max-h-[100%]">
-          <DroppableFileInput
-            name="photos"
-            onChange={(newFiles) => {
-              setFiles([...files, ...newFiles]);
-            }}
-            files={files}
-          />
+          <DroppableFileInput name="photos" />
         </div>
       </div>
       <SubmitButton text="Create" preventBrowserRefresh />

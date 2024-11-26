@@ -1,3 +1,4 @@
+import ImageUploadProvider from "@app/common/ImageUpload/ImageUploadContext";
 import NewAlbumForm from "./components/NewAlbumForm";
 
 const Page = () => {
@@ -7,7 +8,9 @@ const Page = () => {
         <p>New Album</p>
       </div>
       <div className="grow text-md mt-2">
-        <NewAlbumForm />
+        <ImageUploadProvider>
+          <NewAlbumForm />
+        </ImageUploadProvider>
       </div>
     </div>
   );

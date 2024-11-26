@@ -1,16 +1,14 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import ImagePreviews from "@app/common/ImageUpload/ImagePreviews";
-import compressAndReadFileExif from "@utils/compressAndReadFileExif";
 import LoadingSpinner from "../LoadingSpinner";
-import { toast } from "react-toastify";
 import { useFormStatus } from "react-dom";
+import { useImageUploadContext } from "./ImageUploadContext";
 
-const DroppableFileInput = ({ name, required, onChange, files }) => {
+const DroppableFileInput = ({ name, required }) => {
   const inputRef = useRef();
-  const [imagePreviews, setImagePreviews] = useState([]);
-  const [isLoadingPreview, setIsLoadingPreview] = useState(false);
   const { pending } = useFormStatus();
+  const { handleAddFiles, imagePreviews, isLoading } = useImageUploadContext();
 
   function handleClick() {
     inputRef.current && inputRef.current.click();
@@ -18,7 +16,7 @@ const DroppableFileInput = ({ name, required, onChange, files }) => {
 
   function handleChange(e) {
     const newFiles = Array.from(e.target.files);
-    onChange(newFiles);
+    handleAddFiles(newFiles);
   }
 
   function handleDragOver(e) {
@@ -31,32 +29,8 @@ const DroppableFileInput = ({ name, required, onChange, files }) => {
       return;
     }
     const newFiles = Array.from(e.dataTransfer.files);
-    onChange(newFiles);
+    handleAddFiles(newFiles);
   }
-
-  async function handlePreview(fileList) {
-    try {
-      setIsLoadingPreview(true);
-      const previews = [];
-      for (let i = 0; i < fileList.length; i++) {
-        previews.push(compressAndReadFileExif(fileList[i]));
-      }
-      const compressedPreviews = await Promise.all(previews);
-
-      setImagePreviews(compressedPreviews);
-    } catch (err) {
-      toast.error("Invalid image file");
-      setImagePreviews([]);
-    } finally {
-      setIsLoadingPreview(false);
-    }
-  }
-
-  useEffect(() => {
-    if (files) {
-      handlePreview(files);
-    }
-  }, [files]);
 
   return (
     <div className="flex flex-col h-full md:flex-row">
@@ -86,9 +60,9 @@ const DroppableFileInput = ({ name, required, onChange, files }) => {
           }}
         />
       </div>
-      {(imagePreviews.length > 0 || isLoadingPreview) && (
+      {(imagePreviews.length > 0 || isLoading) && (
         <div className="w-full h-full">
-          {isLoadingPreview ? (
+          {isLoading ? (
             <div className="h-full flex flex-col justify-center items-center gap-5 text-gray-500 text-wrap text-center">
               <div className="w-8">
                 <LoadingSpinner />
@@ -96,10 +70,7 @@ const DroppableFileInput = ({ name, required, onChange, files }) => {
               <p>Preparing your photos...</p>
             </div>
           ) : (
-            <ImagePreviews
-              images={imagePreviews}
-              setImages={setImagePreviews}
-            />
+            <ImagePreviews />
           )}
         </div>
       )}
