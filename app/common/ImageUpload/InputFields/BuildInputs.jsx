@@ -1,4 +1,5 @@
 import FancyInput from "@app/common/FancyInput";
+import { FORM_FIELDS } from "@utils/imageUploadUtils";
 
 function BuildInputs({ photo }) {
   const rowStyle = "flex flex-rows items-center justify-around gap-2";
@@ -14,9 +15,9 @@ function BuildInputs({ photo }) {
             </label>
             <FancyInput
               type="text"
-              name="lensModel"
+              name={FORM_FIELDS.LENS_MODEL.name}
               defaultValue={photo.lensModel}
-              label="Lens Model"
+              label={FORM_FIELDS.LENS_MODEL.label}
             />
           </div>
           <div className={rowStyle}>
@@ -25,9 +26,9 @@ function BuildInputs({ photo }) {
             </label>
             <FancyInput
               type="text"
-              name="cameraModel"
+              name={FORM_FIELDS.CAMERA_MODEL.name}
               defaultValue={photo.cameraModel}
-              label="Camera Model"
+              label={FORM_FIELDS.CAMERA_MODEL.label}
             />
           </div>
         </div>
@@ -42,16 +43,20 @@ function BuildInputs({ photo }) {
             </label>
             <FancyInput
               type="text"
-              name="editingSoftware"
+              name={FORM_FIELDS.EDITING_SOFTWARE.name}
               defaultValue={photo.editingSoftware}
-              label="Editing Software"
+              label={FORM_FIELDS.EDITING_SOFTWARE.label}
             />
           </div>
           <div className={rowStyle}>
             <label>
               <img src="/assets/icons/calendar.svg" width={20} alt="calendar" />
             </label>
-            <FancyInput type="date" name="date" defaultValue={photo.date} />
+            <FancyInput
+              type="date"
+              name={FORM_FIELDS.DATE.name}
+              defaultValue={photo.date}
+            />
           </div>
         </div>
       </div>
@@ -59,7 +64,11 @@ function BuildInputs({ photo }) {
         <label>
           <img src="/assets/icons/pen-square.svg" width={20} alt="pen" />
         </label>
-        <FancyInput type="textarea" name="description" label="Description" />
+        <FancyInput
+          type="textarea"
+          name={FORM_FIELDS.DESCRIPTION.name}
+          label={FORM_FIELDS.DESCRIPTION.label}
+        />
       </div>
     </div>
   );

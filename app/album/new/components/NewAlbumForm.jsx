@@ -8,7 +8,11 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import FancyInput from "@app/common/FancyInput";
-import { formatFormData, formUploadPhotos } from "@utils/imageUploadUtils";
+import {
+  FORM_FIELDS,
+  formatFormData,
+  formUploadPhotos,
+} from "@utils/imageUploadUtils";
 import { useImageUploadContext } from "@app/common/ImageUpload/ImageUploadContext";
 const NewAlbumForm = () => {
   const errorMessage = "Unable to create album. Please try again later";
@@ -21,7 +25,7 @@ const NewAlbumForm = () => {
   async function handleCreateAlbum(formdata) {
     try {
       const formattedFormData = formatFormData(formdata, filesForUpload);
-      const albumName = formattedFormData.get("albumName");
+      const albumName = formattedFormData.get(FORM_FIELDS.ALBUM_NAME.name);
       const albumRes = await createAlbum({
         albumName,
       });
@@ -33,7 +37,7 @@ const NewAlbumForm = () => {
       const aid = albumRes.data.aid;
 
       // No photos
-      if (formattedFormData.getAll("photos")[0].name === "") {
+      if (filesForUpload.length === 0) {
         router.push(`/album/${aid}`);
         toast.success(`Album "${albumName}" successfully created!`);
         return;

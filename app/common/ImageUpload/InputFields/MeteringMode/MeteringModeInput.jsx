@@ -1,6 +1,7 @@
 import MeteringMode from "./MeteringMode";
 import { useState } from "react";
 import { METERING_MODES } from "@utils/helpers";
+import { FORM_FIELDS } from "@utils/imageUploadUtils";
 
 function MeteringInput({ defaultValue }) {
   const [meteringMode, setMeteringMode] = useState(defaultValue);
@@ -15,7 +16,7 @@ function MeteringInput({ defaultValue }) {
     <>
       <input
         type="text"
-        name="meteringMode"
+        name={FORM_FIELDS.METERING_MODE.name}
         className="hidden"
         value={meteringMode}
       />

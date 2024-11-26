@@ -1,6 +1,7 @@
 import FancyInput from "@app/common/FancyInput";
 import MeteringInput from "./MeteringMode/MeteringModeInput";
 import ExposureModeInput from "./ExposureMode/ExposureModeInput";
+import { FORM_FIELDS } from "@utils/imageUploadUtils";
 
 function ExposureInputs({ photo }) {
   const rowStyle = "flex flex-rows items-center justify-around gap-2";
@@ -15,11 +16,11 @@ function ExposureInputs({ photo }) {
           </label>
           <FancyInput
             type="number"
-            name="aperture"
+            name={FORM_FIELDS.APERTURE.name}
             step={0.1}
             min={0}
             defaultValue={photo.aperture}
-            label="Aperture"
+            label={FORM_FIELDS.APERTURE.label}
           />
         </div>
         <div className={rowStyle}>
@@ -32,9 +33,9 @@ function ExposureInputs({ photo }) {
           </label>
           <FancyInput
             type="text"
-            label="Shutter Speed"
+            label={FORM_FIELDS.SHUTTER_SPEED.label}
             defaultValue={photo.shutterspeed}
-            name="shutterspeed"
+            name={FORM_FIELDS.SHUTTER_SPEED.name}
           />
         </div>
         <div className={rowStyle}>
@@ -43,10 +44,10 @@ function ExposureInputs({ photo }) {
           </label>
           <FancyInput
             type="number"
-            name="iso"
+            name={FORM_FIELDS.ISO.name}
             min={0}
             defaultValue={photo.iso}
-            label="ISO"
+            label={FORM_FIELDS.ISO.label}
           />
         </div>
       </div>
@@ -62,9 +63,9 @@ function ExposureInputs({ photo }) {
           </label>
           <FancyInput
             type="number"
-            name="focalLength"
+            name={FORM_FIELDS.FOCAL_LENGTH.name}
             min={0}
-            label="Focal Length"
+            label={FORM_FIELDS.FOCAL_LENGTH.label}
             defaultValue={photo.focalLength}
           />
         </div>

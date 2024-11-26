@@ -1,6 +1,7 @@
 import ExposureMode from "./ExposureMode";
 import { useState } from "react";
 import { EXPOSURE_MODES } from "@utils/helpers";
+import { FORM_FIELDS } from "@utils/imageUploadUtils";
 function ExposureModeInput({ defaultValue }) {
   const [exposureMode, setExposureMode] = useState(defaultValue);
   function handleClick(mode) {
@@ -14,7 +15,7 @@ function ExposureModeInput({ defaultValue }) {
     <>
       <input
         type="text"
-        name="exposureMode"
+        name={FORM_FIELDS.EXPOSURE_MODE.name}
         className="hidden"
         value={exposureMode}
       />

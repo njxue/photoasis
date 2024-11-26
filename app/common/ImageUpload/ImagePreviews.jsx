@@ -28,6 +28,7 @@ const ImagePreviews = () => {
                 } h-[80px] w-full`}
                 src={image.url}
                 onClick={(e) => {
+                  console.log(e.target.id);
                   handleClickImagePreview(e.target.id);
                 }}
                 name={image.id}

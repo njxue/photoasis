@@ -1,10 +1,11 @@
 import updateAlbum from "@actions/updateAlbum";
+import { FORM_FIELDS } from "@utils/imageUploadUtils";
 import { toast } from "react-toastify";
 
 const UpdateAlbumForm = ({ albumData, setIsEditing }) => {
   const { aid } = albumData;
   async function handleUpdateAlbum(formdata) {
-    const albumName = formdata.get("albumName");
+    const albumName = formdata.get(FORM_FIELDS.ALBUM_NAME.name);
     const res = await updateAlbum({ aid, albumName });
     if (res.ok) {
       setIsEditing(false);

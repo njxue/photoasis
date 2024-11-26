@@ -1,6 +1,7 @@
 import ExifReader from "exifreader";
 import { compress } from "./compress";
 import { b2GetUploadUrls } from "@actions/b2";
+import { v4 as uuidv4 } from "uuid";
 export const formatFormData = (formData, fileList) => {
   formData.delete("photos");
   fileList.forEach((file) => {
@@ -69,6 +70,7 @@ export const compressAndReadFileExif = async (file) => {
   });
 
   return {
+    id: uuidv4(),
     aperture,
     shutterspeed,
     iso,
@@ -88,23 +90,27 @@ export const formUploadPhotos = async (aid, uid, formdata) => {
   return new Promise((resolve, reject) => {
     (async () => {
       try {
-        let fileList = formdata.getAll("photos").map((file, i) => ({
-          file: file,
-          idx: i,
-          name: file.name,
-        }));
+        let fileList = formdata
+          .getAll(FORM_FIELDS.PHOTOS.name)
+          .map((file, i) => ({
+            file: file,
+            idx: i,
+            name: file.name,
+          }));
 
-        const aperture = formdata.getAll("aperture");
-        const shutterspeed = formdata.getAll("shutterspeed");
-        const iso = formdata.getAll("iso");
-        const description = formdata.getAll("description");
-        const date = formdata.getAll("date");
-        const focalLength = formdata.getAll("focalLength");
-        const meteringMode = formdata.getAll("meteringMode");
-        const exposureMode = formdata.getAll("exposureMode");
-        const lensModel = formdata.getAll("lensModel");
-        const cameraModel = formdata.getAll("cameraModel");
-        const editingSoftware = formdata.getAll("editingSoftware");
+        const aperture = formdata.getAll(FORM_FIELDS.APERTURE.name);
+        const shutterspeed = formdata.getAll(FORM_FIELDS.SHUTTER_SPEED.name);
+        const iso = formdata.getAll(FORM_FIELDS.ISO.name);
+        const description = formdata.getAll(FORM_FIELDS.DESCRIPTION.name);
+        const date = formdata.getAll(FORM_FIELDS.DATE.name);
+        const focalLength = formdata.getAll(FORM_FIELDS.FOCAL_LENGTH.name);
+        const meteringMode = formdata.getAll(FORM_FIELDS.METERING_MODE.name);
+        const exposureMode = formdata.getAll(FORM_FIELDS.EXPOSURE_MODE.name);
+        const lensModel = formdata.getAll(FORM_FIELDS.LENS_MODEL.name);
+        const cameraModel = formdata.getAll(FORM_FIELDS.CAMERA_MODEL.name);
+        const editingSoftware = formdata.getAll(
+          FORM_FIELDS.EDITING_SOFTWARE.name
+        );
 
         const MAX_RETRIES = 5;
         let num_tries = 0;
@@ -192,4 +198,20 @@ const uploadFile = async (file) => {
     fileId: data.fileId,
     status: res.status,
   };
+};
+
+export const FORM_FIELDS = {
+  ALBUM_NAME: { label: "Album Name", name: "albumName" },
+  PHOTOS: { label: "Photos", name: "photos" },
+  APERTURE: { label: "Aperture", name: "aperture" },
+  SHUTTER_SPEED: { label: "Shutter Speed", name: "shutterspeed" },
+  ISO: { label: "ISO", name: "iso" },
+  DATE: { label: "Date", name: "date" },
+  FOCAL_LENGTH: { label: "Focal Length", name: "focalLength" },
+  METERING_MODE: { label: "Metering Mode", name: "meteringMode" },
+  EXPOSURE_MODE: { label: "Exposure Mode", name: "exposureMode" },
+  LENS_MODEL: { label: "Lens Model", name: "lensModel" },
+  CAMERA_MODEL: { label: "Camera Model", name: "cameraModel" },
+  EDITING_SOFTWARE: { label: "Editing Software", name: "editingSoftware" },
+  DESCRIPTION: { label: "Description", name: "description" },
 };
