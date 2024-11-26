@@ -30,8 +30,8 @@
   @apply btn bg-gray-200;
 }
 
-.btn-green {
-  @apply btn bg-green-600 text-white;
+.btn-gray {
+  @apply btn bg-gray-700 text-white;
 }
 
 .input {

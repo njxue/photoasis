@@ -22,7 +22,7 @@ const SubmitButton = ({ text, preventBrowserRefresh }) => {
 
   return (
     <button
-      className="btn-green w-full h-9 text-white font-bold"
+      className="btn-gray w-full h-9 text-white font-bold"
       type="submit"
       disabled={pending}>
       {pending ? "Loading..." : text ?? "Submit"}
