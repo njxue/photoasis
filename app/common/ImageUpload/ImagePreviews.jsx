@@ -9,8 +9,8 @@ const ImagePreviews = ({ images, setImages }) => {
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const { pending } = useFormStatus();
 
-  function handleRemoveImage(image) {
-    const newImages = images.filter((i) => i.name !== image);
+  function handleRemoveImage(imageId) {
+    const newImages = images.filter((i) => i.id !== imageId);
     setImages(newImages);
   }
 
@@ -32,7 +32,7 @@ const ImagePreviews = ({ images, setImages }) => {
                 quality={QUALITY_LOW}
                 hover
               />
-              {!pending && (
+              {!pending && false && (
                 <div className="bg-black absolute right-0 top-0 cursor-pointer opacity-0 hover:opacity-70">
                   <img
                     src="/assets/icons/cross.svg"
@@ -40,8 +40,8 @@ const ImagePreviews = ({ images, setImages }) => {
                     width={16}
                     onClick={(e) => {
                       // Stops modal from closing once the image (and this img tag) is removed from the DOM
-                      //e.stopPropagation();
-                      handleRemoveImage(image.name);
+                      e.stopPropagation();
+                      handleRemoveImage(image.id);
                     }}
                     className="invert"
                   />
