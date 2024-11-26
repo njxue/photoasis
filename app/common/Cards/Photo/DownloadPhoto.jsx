@@ -9,6 +9,7 @@ function DownloadPhoto({ photo }) {
 
   async function handleDownload() {
     setIsDownloading(true);
+    const toastId = toast.loading(`Downloading ${photo.name}`);
     try {
       let res = await b2DownloadFileById(photo.pid);
       if (!res.ok) {
@@ -19,9 +20,18 @@ function DownloadPhoto({ photo }) {
       const { content, mimeType } = data;
       const blob = await base64ToBlob({ content, mimeType });
       downloadBlob({ blob, fileName: photo.name });
+      toast.update(toastId, {
+        render: `${photo.name} downloaded`,
+        type: toast.TYPE.SUCCESS,
+        autoClose: 3000,
+        isLoading: false,
+      });
     } catch (err) {
-      toast.error("Unable to download photo", {
-        toastId: "Error: Download photo",
+      toast.update(toastId, {
+        render: `Failed to download ${photo.name}`,
+        type: toast.TYPE.ERROR,
+        autoClose: 3000,
+        isLoading: false,
       });
     } finally {
       setIsDownloading(false);

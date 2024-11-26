@@ -7,7 +7,6 @@ const ToastContainerWrapper = () => {
   return (
     <ToastContainer
       position={toast.POSITION.BOTTOM_RIGHT}
-      limit={1}
       autoClose={3000}
       closeButton={true}
     />
