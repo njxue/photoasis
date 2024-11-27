@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="/public/assets/images/logo.png" alt="Photoasis Logo" width="300"/>
+    <img src="/public/assets/images/logoNew.png" alt="Photoasis Logo" width="300"/>
     <p><i>An online photo gallery that allows you to tag your photos with EXIF data</i></p>
     Try it out <a href="https://photoasis.vercel.app">here</a>!
 </div>
