@@ -7,6 +7,7 @@ import LoadingSpinner from "../LoadingSpinner";
 const OptimisedImage = ({
   src,
   name,
+  id,
   onClick,
   className,
   hover,
@@ -35,7 +36,8 @@ const OptimisedImage = ({
       <Image
         src={src}
         alt={name}
-        id={name}
+        id={id ?? name}
+        name={name}
         className={`
         object-cover cursor-pointer 
         ${hover && hoverStyles}

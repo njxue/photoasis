@@ -3,9 +3,9 @@ import { compress } from "./compress";
 import { b2GetUploadUrls } from "@actions/b2";
 import { v4 as uuidv4 } from "uuid";
 export const formatFormData = (formData, fileList) => {
-  formData.delete("photos");
+  // Use the files in fileList instead of the files in the form, because we are manually keeping track of the files
   fileList.forEach((file) => {
-    formData.append("photos", file);
+    formData.append(FORM_FIELDS.FILES.name, file);
   });
   return formData;
 };
@@ -90,8 +90,10 @@ export const formUploadPhotos = async (aid, uid, formdata) => {
   return new Promise((resolve, reject) => {
     (async () => {
       try {
+        const b2Folder = `${uid}/${aid}/`; // Folder to upload the photos to
+
         let fileList = formdata
-          .getAll(FORM_FIELDS.PHOTOS.name)
+          .getAll(FORM_FIELDS.FILES.name)
           .map((file, i) => ({
             file: file,
             idx: i,
@@ -112,7 +114,7 @@ export const formUploadPhotos = async (aid, uid, formdata) => {
           FORM_FIELDS.EDITING_SOFTWARE.name
         );
 
-        const MAX_RETRIES = 5;
+        const MAX_RETRIES = 3;
         let num_tries = 0;
         const successfullyUploadedFiles = [];
         while (fileList.length > 0 && num_tries < MAX_RETRIES) {
@@ -125,21 +127,21 @@ export const formUploadPhotos = async (aid, uid, formdata) => {
           const uploadUrlsAndTokens = await b2GetUploadUrls(fileList.length);
           let files = fileList.map((file, i) => ({
             ...file,
-            b2name: `${uid}/${aid}/${encodeURIComponent(file.name)}`,
+            b2name: `${b2Folder}${encodeURIComponent(file.name)}`,
             url: uploadUrlsAndTokens[i].url,
             token: uploadUrlsAndTokens[i].token,
           }));
 
           // Attempt to upload
-          let uploadedFileIds = await uploadFiles(files);
+          let uploadFilesRes = await uploadFiles(files);
 
           // Success
           successfullyUploadedFiles.push(
-            ...uploadedFileIds.filter((file) => file.status === 200)
+            ...uploadFilesRes.filter((file) => file.uploadSuccessful)
           );
 
           // Failed
-          fileList = uploadedFileIds.filter((file) => file.status === 503);
+          fileList = uploadFilesRes.filter((file) => !file.uploadSuccessful);
           num_tries++;
         }
 
@@ -193,16 +195,18 @@ const uploadFile = async (file) => {
     body: file.file,
   });
   const data = await res.json();
+  console.log(res);
+  console.log(data);
   return {
     ...file,
     fileId: data.fileId,
-    status: res.status,
+    uploadSuccessful: res.status === 200, // Will return 503 if not successful
   };
 };
 
 export const FORM_FIELDS = {
   ALBUM_NAME: { label: "Album Name", name: "albumName" },
-  PHOTOS: { label: "Photos", name: "photos" },
+  FILES: { label: "Files", name: "files" },
   APERTURE: { label: "Aperture", name: "aperture" },
   SHUTTER_SPEED: { label: "Shutter Speed", name: "shutterspeed" },
   ISO: { label: "ISO", name: "iso" },

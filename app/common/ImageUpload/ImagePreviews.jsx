@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import PhotoSettingsInputs from "./PhotoSettingsInputs";
 import OptimisedImage from "../Image/OptimisedImage";
 import { QUALITY_LOW } from "../Image/constants";
@@ -27,11 +26,11 @@ const ImagePreviews = () => {
                   selectedFile === image.id && "opacity-30"
                 } h-[80px] w-full`}
                 src={image.url}
-                onClick={(e) => {
-                  console.log(e.target.id);
-                  handleClickImagePreview(e.target.id);
+                onClick={() => {
+                  handleClickImagePreview(image.id);
                 }}
-                name={image.id}
+                name={image.name}
+                id={image.id}
                 quality={QUALITY_LOW}
                 hover
               />

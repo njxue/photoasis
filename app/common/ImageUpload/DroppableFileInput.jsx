@@ -1,11 +1,11 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import ImagePreviews from "@app/common/ImageUpload/ImagePreviews";
 import LoadingSpinner from "../LoadingSpinner";
 import { useFormStatus } from "react-dom";
 import { useImageUploadContext } from "./ImageUploadContext";
 
-const DroppableFileInput = ({ name, required }) => {
+const DroppableFileInput = ({ required }) => {
   const inputRef = useRef();
   const { pending } = useFormStatus();
   const { handleAddFiles, imagePreviews, isLoading } = useImageUploadContext();
@@ -47,7 +47,7 @@ const DroppableFileInput = ({ name, required }) => {
         />
         <input
           type="file"
-          name={name}
+          name="_" // Don't need name; we are not getting the files from this input
           multiple
           className="hidden"
           ref={inputRef}
