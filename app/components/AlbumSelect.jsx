@@ -1,11 +1,12 @@
 "use client";
 
 import deleteAlbums from "@actions/deleteAlbums";
-import { useSelectContext } from "@app/common/Select/SelectContext";
+import { useSelect } from "@app/common/Select/SelectContext";
 import { toast } from "react-toastify";
-import SelectControls from "@app/common/Select/SelectControls";
+import DeleteSelectedControls from "@app/common/Select/DeleteSelectedControls";
+import SelectTrigger from "@app/common/Select/SelectTrigger";
 function AlbumSelect() {
-  const { selectedItems, numSelected } = useSelectContext();
+  const { selectedItems, numSelected } = useSelect();
 
   async function handleDeleteAlbums() {
     const res = await deleteAlbums(selectedItems);
@@ -17,11 +18,13 @@ function AlbumSelect() {
   }
 
   return (
-    <SelectControls
-      text="Delete"
-      onConfirm={handleDeleteAlbums}
-      prompt={`Are you sure you want to delete ${numSelected} album(s)?`}
-    />
+    <>
+      <SelectTrigger />
+      <DeleteSelectedControls
+        handleDelete={handleDeleteAlbums}
+        prompt={`Are you sure you want to delete ${numSelected} album(s)?`}
+      />
+    </>
   );
 }
 

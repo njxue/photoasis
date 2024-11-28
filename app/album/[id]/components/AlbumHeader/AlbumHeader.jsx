@@ -1,11 +1,19 @@
 "use client";
-import { useSelectContext } from "@app/common/Select/SelectContext";
-import AlbumSelect from "./PhotoSelect";
+import SelectControls from "./SelectControls";
 import AlbumMenu from "./Menu/AlbumMenu";
 import UpdateAlbumForm from "./Menu/UpdateAlbumForm";
 import { useState } from "react";
+import { useSelect } from "@app/common/Select/SelectContext";
 function AlbumHeader({ albumData }) {
   const [isEditing, setIsEditing] = useState(false);
+
+  const { mode, beginSelect } = useSelect();
+
+  const selectModes = { delete: "DELETE", thumbnail: "THUMBNAIL" };
+
+  const onClickChangeThumbnail = () => {
+    beginSelect({ allowMultiple: false, mode: selectModes.thumbnail });
+  };
 
   return (
     <div className="p-1 mb-3 mt-2 font-light">
@@ -17,8 +25,17 @@ function AlbumHeader({ albumData }) {
             {albumData.name}
           </p>
           <div className="flex flex-row justify-end grow gap-2 ">
-            <AlbumSelect albumData={albumData} />
-            <AlbumMenu setIsEditing={setIsEditing} albumData={albumData} />
+            <SelectControls
+              selectModes={selectModes}
+              mode={mode}
+              albumData={albumData}
+            />
+            <AlbumMenu
+              onClickChangeThumbnail={onClickChangeThumbnail}
+              selectModes={selectModes}
+              setIsEditing={setIsEditing}
+              albumData={albumData}
+            />
           </div>
         </div>
       )}

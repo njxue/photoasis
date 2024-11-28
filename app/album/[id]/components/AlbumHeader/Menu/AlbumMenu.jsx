@@ -4,10 +4,15 @@ import { useState, useEffect, useRef } from "react";
 import DeleteAlbumForm from "./DeleteAlbumForm";
 import AddPhotosForm from "./AddPhotosForm";
 import ImageUploadProvider from "@app/common/ImageUpload/ImageUploadContext";
-const AlbumMenu = ({ setIsEditing, albumData }) => {
+import { useSelect } from "@app/common/Select/SelectContext";
+const AlbumMenu = ({ setIsEditing, albumData, onClickChangeThumbnail }) => {
   const [showMenuItems, setShowMenuItems] = useState(false);
   const [isDeletingAlbum, setIsDeletingAlbum] = useState(false);
   const [isAddingPhotos, setIsAddingPhotos] = useState(false);
+  const [isChangingThumbnail, setIsChangingThumbnail] = useState(false);
+
+  const { beginSelect } = useSelect();
+
   const menuRef = useRef();
   useEffect(() => {
     const handleClick = (e) => {
@@ -52,6 +57,14 @@ const AlbumMenu = ({ setIsEditing, albumData }) => {
               className="cursor-pointer hover:bg-gray-500 hover:text-white p-2"
               onClick={() => setIsDeletingAlbum(true)}>
               Delete
+            </div>
+            <div
+              className="cursor-pointer hover:bg-gray-500 hover:text-white p-2"
+              onClick={() => {
+                onClickChangeThumbnail()
+                setShowMenuItems(false);
+              }}>
+              Change Thumbnail
             </div>
           </div>
         )}

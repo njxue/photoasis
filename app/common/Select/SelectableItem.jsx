@@ -1,7 +1,7 @@
-import { useSelectContext } from "./SelectContext";
+import { useSelect } from "./SelectContext";
 
 const SelectableItem = ({ children, item }) => {
-  const { isSelecting, isSelected, selectItem } = useSelectContext();
+  const { isSelecting, isSelected, selectItem } = useSelect();
   return (
     <div
       className={`relative cursor-pointer ${
