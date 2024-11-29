@@ -195,8 +195,6 @@ const uploadFile = async (file) => {
     body: file.file,
   });
   const data = await res.json();
-  console.log(res);
-  console.log(data);
   return {
     ...file,
     fileId: data.fileId,

@@ -6,9 +6,7 @@ import { useState } from "react";
 import { useSelect } from "@app/common/Select/SelectContext";
 function AlbumHeader({ albumData }) {
   const [isEditing, setIsEditing] = useState(false);
-
   const { mode, beginSelect } = useSelect();
-
   const selectModes = { delete: "DELETE", thumbnail: "THUMBNAIL" };
 
   const onClickChangeThumbnail = () => {

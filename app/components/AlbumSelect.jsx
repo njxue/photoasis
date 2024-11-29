@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import DeleteSelectedControls from "@app/common/Select/DeleteSelectedControls";
 import SelectTrigger from "@app/common/Select/SelectTrigger";
 function AlbumSelect() {
-  const { selectedItems, numSelected } = useSelect();
+  const { selectedItems, numSelected, isSelecting } = useSelect();
 
   async function handleDeleteAlbums() {
     const res = await deleteAlbums(selectedItems);
@@ -19,7 +19,7 @@ function AlbumSelect() {
 
   return (
     <>
-      <SelectTrigger />
+      {!isSelecting && <SelectTrigger />}
       <DeleteSelectedControls
         handleDelete={handleDeleteAlbums}
         prompt={`Are you sure you want to delete ${numSelected} album(s)?`}

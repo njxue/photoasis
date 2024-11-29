@@ -4,14 +4,11 @@ import { useState, useEffect, useRef } from "react";
 import DeleteAlbumForm from "./DeleteAlbumForm";
 import AddPhotosForm from "./AddPhotosForm";
 import ImageUploadProvider from "@app/common/ImageUpload/ImageUploadContext";
-import { useSelect } from "@app/common/Select/SelectContext";
+import SelectTrigger from "@app/common/Select/SelectTrigger";
 const AlbumMenu = ({ setIsEditing, albumData, onClickChangeThumbnail }) => {
   const [showMenuItems, setShowMenuItems] = useState(false);
   const [isDeletingAlbum, setIsDeletingAlbum] = useState(false);
   const [isAddingPhotos, setIsAddingPhotos] = useState(false);
-  const [isChangingThumbnail, setIsChangingThumbnail] = useState(false);
-
-  const { beginSelect } = useSelect();
 
   const menuRef = useRef();
   useEffect(() => {
@@ -58,14 +55,18 @@ const AlbumMenu = ({ setIsEditing, albumData, onClickChangeThumbnail }) => {
               onClick={() => setIsDeletingAlbum(true)}>
               Delete
             </div>
-            <div
-              className="cursor-pointer hover:bg-gray-500 hover:text-white p-2"
-              onClick={() => {
-                onClickChangeThumbnail()
-                setShowMenuItems(false);
-              }}>
-              Change Thumbnail
-            </div>
+            <SelectTrigger
+              renderTrigger={
+                <div
+                  className="cursor-pointer hover:bg-gray-500 hover:text-white p-2"
+                  onClick={() => {
+                    onClickChangeThumbnail();
+                    setShowMenuItems(false);
+                  }}>
+                  Change Thumbnail
+                </div>
+              }
+            />
           </div>
         )}
       </div>

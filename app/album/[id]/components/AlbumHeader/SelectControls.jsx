@@ -3,13 +3,13 @@ import deletePhotos from "@actions/deletePhotos";
 import { useSelect } from "@app/common/Select/SelectContext";
 import DeleteSelectedControls from "@app/common/Select/DeleteSelectedControls";
 import { toast } from "react-toastify";
-import CancelSelectButton from "@app/common/Select/CancelSelectButton";
 import SelectTrigger from "@app/common/Select/SelectTrigger";
 import ChangeThumbnailSelectControls from "./ChangeThumbnailSelectControls";
-import updateAlbumThumbnail from "@actions/updateAlbumThumbnail";
+import updateAlbum from "@actions/updateAlbum";
 
 function SelectControls({ albumData, selectModes }) {
-  const { selectedItems, numSelected, mode, endSelect } = useSelect();
+  const { selectedItems, numSelected, mode, endSelect, isSelecting } =
+    useSelect();
 
   async function handleDeletePhotos() {
     const res = await deletePhotos({
@@ -29,7 +29,7 @@ function SelectControls({ albumData, selectModes }) {
       return;
     }
 
-    const res = await updateAlbumThumbnail({
+    const res = await updateAlbum({
       aid: albumData.aid,
       thumbnailPid: selectedItems[0],
     });
@@ -44,7 +44,7 @@ function SelectControls({ albumData, selectModes }) {
 
   return (
     <>
-      <SelectTrigger />
+      {!isSelecting && <SelectTrigger />}
       {mode === selectModes.thumbnail ? (
         <ChangeThumbnailSelectControls
           handleChangeThumbail={handleChangeThumbail}

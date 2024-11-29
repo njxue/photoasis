@@ -11,7 +11,7 @@ async function updateAlbum(data, revalidate = true) {
   const uid = session?.user.id;
 
   // Only aid is compulsory
-  const { aid, photos, albumName, photoOrder } = data;
+  const { aid, photos, albumName, photoOrder, thumbnailPid } = data;
   const res = await prisma.$transaction(async (prisma) => {
     // If updated album name
     let albumData = albumName ? { name: albumName } : {};
@@ -50,28 +50,46 @@ async function updateAlbum(data, revalidate = true) {
       if (!newPhotos || newPhotos.count === 0) {
         return { status: 400, message: "Unable to create photos", ok: false };
       }
+    }
 
-      // Update thumbnail
-      const thumbnail = await prisma.photo.findFirst({
-        where: {
-          aid,
-          uid,
-        },
-      });
-
-      if (!thumbnail) {
-        return { status: 404, message: "Thumbnail not found", ok: false };
-      }
-
-      albumData = {
+    // Update thumbnail
+    if (thumbnailPid) {
+      albumData = albumData = {
         ...albumData,
         thumbnail: {
           connect: {
-            pid: thumbnail.pid,
+            pid: thumbnailPid,
           },
         },
       };
+    } else {
+      const existingThumbnail = await prisma.album.findUnique({
+        where: {
+          aid_uid: { aid, uid },
+        },
+        select: {
+          thumbnailPid: true,
+        },
+      });
+
+      if (!existingThumbnail.thumbnailPid) {
+        const thumbnail = await prisma.photo.findFirst({
+          where: {
+            aid,
+            uid,
+          },
+        });
+        albumData = albumData = {
+          ...albumData,
+          thumbnail: {
+            connect: {
+              pid: thumbnail.pid,
+            },
+          },
+        };
+      }
     }
+    console.log(albumData);
 
     const updatedAlbum = await prisma.album.update({
       where: { aid_uid: { aid, uid } },
