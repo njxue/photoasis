@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import SelectTrigger from "@app/common/Select/SelectTrigger";
 import ChangeThumbnailSelectControls from "./ChangeThumbnailSelectControls";
 import updateAlbum from "@actions/updateAlbum";
+import OptimisedImage from "@app/common/Image/OptimisedImage";
 
 function SelectControls({ albumData, selectModes }) {
   const { selectedItems, numSelected, mode, endSelect, isSelecting } =
@@ -29,13 +30,29 @@ function SelectControls({ albumData, selectModes }) {
       return;
     }
 
+    const selectedPhotoPid = selectedItems[0];
+
     const res = await updateAlbum({
       aid: albumData.aid,
-      thumbnailPid: selectedItems[0],
+      thumbnailPid: selectedPhotoPid,
     });
 
+    const photoUrl = albumData.photos.find(
+      (photo) => photo.pid === selectedPhotoPid
+    )?.url;
+
     if (res.ok) {
-      toast.success("Thumbnail Updated");
+      toast.success(
+        <div>
+          <div className="flex justify-center w-full">
+            <div className="w-32 xs:w-60">
+              <OptimisedImage src={photoUrl} />
+            </div>
+          </div>
+          <p className="mt-2">Thumbnail updated 😎</p>
+        </div>,
+        { icon: false, closeButton: false }
+      );
       endSelect();
     } else {
       toast.error("Unable to updated thumbnail. Please try again later");
