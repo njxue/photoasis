@@ -30,22 +30,22 @@ export default function ChangeThumbnailSelectControls({ albumData }) {
 
       if (res.ok) {
         const updateToast = () => {
-          toast.update(toastId, {
-            render: (
+          toast.dismiss(toastId);
+          // New toast instead of update + delay for smoother effect
+          setTimeout(() => {
+            toast.success(
               <div>
                 <div className="flex justify-center w-full">
                   <div className="w-32 h-32 xs:w-60 xs:h-60">
-                    <OptimisedImage src={photoUrl} />
+                    <OptimisedImage src={photoUrl} showLoader />
                   </div>
                 </div>
                 <p className="mt-2">Thumbnail updated 😎</p>
-              </div>
-            ),
-            isLoading: false,
-            type: toast.TYPE.SUCCESS,
-            icon: false,
-            autoClose: 3000,
-          });
+              </div>,
+              { icon: false }
+            );
+          }, 300);
+
           endSelect();
           setIsLoading(false);
         };
