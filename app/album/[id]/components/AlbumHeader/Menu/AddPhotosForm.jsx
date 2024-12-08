@@ -51,11 +51,16 @@ const AddPhotosForm = ({ albumData, show, setShow }) => {
         <div className="h-[90vh] w-[80vw]">
           <form
             className="flex flex-col gap-3 p-2 w-full h-full justify-between"
-            action={handleSubmit}>
+            action={handleSubmit}
+            noValidate>
             <DroppableFileInput required />
             <div className="flex flex-row gap-2">
               <CancelButton onCancel={() => setShow(false)} />
-              <SubmitButton text="Add Photos" preventBrowserRefresh />
+              <SubmitButton
+                text="Add Photos"
+                preventBrowserRefresh
+                disabled={filesForUpload.length === 0}
+              />
             </div>
           </form>
         </div>
