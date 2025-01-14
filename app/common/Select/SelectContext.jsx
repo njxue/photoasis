@@ -23,6 +23,7 @@ export const SelectProvider = ({ children }) => {
     mode = "",
   } = {}) => {
     setIsSelecting(true);
+    setSelectedItems([]);
     setAllowMulti(allowMultiple);
     setMode(mode);
   };

@@ -30,7 +30,6 @@ function AlbumHeader({ albumData }) {
             />
             <AlbumMenu
               onClickChangeThumbnail={onClickChangeThumbnail}
-              selectModes={selectModes}
               setIsEditing={setIsEditing}
               albumData={albumData}
             />
