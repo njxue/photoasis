@@ -4,6 +4,7 @@ import ExpandedPhoto from "./ExpandedPhoto";
 import OptimisedImage from "../../Image/OptimisedImage";
 import PhotoInfo from "./PhotoInfo";
 import { QUALITY_MAX, QUALITY_MID } from "@app/common/Image/constants";
+import Photo from "../Photo";
 
 const PhotoCard = ({ photo, minimalisticView }) => {
   const [expandPhoto, setExpandPhoto] = useState(false);
@@ -26,14 +27,7 @@ const PhotoCard = ({ photo, minimalisticView }) => {
         className="card relative bg-white"
         onMouseEnter={handleShowPhotoInfo}
         onMouseLeave={handleHidePhotoInfo}>
-        <OptimisedImage
-          src={photo.url}
-          name={photo.name}
-          className="object-cover h-full w-full"
-          hover
-          sizes="100vw"
-          quality={QUALITY_MID}
-        />
+        <Photo src={photo.url} name={photo.name} objectFit="contain" />
 
         {showPhotoInfo && (
           <div className="absolute bottom-0 bg-black opacity-70 w-full h-full animate-slideUp">

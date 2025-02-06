@@ -13,11 +13,12 @@ const OptimisedImage = ({
   hover,
   quality = QUALITY_MID,
   priority = false,
-  width = 0,
-  height = 0,
+  width = 10,
+  height = 10,
   sizes = "100vw",
   fill = false,
   showLoader = false,
+  objectFit = "cover",
   onLoad = () => {},
 }) => {
   const hoverStyles =
@@ -39,9 +40,9 @@ const OptimisedImage = ({
         id={id ?? name}
         name={name}
         className={`
-        object-cover cursor-pointer 
-        ${hover && hoverStyles}
-        ${className ?? dimensions}
+        object-${objectFit} cursor-pointer 
+        ${hover && hoverStyles} 
+        ${dimensions} ${className}
       `}
         sizes={sizes}
         quality={quality}
