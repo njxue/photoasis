@@ -27,7 +27,7 @@ const PhotoCard = ({ photo, minimalisticView }) => {
         className="card relative bg-white"
         onMouseEnter={handleShowPhotoInfo}
         onMouseLeave={handleHidePhotoInfo}>
-        <Photo src={photo.url} name={photo.name} objectFit="contain" />
+        <Photo src={photo.url} name={photo.name} objectFit="object-contain" />
 
         {showPhotoInfo && (
           <div className="absolute bottom-0 bg-black opacity-70 w-full h-full animate-slideUp">

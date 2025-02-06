@@ -14,7 +14,7 @@ const AlbumCard = ({ data }) => {
     <>
       <Link href={`/album/${aid}`} className="cursor-pointer">
         <div className="card relative hover:opacity-50 transition-opacity ease-in-out duration-50">
-          <Photo src={thumbnail} name={name} objectFit="contain" />
+          <Photo src={thumbnail} name={name} objectFit="object-contain" />
           <div className="absolute bottom-2 px-[0.5em] text-white text-border font-bold text-start line-clamp-2 text-sm xs:text-lg sm:text-xl  sm:px-5">
             {name}
           </div>

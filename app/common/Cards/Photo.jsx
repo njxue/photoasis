@@ -1,7 +1,7 @@
 import OptimisedImage from "../Image/OptimisedImage";
 import { QUALITY_MID } from "../Image/constants";
 
-const Photo = ({ src, name, objectFit = "cover" }) => {
+const Photo = ({ src, name, objectFit = "object-cover" }) => {
   const placeholder = "/assets/images/placeholder.png";
   return (
     <>
@@ -12,7 +12,7 @@ const Photo = ({ src, name, objectFit = "cover" }) => {
           quality={QUALITY_MID}
           sizes=""
           className="absolute blur-xs"
-          objectFit="cover"
+          objectFit="object-cover"
         />
       )}
       <OptimisedImage
