@@ -6,6 +6,7 @@ import { authOptions } from "./api/auth/[...nextauth]/route";
 import { inter } from "@styles/fonts";
 import Login from "./components/Login";
 import ToastContainerWrapper from "./ToastContainerWrapper";
+import { UserPreferencesProvider } from "./UserPreferencesContext";
 
 export const metadata = {
   title: "Photoasis",
@@ -15,8 +16,10 @@ export const metadata = {
     "google-site-verification": "vf0TcYOKrdnpkV-emUHc7c1dIQpkr0k-MS35tWBJ8qQ",
   },
 };
+
 const Layout = async ({ children }) => {
   const session = await getServerSession(authOptions);
+
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
@@ -28,7 +31,7 @@ const Layout = async ({ children }) => {
                   <Nav />
                 </div>
                 <div className="grow mt-12 md:ml-12 md:mt-0 p-3 bg-gray-200 overflow-auto">
-                  {children}
+                  <UserPreferencesProvider>{children}</UserPreferencesProvider>
                 </div>
               </div>
             ) : (

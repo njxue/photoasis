@@ -11,8 +11,9 @@ const Tab = ({ path, icon }) => {
       <img
         src={`/assets/icons/${icon}.svg`}
         alt={icon}
-        className={`${pathName === path && activeStyles} hover:opacity-50`}
-        width={30}
+        className={`${
+          pathName === path && activeStyles
+        } hover:opacity-50 w-[25px] md:w-[30px]`}
       />
     </Link>
   );

@@ -1,14 +1,15 @@
 "use client";
 import { useState } from "react";
 import ExpandedPhoto from "./ExpandedPhoto";
-import OptimisedImage from "../../Image/OptimisedImage";
 import PhotoInfo from "./PhotoInfo";
-import { QUALITY_MAX, QUALITY_MID } from "@app/common/Image/constants";
 import Photo from "../Photo";
+import { useUserPreferences } from "@app/UserPreferencesContext";
 
 const PhotoCard = ({ photo, minimalisticView }) => {
   const [expandPhoto, setExpandPhoto] = useState(false);
   const [showPhotoInfo, setShowPhotoInfo] = useState(false);
+
+  const { userPreferences } = useUserPreferences();
 
   function handleShowPhotoInfo() {
     setShowPhotoInfo(!minimalisticView);
@@ -27,7 +28,11 @@ const PhotoCard = ({ photo, minimalisticView }) => {
         className="card relative bg-white"
         onMouseEnter={handleShowPhotoInfo}
         onMouseLeave={handleHidePhotoInfo}>
-        <Photo src={photo.url} name={photo.name} objectFit="object-contain" />
+        <Photo
+          src={photo.url}
+          name={photo.name}
+          objectFit={userPreferences.objectFit}
+        />
 
         {showPhotoInfo && (
           <div className="absolute bottom-0 bg-black opacity-70 w-full h-full animate-slideUp">

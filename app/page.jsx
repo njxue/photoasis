@@ -3,6 +3,7 @@ import prisma from "@prisma/prisma";
 import { getServerSession } from "next-auth";
 import Dashboard from "./components/Dashboard";
 import { unstable_cache } from "next/cache";
+import { UserPreferencesProvider } from "./UserPreferencesContext";
 
 const fetchAlbums = unstable_cache(
   async (uid) => {
@@ -43,6 +44,7 @@ const Home = async () => {
   const uid = session?.user.id;
 
   const albums = await fetchAlbums(uid);
+
   return (
     <div className="flex flex-center flex-col h-full w-full">
       <Dashboard albums={albums} />

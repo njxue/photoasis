@@ -5,24 +5,14 @@ import DeleteAlbumForm from "./DeleteAlbumForm";
 import AddPhotosForm from "./AddPhotosForm";
 import ImageUploadProvider from "@app/common/ImageUpload/ImageUploadContext";
 import SelectTrigger from "@app/common/Select/SelectTrigger";
+import useClickOutside from "@app/common/hooks/useClickOutside";
 const AlbumMenu = ({ setIsEditing, albumData, onClickChangeThumbnail }) => {
-  const [showMenuItems, setShowMenuItems] = useState(false);
   const [isDeletingAlbum, setIsDeletingAlbum] = useState(false);
   const [isAddingPhotos, setIsAddingPhotos] = useState(false);
 
   const menuRef = useRef();
-  useEffect(() => {
-    const handleClick = (e) => {
-      if (!menuRef.current?.contains(e.target)) {
-        setShowMenuItems(false);
-      }
-    };
-    if (showMenuItems) {
-      document.addEventListener("click", handleClick);
-    }
-    return () => document.removeEventListener("click", handleClick);
-  }, [showMenuItems]);
-
+  const { isVisible: showMenu, setIsVisible: setShowMenu } =
+    useClickOutside(menuRef);
   return (
     <>
       <div className="relative">
@@ -30,11 +20,9 @@ const AlbumMenu = ({ setIsEditing, albumData, onClickChangeThumbnail }) => {
           src="/assets/icons/vertical-dots.svg"
           alt="settings"
           className="min-w-[30px] w-[30px] cursor-pointer"
-          onClick={() => {
-            setShowMenuItems((prev) => !prev);
-          }}
+          onClick={() => setShowMenu(true)}
         />
-        {showMenuItems && (
+        {showMenu && (
           <div
             className="flex flex-col absolute z-50 bg-white w-[200px] right-0 rounded border border-solid border-gray-200 mt-2"
             ref={menuRef}>
@@ -61,7 +49,7 @@ const AlbumMenu = ({ setIsEditing, albumData, onClickChangeThumbnail }) => {
                   className="cursor-pointer hover:bg-gray-500 hover:text-white p-2"
                   onClick={() => {
                     onClickChangeThumbnail();
-                    setShowMenuItems(false);
+                    setShowMenu(false);
                   }}>
                   Change Thumbnail
                 </div>
