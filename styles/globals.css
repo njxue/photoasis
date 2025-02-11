@@ -27,7 +27,7 @@
 }
 
 .btn-white {
-  @apply btn bg-gray-200;
+  @apply btn bg-gray-100;
 }
 
 .btn-gray {

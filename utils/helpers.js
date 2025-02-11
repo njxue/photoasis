@@ -91,7 +91,7 @@ const EXPOSURE_MODES = [
   },
 ];
 
-function arrayToFileList(filesArray) {
+const arrayToFileList = (filesArray) => {
   const dataTransfer = new DataTransfer();
 
   filesArray.forEach((file) => {
@@ -99,14 +99,34 @@ function arrayToFileList(filesArray) {
   });
 
   return dataTransfer.files;
-}
+};
 
+const isEqualDeep = (obj1, obj2) => {
+  if (
+    typeof obj1 !== "object" ||
+    typeof obj2 !== "object" ||
+    obj1 === null ||
+    obj2 === null
+  ) {
+    return obj1 === obj2;
+  }
+
+  const keys1 = Object.keys(obj1);
+  const keys2 = Object.keys(obj2);
+
+  if (keys1.length !== keys2.length) {
+    return false;
+  }
+
+  return keys1.every((key) => isEqualDeep(obj1[key], obj2[key]));
+};
 export {
   capitalize,
   parseDate,
   base64ToBlob,
   downloadBlob,
   arrayToFileList,
+  isEqualDeep,
   METERING_MODES,
   EXPOSURE_MODES,
 };

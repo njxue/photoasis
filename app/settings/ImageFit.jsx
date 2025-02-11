@@ -1,21 +1,14 @@
 "use client";
 
-import updateUserPreferences from "@actions/updateUserPreferences";
 import Photo from "@app/common/Cards/Photo";
-import { useUserPreferences } from "@app/UserPreferencesContext";
 
 const FitOption = ({
   objectFit = "object-cover",
-  userPreferences,
-  setUserPreferences,
+  newUserPreferences,
+  handleClick,
 }) => {
   const selectedStyles = "border-black";
-  const isSelected = userPreferences?.objectFit === objectFit;
-
-  const handleClick = async () => {
-    setUserPreferences({ ...userPreferences, objectFit: objectFit });
-    await updateUserPreferences({ objectFit });
-  };
+  const isSelected = newUserPreferences?.objectFit === objectFit;
 
   return (
     <div
@@ -26,29 +19,36 @@ const FitOption = ({
       <div className="relative w-full h-full">
         <Photo src="/assets/images/placeholder.jpg" objectFit={objectFit} />
       </div>
-      <p className="mt-2 font-semibold text-lg">
+      <p className="mt-2 font-semibold text-sm">
         {objectFit === "object-cover" ? "Cover" : "Contain"}
       </p>
     </div>
   );
 };
-const ImageFit = () => {
-  const { userPreferences, setUserPreferences } = useUserPreferences();
-  console.log(userPreferences);
-
+const ImageFit = ({ newUserPreferences, setNewUserPreferences }) => {
   return (
     <div className="flex flex-col items-start">
-      <p className="text-xl">Image fit</p>
-      <div className="flex flex-row items-center justify-start gap-1 mt-5 w-full">
+      <p className="text-base sm:text-xl">Image fit</p>
+      <div className="flex flex-row items-center justify-start gap-1 mt-2 w-full">
         <FitOption
           objectFit="object-contain"
-          userPreferences={userPreferences}
-          setUserPreferences={setUserPreferences}
+          handleClick={() =>
+            setNewUserPreferences({
+              ...newUserPreferences,
+              objectFit: "object-contain",
+            })
+          }
+          newUserPreferences={newUserPreferences}
         />
         <FitOption
           objectFit="object-cover"
-          userPreferences={userPreferences}
-          setUserPreferences={setUserPreferences}
+          handleClick={() =>
+            setNewUserPreferences({
+              ...newUserPreferences,
+              objectFit: "object-cover",
+            })
+          }
+          newUserPreferences={newUserPreferences}
         />
       </div>
     </div>
