@@ -19,7 +19,7 @@ const FitOption = ({
 
   return (
     <div
-      className={`flex flex-col items-center cursor-pointer hover:opacity-50 transition-opacity w-1/2 max-w-[300px] h-[120px] xs:h-[170px] sm:h-[220px] p-2 border-2 ${
+      className={`flex flex-col items-center cursor-pointer hover:opacity-50 transition-opacity w-1/2 max-w-[300px] h-[170px] sm:h-[220px] p-2 border-2 ${
         isSelected && selectedStyles
       }`}
       onClick={handleClick}>
@@ -39,7 +39,7 @@ const ImageFit = () => {
   return (
     <div className="flex flex-col items-start">
       <p className="text-xl">Image fit</p>
-      <div className="flex flex-row items-center justify-start gap-3 xs:gap-5 mt-5 w-full">
+      <div className="flex flex-row items-center justify-start gap-1 mt-5 w-full">
         <FitOption
           objectFit="object-contain"
           userPreferences={userPreferences}
