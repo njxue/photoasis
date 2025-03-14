@@ -2,8 +2,13 @@
 
 import React from "react";
 import { SessionProvider } from "next-auth/react";
+import { PostHogProvider } from "./PosthogProvider";
 const Provider = ({ children, session }) => {
-  return <SessionProvider session={session}>{children}</SessionProvider>;
+  return (
+    <PostHogProvider>
+      <SessionProvider session={session}>{children}</SessionProvider>
+    </PostHogProvider>
+  );
 };
 
 export default Provider;
