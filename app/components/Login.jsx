@@ -37,14 +37,21 @@ const Login = () => {
           <div className="mt-10 w-full min-w-[260px] md:w-1/2">
             {Object.values(providers).map((provider) => (
               <button
-                onClick={() => signIn(provider.id)}
+                onClick={() => {
+                  false && signIn(provider.id);
+                }}
                 className="flex flex-row justify-center items-center gap-3 h-[40px] w-full border border-solid border-gray-400 rounded p-2 hover:bg-gray-50">
-                <img
-                  src={`/assets/icons/${provider.id}.svg`}
-                  className="h-full pointer-events-none"
-                  alt={provider.id}
-                />
-                <p>Sign in with {capitalize(provider.id)}</p>
+                {false && (
+                  <img
+                    src={`/assets/icons/${provider.id}.svg`}
+                    className="h-full pointer-events-none"
+                    alt={provider.id}
+                  />
+                )}
+                <a href="https://forms.gle/CLTFzRduwSGcUSVa6">
+                  Answer this short survey before logging in
+                </a>
+                {false && <p>Sign in with {capitalize(provider.id)}</p>}
               </button>
             ))}
           </div>
