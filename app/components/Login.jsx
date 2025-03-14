@@ -5,6 +5,7 @@ import { getProviders, signIn } from "next-auth/react";
 import { useEffect, useState } from "react";
 const Login = () => {
   const [providers, setProviders] = useState(null);
+  const LOGIN_DISABLED = process.env.NEXT_PUBLIC_DISABLE_LOGIN === "true";
 
   useEffect(() => {
     (async () => {
@@ -12,6 +13,12 @@ const Login = () => {
       setProviders(res);
     })();
   }, []);
+
+  const handleClickGoogleForm = () => {
+    localStorage.setItem("navigatedToForm", "true");
+  };
+
+  const navigatedToForm = localStorage.getItem("navigatedToForm") === "true";
 
   return (
     <div className="relative w-screen h-screen flex flex-row justify-center items-center bg-[url('/assets/images/polaroid.jpg')] bg-cover bg-center bg-no-repeat">
@@ -35,25 +42,31 @@ const Login = () => {
             digital stories!
           </div>
           <div className="mt-10 w-full min-w-[260px] md:w-1/2">
-            {Object.values(providers).map((provider) => (
+            {LOGIN_DISABLED && !navigatedToForm && (
               <button
-                onClick={() => {
-                  false && signIn(provider.id);
-                }}
-                className="flex flex-row justify-center items-center gap-3 h-[40px] w-full border border-solid border-gray-400 rounded p-2 hover:bg-gray-50">
-                {false && (
-                  <img
-                    src={`/assets/icons/${provider.id}.svg`}
-                    className="h-full pointer-events-none"
-                    alt={provider.id}
-                  />
-                )}
+                onClick={handleClickGoogleForm}
+                className=" border border-solid border-gray-400 rounded p-2 hover:bg-gray-50">
                 <a href="https://forms.gle/CLTFzRduwSGcUSVa6">
                   Answer this short survey before logging in
                 </a>
-                {false && <p>Sign in with {capitalize(provider.id)}</p>}
               </button>
-            ))}
+            )}
+            {(!LOGIN_DISABLED || navigatedToForm) &&
+              Object.values(providers).map((provider) => (
+                <button
+                  onClick={() => signIn(provider.id)}
+                  className="flex flex-row justify-center items-center gap-3 h-[40px] w-full border border-solid border-gray-400 rounded p-2 hover:bg-gray-50">
+                  {
+                    <img
+                      src={`/assets/icons/${provider.id}.svg`}
+                      className="h-full pointer-events-none"
+                      alt={provider.id}
+                    />
+                  }
+
+                  {<p>Sign in with {capitalize(provider.id)}</p>}
+                </button>
+              ))}
           </div>
         </div>
       )}
