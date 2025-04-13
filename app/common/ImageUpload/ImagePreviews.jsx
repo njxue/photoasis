@@ -18,9 +18,9 @@ const ImagePreviews = () => {
   return (
     <div className="flex flex-col py-3 md:py-0 md:px-1 h-full">
       <div className="relative min-h-[90px] overflow-auto grow">
-        <div className="absolute top-0 left-0 w-full grid gap-1 grid-cols-3 xs:grid-cols-4 sm:grid-cols-6 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
+        <div className="absolute top-0 left-0 w-full grid gap-1 grid-cols-3 xs:grid-cols-4 sm:grid-cols-5 md:grid-cols-4 lg:grid-cols-5">
           {images?.map((image) => (
-            <div className="relative min-w-[80px]" key={image.id}>
+            <div className="relative max-h-[100px] " key={image.id}>
               <OptimisedImage
                 className={`${
                   selectedFile === image.id && "opacity-30"
