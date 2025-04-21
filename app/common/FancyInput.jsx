@@ -1,7 +1,16 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 
-function FancyInput({ label, name, required, type, min, step, defaultValue }) {
+function FancyInput({
+  label,
+  name,
+  required,
+  type,
+  min,
+  step,
+  defaultValue,
+  onChange,
+}) {
   const inputRef = useRef();
   const labelRef = useRef();
 
@@ -43,6 +52,9 @@ function FancyInput({ label, name, required, type, min, step, defaultValue }) {
           name={name}
           required={required}
           onFocus={() => setIsFocused(true)}
+          onChange={(e) => {
+            onChange?.(e.target.value);
+          }}
         />
       ) : (
         <input
@@ -55,6 +67,9 @@ function FancyInput({ label, name, required, type, min, step, defaultValue }) {
           name={name}
           required={required}
           onFocus={() => setIsFocused(true)}
+          onChange={(e) => {
+            onChange?.(e.target.value);
+          }}
         />
       )}
       <div

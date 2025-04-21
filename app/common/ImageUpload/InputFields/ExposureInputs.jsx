@@ -3,7 +3,7 @@ import MeteringInput from "./MeteringMode/MeteringModeInput";
 import ExposureModeInput from "./ExposureMode/ExposureModeInput";
 import { FORM_FIELDS } from "@utils/imageUploadUtils";
 
-function ExposureInputs({ photo }) {
+function ExposureInputs({ fileData }) {
   const rowStyle = "flex flex-rows items-center justify-around gap-2";
   const colStyle = "w-1/2 flex flex-col gap-2";
 
@@ -19,8 +19,11 @@ function ExposureInputs({ photo }) {
             name={FORM_FIELDS.APERTURE.name}
             step={0.1}
             min={0}
-            defaultValue={photo.aperture}
+            defaultValue={fileData[FORM_FIELDS.APERTURE.name]}
             label={FORM_FIELDS.APERTURE.label}
+            onChange={(v) => {
+              fileData[FORM_FIELDS.APERTURE.name] = v;
+            }}
           />
         </div>
         <div className={rowStyle}>
@@ -34,8 +37,11 @@ function ExposureInputs({ photo }) {
           <FancyInput
             type="text"
             label={FORM_FIELDS.SHUTTER_SPEED.label}
-            defaultValue={photo.shutterspeed}
+            defaultValue={fileData[FORM_FIELDS.SHUTTER_SPEED.name]}
             name={FORM_FIELDS.SHUTTER_SPEED.name}
+            onChange={(v) => {
+              fileData[FORM_FIELDS.SHUTTER_SPEED.name] = v;
+            }}
           />
         </div>
         <div className={rowStyle}>
@@ -46,8 +52,11 @@ function ExposureInputs({ photo }) {
             type="number"
             name={FORM_FIELDS.ISO.name}
             min={0}
-            defaultValue={photo.iso}
+            defaultValue={fileData[FORM_FIELDS.ISO.name]}
             label={FORM_FIELDS.ISO.label}
+            onChange={(v) => {
+              fileData[FORM_FIELDS.ISO.name] = v;
+            }}
           />
         </div>
       </div>
@@ -66,12 +75,15 @@ function ExposureInputs({ photo }) {
             name={FORM_FIELDS.FOCAL_LENGTH.name}
             min={0}
             label={FORM_FIELDS.FOCAL_LENGTH.label}
-            defaultValue={photo.focalLength}
+            defaultValue={fileData[FORM_FIELDS.FOCAL_LENGTH.name]}
+            onChange={(v) => {
+              fileData[FORM_FIELDS.FOCAL_LENGTH.name] = v;
+            }}
           />
         </div>
 
-        <MeteringInput defaultValue={photo.meteringMode} />
-        <ExposureModeInput defaultValue={photo.exposureMode} />
+        <MeteringInput fileData={fileData} />
+        <ExposureModeInput fileData={fileData} />
       </div>
     </div>
   );

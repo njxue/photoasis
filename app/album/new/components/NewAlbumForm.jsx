@@ -1,5 +1,5 @@
 "use client";
-import updateAlbum from "@actions/updateAlbum";
+
 import createAlbum from "@actions/createAlbum";
 import deleteAlbum from "@actions/deleteAlbum";
 import DroppableFileInput from "@app/common/ImageUpload/DroppableFileInput";
@@ -8,11 +8,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import FancyInput from "@app/common/FancyInput";
-import {
-  FORM_FIELDS,
-  formatFormData,
-  formUploadPhotos,
-} from "@utils/imageUploadUtils";
+import { FORM_FIELDS, uploadPhotos } from "@utils/imageUploadUtils";
 import { useImageUploadContext } from "@app/common/ImageUpload/ImageUploadContext";
 const NewAlbumForm = () => {
   const errorMessage = "Unable to create album. Please try again later";
@@ -21,11 +17,10 @@ const NewAlbumForm = () => {
   const router = useRouter();
 
   const { files } = useImageUploadContext();
-  const rawFiles = files.map((f) => f.rawFile);
+
   async function handleCreateAlbum(formdata) {
     try {
-      const formattedFormData = formatFormData(formdata, rawFiles);
-      const albumName = formattedFormData.get(FORM_FIELDS.ALBUM_NAME.name);
+      const albumName = formdata.get(FORM_FIELDS.ALBUM_NAME.name);
       const albumRes = await createAlbum({
         albumName,
       });
@@ -43,23 +38,16 @@ const NewAlbumForm = () => {
         return;
       }
 
-      const b2UploadRes = await formUploadPhotos(aid, uid, formattedFormData);
-      if (b2UploadRes.status !== 200) {
-        toast.error(b2UploadRes.message);
+      const res = await uploadPhotos(aid, uid, files);
+      if (res.status !== 200) {
+        toast.error(res.message);
         // Rollback album creation
         await deleteAlbum(aid);
         return;
       }
 
-      const fileInfos = b2UploadRes.data;
-      const res = await updateAlbum({ aid, photos: fileInfos });
-      if (res.ok) {
-        router.push(`/album/${aid}`);
-        toast.success(`Album "${albumName}" successfully created!`);
-      } else {
-        toast.error(errorMessage);
-        await deleteAlbum(aid);
-      }
+      router.push(`/album/${aid}`);
+      toast.success(`Album "${albumName}" successfully created!`);
     } catch (err) {
       console.log(err);
       toast.error(errorMessage);

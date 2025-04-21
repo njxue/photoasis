@@ -14,23 +14,33 @@ const ImageUploadProvider = ({ children }) => {
   const [selectedFile, setSelectedFile] = useState();
 
   const handleAddFiles = async (newFiles) => {
-    console.log(newFiles);
     setIsLoading(true);
     let processedFiles = await Promise.all(newFiles.map(processFile));
     processedFiles = processedFiles.map((file, i) => ({
       rawFile: newFiles[i],
       fileData: file,
     }));
+
     setFiles([...files, ...processedFiles]);
+    if (files.length === 0) {
+      setSelectedFile(processedFiles[0]);
+    }
     setIsLoading(false);
   };
 
   const handleRemoveFile = (fileId) => {
     setFiles((files) => files.filter((file) => file.fileData.id !== fileId));
+    if (selectedFile.fileData.id === fileId) {
+      if (files.length === 0) {
+        setSelectedFile(null);
+      } else {
+        setSelectedFile(files[0]);
+      }
+    }
   };
 
   const handleClickImagePreview = (fileId) => {
-    setSelectedFile(fileId);
+    setSelectedFile(files.find((f) => f.fileData?.id === fileId));
   };
 
   const resetFiles = () => {

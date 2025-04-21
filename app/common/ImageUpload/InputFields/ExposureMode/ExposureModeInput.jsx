@@ -2,13 +2,18 @@ import ExposureMode from "./ExposureMode";
 import { useState } from "react";
 import { EXPOSURE_MODES } from "@utils/helpers";
 import { FORM_FIELDS } from "@utils/imageUploadUtils";
-function ExposureModeInput({ defaultValue }) {
-  const [exposureMode, setExposureMode] = useState(defaultValue);
+function ExposureModeInput({ fileData }) {
+  const [exposureMode, setExposureMode] = useState(
+    fileData[FORM_FIELDS.EXPOSURE_MODE.name]
+  );
+
   function handleClick(mode) {
     if (exposureMode === mode) {
       setExposureMode(null);
+      fileData[FORM_FIELDS.EXPOSURE_MODE.name] = null;
     } else {
       setExposureMode(mode);
+      fileData[FORM_FIELDS.EXPOSURE_MODE.name] = mode;
     }
   }
   return (
@@ -17,7 +22,7 @@ function ExposureModeInput({ defaultValue }) {
         type="text"
         name={FORM_FIELDS.EXPOSURE_MODE.name}
         className="hidden"
-        value={exposureMode}
+        defaultValue={exposureMode}
       />
       <div className="flex flex-col justify-center w-full text-center">
         <div className="flex flex-row justify-around">

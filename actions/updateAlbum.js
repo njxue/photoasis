@@ -33,7 +33,7 @@ async function updateAlbum(data, revalidate = true) {
             shutterspeed: photo.shutterspeed,
             iso: parseInt(photo.iso),
             description: photo.description || null,
-            date: photo.date,
+            date: photo.date ? photo.date + "T00:00:00Z" : null,
             focalLength: parseFloat(photo.focalLength),
             meteringMode: photo.meteringMode || null,
             exposureMode: photo.exposureMode || null,
@@ -90,7 +90,6 @@ async function updateAlbum(data, revalidate = true) {
         };
       }
     }
-    console.log(albumData);
 
     const updatedAlbum = await prisma.album.update({
       where: { aid_uid: { aid, uid } },

@@ -3,13 +3,18 @@ import { useState } from "react";
 import { METERING_MODES } from "@utils/helpers";
 import { FORM_FIELDS } from "@utils/imageUploadUtils";
 
-function MeteringInput({ defaultValue }) {
-  const [meteringMode, setMeteringMode] = useState(defaultValue);
+function MeteringInput({ fileData }) {
+  const [meteringMode, setMeteringMode] = useState(
+    fileData[FORM_FIELDS.METERING_MODE.name]
+  );
+
   function handleClick(mode) {
     if (meteringMode === mode) {
       setMeteringMode(null);
+      fileData[FORM_FIELDS.METERING_MODE.name] = null;
     } else {
       setMeteringMode(mode);
+      fileData[FORM_FIELDS.METERING_MODE.name] = mode;
     }
   }
   return (
@@ -18,7 +23,7 @@ function MeteringInput({ defaultValue }) {
         type="text"
         name={FORM_FIELDS.METERING_MODE.name}
         className="hidden"
-        value={meteringMode}
+        defaultValue={meteringMode}
       />
       <div className="flex flex-col justify-center w-full text-center">
         <div className="flex flex-row justify-around">

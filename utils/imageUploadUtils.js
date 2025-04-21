@@ -3,6 +3,7 @@ import { compress } from "./compress";
 import { b2GetUploadUrls } from "@actions/b2";
 import { v4 as uuidv4 } from "uuid";
 import { encode } from "blurhash";
+import updateAlbum from "@actions/updateAlbum";
 export const formatFormData = (formData, fileList) => {
   // Use the files in fileList instead of the files in the form, because we are manually keeping track of the files
   fileList.forEach((file) => {
@@ -81,13 +82,6 @@ export const extractFileMetadata = async (file) => {
     // No EXIF metadata
   }
 
-  const compressed = await compress(file, {
-    maxSizeMB: 0.3,
-    maxWidthOrHeight: 200, // Intrinsic size
-  });
-
-  const blurhash = await compressAndGenerateBlurhash(compressed);
-
   return {
     id: uuidv4(),
     aperture,
@@ -101,72 +95,61 @@ export const extractFileMetadata = async (file) => {
     lensModel,
     cameraModel,
     name: file.name,
-    blurhash,
-    url: URL.createObjectURL(compressed),
   };
 };
 
-export const formUploadPhotos = async (aid, uid, formdata) => {
+export const uploadPhotos = async (aid, uid, files) => {
   return new Promise((resolve, reject) => {
     (async () => {
       try {
         const b2Folder = `${uid}/${aid}/`; // Folder to upload the photos to
 
-        let fileList = formdata
-          .getAll(FORM_FIELDS.FILES.name)
-          .map((file, i) => ({
-            file: file,
-            idx: i,
-            name: file.name,
-          }));
-        const blurHash = formdata.getAll("blurhash");
-        const aperture = formdata.getAll(FORM_FIELDS.APERTURE.name);
-        const shutterspeed = formdata.getAll(FORM_FIELDS.SHUTTER_SPEED.name);
-        const iso = formdata.getAll(FORM_FIELDS.ISO.name);
-        const description = formdata.getAll(FORM_FIELDS.DESCRIPTION.name);
-        const date = formdata.getAll(FORM_FIELDS.DATE.name);
-        const focalLength = formdata.getAll(FORM_FIELDS.FOCAL_LENGTH.name);
-        const meteringMode = formdata.getAll(FORM_FIELDS.METERING_MODE.name);
-        const exposureMode = formdata.getAll(FORM_FIELDS.EXPOSURE_MODE.name);
-        const lensModel = formdata.getAll(FORM_FIELDS.LENS_MODEL.name);
-        const cameraModel = formdata.getAll(FORM_FIELDS.CAMERA_MODEL.name);
-        const editingSoftware = formdata.getAll(
-          FORM_FIELDS.EDITING_SOFTWARE.name
-        );
-
         const MAX_RETRIES = 3;
         let num_tries = 0;
-        const successfullyUploadedFiles = [];
-        while (fileList.length > 0 && num_tries < MAX_RETRIES) {
+        let unuploadedFiles = [...files];
+
+        while (unuploadedFiles.length > 0 && num_tries < MAX_RETRIES) {
           if (process.env.NODE_ENV === "development") {
             console.log(
-              `Attempt #${num_tries + 1} with ${fileList.length} files`
+              `Attempt #${num_tries + 1} with ${unuploadedFiles.length} files`
             );
           }
 
-          const uploadUrlsAndTokens = await b2GetUploadUrls(fileList.length);
-          let files = fileList.map((file, i) => ({
+          let failedUploads = [];
+
+          const uploadUrlsAndTokens = await b2GetUploadUrls(
+            unuploadedFiles.length
+          );
+
+          let unuploadedFilesWithToken = unuploadedFiles.map((file, i) => ({
             ...file,
-            b2name: `${b2Folder}${encodeURIComponent(file.name)}`,
-            url: uploadUrlsAndTokens[i].url,
-            token: uploadUrlsAndTokens[i].token,
+            b2data: {
+              b2name: `${b2Folder}${encodeURIComponent(file.fileData.name)}`,
+              url: uploadUrlsAndTokens[i].url,
+              token: uploadUrlsAndTokens[i].token,
+            },
           }));
 
           // Attempt to upload
-          let uploadFilesRes = await uploadFiles(files);
-
-          // Success
-          successfullyUploadedFiles.push(
-            ...uploadFilesRes.filter((file) => file.uploadSuccessful)
+          let b2Ids = await Promise.all(
+            unuploadedFilesWithToken.map(uploadFile)
           );
 
-          // Failed
-          fileList = uploadFilesRes.filter((file) => !file.uploadSuccessful);
+          // Success
+          unuploadedFiles.forEach((file, i) => {
+            if (b2Ids[i] != null) {
+              file.fileData.fileId = b2Ids[i];
+            } else {
+              failedUploads.push(file);
+            }
+          });
+
+          unuploadedFiles = failedUploads;
           num_tries++;
         }
 
         // Did not manage to upload all
-        if (fileList.length > 0) {
+        if (unuploadedFiles.length > 0) {
           return resolve({
             status: 503,
             message:
@@ -174,25 +157,8 @@ export const formUploadPhotos = async (aid, uid, formdata) => {
           });
         }
 
-        // Assign photo settings
-        const uploadedFiles = successfullyUploadedFiles.map((file) => ({
-          name: file.name,
-          aperture: aperture[file.idx],
-          shutterspeed: shutterspeed[file.idx],
-          iso: iso[file.idx],
-          description: description[file.idx],
-          date: date[file.idx] ? date[file.idx] + "T00:00:00Z" : null,
-          focalLength: focalLength[file.idx],
-          meteringMode: meteringMode[file.idx],
-          exposureMode: exposureMode[file.idx],
-          lensModel: lensModel[file.idx],
-          cameraModel: cameraModel[file.idx],
-          editingSoftware: editingSoftware[file.idx],
-          fileId: file.fileId,
-          blurhash: blurHash[file.idx],
-        }));
-
-        resolve({ status: 200, data: uploadedFiles });
+        await updateAlbum({ aid, photos: files.map((f) => f.fileData) });
+        resolve({ status: 200, message: "Successfully uploaded photos" });
       } catch (err) {
         reject({ status: 500, message: err });
       }
@@ -200,27 +166,21 @@ export const formUploadPhotos = async (aid, uid, formdata) => {
   });
 };
 
-const uploadFiles = async (files) => {
-  return await Promise.all(files.map(uploadFile));
-};
-
 const uploadFile = async (file) => {
-  const res = await fetch(file.url, {
+  const b2data = file.b2data;
+  const res = await fetch(b2data.url, {
     method: "POST",
     headers: {
-      Authorization: file.token,
-      "X-Bz-File-Name": file.b2name,
+      Authorization: b2data.token,
+      "X-Bz-File-Name": b2data.b2name,
       "Content-Type": "b2/x-auto",
       "X-Bz-Content-Sha1": "do_not_verify",
     },
-    body: file.file,
+    body: file.rawFile,
   });
   const data = await res.json();
-  return {
-    ...file,
-    fileId: data.fileId,
-    uploadSuccessful: res.status === 200, // Will return 503 if not successful
-  };
+
+  return res.status === 200 ? data.fileId : null;
 };
 
 const compressAndGenerateBlurhash = async (

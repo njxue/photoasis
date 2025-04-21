@@ -2,7 +2,7 @@
 import { useState } from "react";
 import ExposureInputs from "./InputFields/ExposureInputs";
 import BuildInputs from "./InputFields/BuildInputs";
-const PhotoSettingsInputs = ({ photo }) => {
+const PhotoSettingsInputs = ({ fileData }) => {
   const EXPOSURE_TAB = "Exposure";
   const BUILD_TAB = "Build";
   const [tab, setTab] = useState(EXPOSURE_TAB);
@@ -11,10 +11,10 @@ const PhotoSettingsInputs = ({ photo }) => {
     <div className="h-full flex flex-col justify-between">
       <div className="text-xs px-1">
         <div hidden={tab !== EXPOSURE_TAB}>
-          <ExposureInputs photo={photo} />
+          <ExposureInputs fileData={fileData} />
         </div>
         <div hidden={tab !== BUILD_TAB}>
-          <BuildInputs photo={photo} />
+          <BuildInputs fileData={fileData} />
         </div>
       </div>
       <div className="flex flex-row mt-2 items-center justify-between text-[10px]">
@@ -35,7 +35,7 @@ const PhotoSettingsInputs = ({ photo }) => {
           />
         </div>
         <div className="flex justify-end items-center basis-2/3 text-wrap">
-          <p className="">{photo.name}</p>
+          <p>{fileData?.name}</p>
         </div>
       </div>
     </div>

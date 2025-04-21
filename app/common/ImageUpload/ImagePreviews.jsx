@@ -10,8 +10,8 @@ const ImagePreviews = () => {
 
   const { handleClickImagePreview, handleRemoveFile, selectedFile, files } =
     useImageUploadContext();
-
   const fileData = files.map((f) => f.fileData);
+
   return (
     <div className="flex flex-col py-3 md:py-0 md:px-1 h-full">
       <div className="relative min-h-[90px] overflow-auto grow">
@@ -51,16 +51,13 @@ const ImagePreviews = () => {
           ))}
         </div>
       </div>
-      <div className="min-h-[150px] mt-6" hidden={selectedFile == null}>
-        {fileData &&
-          fileData.map((file) => (
-            <div
-              hidden={selectedFile !== file.id}
-              className="h-full"
-              key={file.id}>
-              <PhotoSettingsInputs photo={file} />
-            </div>
-          ))}
+      <div className="min-h-[150px] mt-6">
+        {selectedFile && (
+          <PhotoSettingsInputs
+            fileData={selectedFile.fileData}
+            key={selectedFile.fileData.id}
+          />
+        )}
       </div>
     </div>
   );

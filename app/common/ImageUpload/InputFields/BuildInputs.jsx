@@ -1,7 +1,7 @@
 import FancyInput from "@app/common/FancyInput";
 import { FORM_FIELDS } from "@utils/imageUploadUtils";
 
-function BuildInputs({ photo }) {
+function BuildInputs({ fileData }) {
   const rowStyle = "flex flex-rows items-center justify-around gap-2";
   const colStyle = "w-1/2 flex flex-col gap-2";
 
@@ -16,8 +16,11 @@ function BuildInputs({ photo }) {
             <FancyInput
               type="text"
               name={FORM_FIELDS.LENS_MODEL.name}
-              defaultValue={photo.lensModel}
+              defaultValue={fileData[FORM_FIELDS.LENS_MODEL.name]}
               label={FORM_FIELDS.LENS_MODEL.label}
+              onChange={(v) => {
+                fileData[FORM_FIELDS.LENS_MODEL.name] = v;
+              }}
             />
           </div>
           <div className={rowStyle}>
@@ -27,8 +30,11 @@ function BuildInputs({ photo }) {
             <FancyInput
               type="text"
               name={FORM_FIELDS.CAMERA_MODEL.name}
-              defaultValue={photo.cameraModel}
+              defaultValue={fileData[FORM_FIELDS.CAMERA_MODEL.name]}
               label={FORM_FIELDS.CAMERA_MODEL.label}
+              onChange={(v) => {
+                fileData[FORM_FIELDS.CAMERA_MODEL.name] = v;
+              }}
             />
           </div>
         </div>
@@ -44,8 +50,11 @@ function BuildInputs({ photo }) {
             <FancyInput
               type="text"
               name={FORM_FIELDS.EDITING_SOFTWARE.name}
-              defaultValue={photo.editingSoftware}
+              defaultValue={fileData[FORM_FIELDS.EDITING_SOFTWARE.name]}
               label={FORM_FIELDS.EDITING_SOFTWARE.label}
+              onChange={(v) => {
+                fileData[FORM_FIELDS.EDITING_SOFTWARE.name] = v;
+              }}
             />
           </div>
           <div className={rowStyle}>
@@ -55,7 +64,10 @@ function BuildInputs({ photo }) {
             <FancyInput
               type="date"
               name={FORM_FIELDS.DATE.name}
-              defaultValue={photo.date}
+              defaultValue={fileData[FORM_FIELDS.DATE.name]}
+              onChange={(v) => {
+                fileData[FORM_FIELDS.DATE.name] = v;
+              }}
             />
           </div>
         </div>
@@ -68,6 +80,10 @@ function BuildInputs({ photo }) {
           type="textarea"
           name={FORM_FIELDS.DESCRIPTION.name}
           label={FORM_FIELDS.DESCRIPTION.label}
+          defaultValue={fileData[FORM_FIELDS.DESCRIPTION.name]}
+          onChange={(v) => {
+            fileData[FORM_FIELDS.DESCRIPTION.name] = v;
+          }}
         />
       </div>
     </div>
