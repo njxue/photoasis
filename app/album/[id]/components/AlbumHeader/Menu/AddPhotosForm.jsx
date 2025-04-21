@@ -16,11 +16,12 @@ const AddPhotosForm = ({ albumData, show, setShow }) => {
   const { data: session } = useSession();
   const { aid } = albumData;
 
-  const { filesForUpload, resetFiles } = useImageUploadContext();
+  const { resetFiles, files } = useImageUploadContext();
+  const rawFiles = files.map((f) => f.rawFile);
 
   async function handleSubmit(formdata) {
     try {
-      const formattedFormData = formatFormData(formdata, filesForUpload);
+      const formattedFormData = formatFormData(formdata, rawFiles);
       const b2UploadRes = await formUploadPhotos(
         aid,
         session?.user.id,
@@ -59,7 +60,7 @@ const AddPhotosForm = ({ albumData, show, setShow }) => {
               <SubmitButton
                 text="Add Photos"
                 preventBrowserRefresh
-                disabled={filesForUpload.length === 0}
+                disabled={files.length === 0}
               />
             </div>
           </form>

@@ -20,11 +20,11 @@ const NewAlbumForm = () => {
   const uid = session?.user.id;
   const router = useRouter();
 
-  const { filesForUpload } = useImageUploadContext();
-
+  const { files } = useImageUploadContext();
+  const rawFiles = files.map((f) => f.rawFile);
   async function handleCreateAlbum(formdata) {
     try {
-      const formattedFormData = formatFormData(formdata, filesForUpload);
+      const formattedFormData = formatFormData(formdata, rawFiles);
       const albumName = formattedFormData.get(FORM_FIELDS.ALBUM_NAME.name);
       const albumRes = await createAlbum({
         albumName,
@@ -37,7 +37,7 @@ const NewAlbumForm = () => {
       const aid = albumRes.data.aid;
 
       // No photos
-      if (filesForUpload.length === 0) {
+      if (files.length === 0) {
         router.push(`/album/${aid}`);
         toast.success(`Album "${albumName}" successfully created!`);
         return;

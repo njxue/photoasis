@@ -8,7 +8,7 @@ import { useImageUploadContext } from "./ImageUploadContext";
 const DroppableFileInput = ({ required }) => {
   const inputRef = useRef();
   const { pending } = useFormStatus();
-  const { handleAddFiles, imagePreviews, isLoading } = useImageUploadContext();
+  const { handleAddFiles, isLoading, files } = useImageUploadContext();
 
   function handleClick() {
     inputRef.current && inputRef.current.click();
@@ -60,7 +60,7 @@ const DroppableFileInput = ({ required }) => {
           }}
         />
       </div>
-      {(imagePreviews.length > 0 || isLoading) && (
+      {(files.length > 0 || isLoading) && (
         <div className="w-full h-full">
           {isLoading ? (
             <div className="h-full flex flex-col justify-center items-center gap-5 text-gray-500 text-wrap text-center">

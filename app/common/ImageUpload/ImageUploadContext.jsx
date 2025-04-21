@@ -14,18 +14,19 @@ const ImageUploadProvider = ({ children }) => {
   const [selectedFile, setSelectedFile] = useState();
 
   const handleAddFiles = async (newFiles) => {
+    console.log(newFiles);
     setIsLoading(true);
     let processedFiles = await Promise.all(newFiles.map(processFile));
     processedFiles = processedFiles.map((file, i) => ({
-      file: newFiles[i],
-      preview: file,
+      rawFile: newFiles[i],
+      fileData: file,
     }));
     setFiles([...files, ...processedFiles]);
     setIsLoading(false);
   };
 
   const handleRemoveFile = (fileId) => {
-    setFiles((files) => files.filter((file) => file.preview.id !== fileId));
+    setFiles((files) => files.filter((file) => file.fileData.id !== fileId));
   };
 
   const handleClickImagePreview = (fileId) => {
@@ -36,15 +37,10 @@ const ImageUploadProvider = ({ children }) => {
     setFiles([]);
   };
 
-  const imagePreviews = files.map((file) => file.preview);
-  const filesForUpload = files.map((file) => file.file);
-
   const value = {
     isLoading,
     handleAddFiles,
     handleRemoveFile,
-    imagePreviews,
-    filesForUpload,
     handleClickImagePreview,
     selectedFile,
     files,
