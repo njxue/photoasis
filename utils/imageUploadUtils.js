@@ -2,6 +2,7 @@ import ExifReader from "exifreader";
 import { compress } from "./compress";
 import { b2GetUploadUrls } from "@actions/b2";
 import { v4 as uuidv4 } from "uuid";
+import { encode } from "blurhash";
 export const formatFormData = (formData, fileList) => {
   // Use the files in fileList instead of the files in the form, because we are manually keeping track of the files
   fileList.forEach((file) => {
@@ -10,7 +11,20 @@ export const formatFormData = (formData, fileList) => {
   return formData;
 };
 
-export const compressAndReadFileExif = async (file) => {
+export const processFile = async (file) => {
+  const [extractedMetadata, compressedWithBlurhash] = await Promise.all([
+    extractFileMetadata(file),
+    compressAndGenerateBlurhash(file),
+  ]);
+  const { compressed, blurhash } = compressedWithBlurhash;
+  return {
+    ...extractedMetadata,
+    url: URL.createObjectURL(compressed),
+    blurhash,
+  };
+};
+
+export const extractFileMetadata = async (file) => {
   let aperture = null;
   let iso = null;
   let shutterspeed = null;
@@ -24,6 +38,9 @@ export const compressAndReadFileExif = async (file) => {
 
   try {
     const metadata = await ExifReader.load(file);
+
+    //const imageData = await getImageData(file);
+
     // Aperture
     aperture = metadata["FNumber"]
       ? metadata["FNumber"].value[0] / metadata["FNumber"].value[1]
@@ -69,6 +86,8 @@ export const compressAndReadFileExif = async (file) => {
     maxWidthOrHeight: 200, // Intrinsic size
   });
 
+  const blurhash = await compressAndGenerateBlurhash(compressed);
+
   return {
     id: uuidv4(),
     aperture,
@@ -82,6 +101,7 @@ export const compressAndReadFileExif = async (file) => {
     lensModel,
     cameraModel,
     name: file.name,
+    blurhash,
     url: URL.createObjectURL(compressed),
   };
 };
@@ -99,7 +119,7 @@ export const formUploadPhotos = async (aid, uid, formdata) => {
             idx: i,
             name: file.name,
           }));
-
+        const blurHash = formdata.getAll("blurhash");
         const aperture = formdata.getAll(FORM_FIELDS.APERTURE.name);
         const shutterspeed = formdata.getAll(FORM_FIELDS.SHUTTER_SPEED.name);
         const iso = formdata.getAll(FORM_FIELDS.ISO.name);
@@ -169,6 +189,7 @@ export const formUploadPhotos = async (aid, uid, formdata) => {
           cameraModel: cameraModel[file.idx],
           editingSoftware: editingSoftware[file.idx],
           fileId: file.fileId,
+          blurhash: blurHash[file.idx],
         }));
 
         resolve({ status: 200, data: uploadedFiles });
@@ -200,6 +221,52 @@ const uploadFile = async (file) => {
     fileId: data.fileId,
     uploadSuccessful: res.status === 200, // Will return 503 if not successful
   };
+};
+
+const compressAndGenerateBlurhash = async (
+  file,
+  componentX = 4,
+  componentY = 4
+) => {
+  const compressed = await compress(file, {
+    maxSizeMB: 0.3,
+    maxWidthOrHeight: 200,
+  });
+
+  const imageData = await getImageData(compressed);
+  const blurhash = encode(
+    imageData.data,
+    imageData.width,
+    imageData.height,
+    componentX,
+    componentY
+  );
+  return { compressed, blurhash };
+};
+
+const getImageData = async (file) => {
+  const dataURL = await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+
+  const img = await new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = reject;
+    image.src = dataURL;
+  });
+
+  const canvas = document.createElement("canvas");
+  canvas.width = img.width;
+  canvas.height = img.height;
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(img, 0, 0);
+  const imageData = ctx.getImageData(0, 0, img.width, img.height);
+
+  return imageData;
 };
 
 export const FORM_FIELDS = {

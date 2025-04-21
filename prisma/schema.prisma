@@ -37,6 +37,7 @@ model Photo {
   album             Album?    @relation(fields: [aid, uid], references: [aid, uid])
   description       String?
   date              DateTime?
+  blurhash          String?
 }
 
 model Album {

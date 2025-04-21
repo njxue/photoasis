@@ -20,7 +20,8 @@ const ImagePreviews = () => {
       <div className="relative min-h-[90px] overflow-auto grow">
         <div className="absolute top-0 left-0 w-full grid gap-1 grid-cols-3 xs:grid-cols-4 sm:grid-cols-5 md:grid-cols-4 lg:grid-cols-5">
           {images?.map((image) => (
-            <div className="relative max-h-[100px] " key={image.id}>
+            <div className="relative max-h-[100px]" key={image.id}>
+              <input name="blurhash" value={image.blurhash} hidden />
               <OptimisedImage
                 className={`${
                   selectedFile === image.id && "opacity-30"

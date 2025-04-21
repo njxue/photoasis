@@ -1,5 +1,5 @@
 "use client";
-import { compressAndReadFileExif } from "@utils/imageUploadUtils";
+import { processFile } from "@utils/imageUploadUtils";
 import { createContext, useContext, useState } from "react";
 
 const ImageUploadContext = createContext(null);
@@ -15,10 +15,8 @@ const ImageUploadProvider = ({ children }) => {
 
   const handleAddFiles = async (newFiles) => {
     setIsLoading(true);
-    const compressedFilesWithExif = await Promise.all(
-      newFiles.map(compressAndReadFileExif)
-    );
-    const processedFiles = compressedFilesWithExif.map((file, i) => ({
+    let processedFiles = await Promise.all(newFiles.map(processFile));
+    processedFiles = processedFiles.map((file, i) => ({
       file: newFiles[i],
       preview: file,
     }));

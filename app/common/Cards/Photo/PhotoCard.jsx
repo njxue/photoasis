@@ -25,12 +25,13 @@ const PhotoCard = ({ photo, minimalisticView }) => {
         setExpandPhoto(true);
       }}>
       <div
-        className="card relative bg-white"
+        className="card relative"
         onMouseEnter={handleShowPhotoInfo}
         onMouseLeave={handleHidePhotoInfo}>
         <Photo
           src={photo.url}
           name={photo.name}
+          blurhash={photo.blurhash}
           objectFit={userPreferences.objectFit}
         />
 
