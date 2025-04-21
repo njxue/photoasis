@@ -21,7 +21,7 @@ const ImagePreviews = () => {
               <input name="blurhash" value={file.blurhash} hidden />
               <OptimisedImage
                 className={`${
-                  selectedFile === file.id && "opacity-30"
+                  selectedFile.fileData.id === file.id && "opacity-30"
                 } h-[80px] w-full`}
                 src={file.url}
                 onClick={() => {
