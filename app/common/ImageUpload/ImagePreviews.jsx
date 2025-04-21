@@ -17,21 +17,28 @@ const ImagePreviews = () => {
       <div className="relative min-h-[90px] overflow-auto grow">
         <div className="absolute top-0 left-0 w-full grid gap-1 grid-cols-3 xs:grid-cols-4 sm:grid-cols-5 md:grid-cols-4 lg:grid-cols-5">
           {fileData?.map((file) => (
-            <div className="relative max-h-[100px]" key={file.id}>
+            <div className="relative h-[90px]" key={file.id}>
               <input name="blurhash" value={file.blurhash} hidden />
-              <OptimisedImage
+              <div
                 className={`${
-                  selectedFile.fileData.id === file.id && "opacity-30"
-                } h-[80px] w-full`}
-                src={file.url}
-                onClick={() => {
-                  handleClickImagePreview(file.id);
-                }}
-                name={file.name}
-                id={file.id}
-                quality={QUALITY_LOW}
-                hover
-              />
+                  selectedFile.fileData.id === file.id &&
+                  "border-2 border-black"
+                } h-full`}>
+                <OptimisedImage
+                  className={`${
+                    selectedFile.fileData.id === file.id && "opacity-30"
+                  } h-full w-full`}
+                  src={file.url}
+                  onClick={() => {
+                    handleClickImagePreview(file.id);
+                  }}
+                  name={file.name}
+                  id={file.id}
+                  quality={QUALITY_LOW}
+                  hover
+                />
+              </div>
+
               {!pending && (
                 <div className="bg-black absolute right-0 top-0 cursor-pointer opacity-0 hover:opacity-70">
                   <img

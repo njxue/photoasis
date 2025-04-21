@@ -30,11 +30,23 @@ const ImageUploadProvider = ({ children }) => {
 
   const handleRemoveFile = (fileId) => {
     setFiles((files) => files.filter((file) => file.fileData.id !== fileId));
+
     if (selectedFile.fileData.id === fileId) {
-      if (files.length === 0) {
+      if (files.length === 1) {
+        // No more files
         setSelectedFile(null);
       } else {
-        setSelectedFile(files[0]);
+        /**
+         * Removed file that is currently selected
+         * - If file is rightmost: select left file
+         * - If file is not rightmost: select right file
+         */
+        const idx = files.findIndex((f) => f.fileData.id === fileId);
+        if (idx === files.length - 1) {
+          setSelectedFile(files[idx - 1]);
+        } else {
+          setSelectedFile(files[idx + 1]);
+        }
       }
     }
   };
