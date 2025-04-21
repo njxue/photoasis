@@ -13,8 +13,8 @@ const Photo = ({ src, name, objectFit = "object-cover", blurhash = "" }) => {
             height="100%"
             hash={blurhash}
             punch={1}
-            resolutionX={400}
-            resolutionY={300}
+            resolutionX={32}
+            resolutionY={32}
           />
         </div>
       ) : (
