@@ -1,6 +1,5 @@
-import { b2DownloadFileById } from "@actions/b2";
+import { b2GetDownloadUrl } from "@actions/b2";
 import LoadingSpinner from "@app/common/LoadingSpinner";
-import { base64ToBlob, downloadBlob } from "@utils/helpers";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
@@ -10,16 +9,14 @@ function DownloadPhoto({ photo }) {
   async function handleDownload() {
     setIsDownloading(true);
     const toastId = toast.loading(`Downloading ${photo.name}`);
-    try {
-      let res = await b2DownloadFileById(photo.pid);
-      if (!res.ok) {
-        throw new Error("Unable to download photo");
-      }
 
-      const data = res.data;
-      const { content, mimeType } = data;
-      const blob = await base64ToBlob({ content, mimeType });
-      downloadBlob({ blob, fileName: photo.name });
+    try {
+      const downloadUrl = await b2GetDownloadUrl(
+        photo.uid,
+        photo.aid,
+        photo.name
+      );
+      window.location.href = downloadUrl;
       toast.update(toastId, {
         render: `${photo.name} downloaded`,
         type: toast.TYPE.SUCCESS,

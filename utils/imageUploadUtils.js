@@ -175,6 +175,7 @@ const uploadFile = async (file) => {
       "X-Bz-File-Name": b2data.b2name,
       "Content-Type": "b2/x-auto",
       "X-Bz-Content-Sha1": "do_not_verify",
+      //"X-Bz-Info-b2-content-disposition": "attachment",
     },
     body: file.rawFile,
   });

@@ -8,8 +8,10 @@ const b2Authorize = async () => {
       applicationKey: process.env.BACKBLAZE_APP_KEY,
       applicationKeyId: process.env.BACKBLAZE_KEY_ID,
     });
-    await b2.authorize();
+    const authRes = await b2.authorize();
+    return authRes?.data;
   }
+  return b2;
 };
 const b2GetUploadUrl = async () => {
   await b2Authorize();
@@ -65,4 +67,25 @@ const b2DownloadFileById = async (fileId) => {
     };
   }
 };
-export { b2GetUploadUrl, b2GetUploadUrls, b2DownloadFileById };
+
+// https://www.backblaze.com/apidocs/b2-download-file-by-name
+const b2GetDownloadUrl = async (uid, aid, fileName) => {
+  const auth = await b2Authorize();
+  const contentDisposition = "attachment";
+  const downloadAuth = await b2.getDownloadAuthorization({
+    bucketId: process.env.BACKBLAZE_BUCKET_ID,
+    fileNamePrefix: `${uid}/${aid}/`,
+    validDurationInSeconds: 60,
+    b2ContentDisposition: contentDisposition,
+  });
+  const baseDownloadUrl = auth?.downloadUrl;
+  const fullDownloadUrl = `${baseDownloadUrl}/file/${process.env.NEXT_PUBLIC_BACKBLAZE_BUCKET_NAME}/${uid}/${aid}/${fileName}?Authorization=${downloadAuth?.data?.authorizationToken}&b2ContentDisposition=${contentDisposition}`;
+  return fullDownloadUrl;
+};
+
+export {
+  b2GetUploadUrl,
+  b2GetUploadUrls,
+  b2DownloadFileById,
+  b2GetDownloadUrl,
+};
