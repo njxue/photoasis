@@ -18,7 +18,7 @@ const AlbumCard = ({ data }) => {
             src={thumbnail}
             name={name}
             objectFit={userPreferences.objectFit}
-            blurhash={data.thumbnail.blurhash}
+            blurhash={data.thumbnail?.blurhash}
           />
           <div className="absolute bottom-2 px-[0.5em] text-white text-border font-bold text-start line-clamp-2 text-sm xs:text-lg sm:text-xl  sm:px-5">
             {name}
