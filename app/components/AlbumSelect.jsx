@@ -3,10 +3,13 @@
 import deleteAlbums from "@actions/deleteAlbums";
 import { useSelect } from "@app/common/Select/SelectContext";
 import { toast } from "react-toastify";
-import DeleteSelectedControls from "@app/common/Select/DeleteSelectedControls";
 import SelectTrigger from "@app/common/Select/SelectTrigger";
+import CancelSelectButton from "@app/common/Select/CancelSelectButton";
+import ConfirmationModal from "@app/common/ConfirmationModal";
+import { useState } from "react";
 function AlbumSelect() {
-  const { selectedItems, numSelected, isSelecting } = useSelect();
+  const { selectedItems, numSelected, isSelecting, endSelect } = useSelect();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   async function handleDeleteAlbums() {
     const res = await deleteAlbums(selectedItems);
@@ -17,14 +20,28 @@ function AlbumSelect() {
     }
   }
 
-  return (
-    <>
-      {!isSelecting && <SelectTrigger />}
-      <DeleteSelectedControls
-        handleDelete={handleDeleteAlbums}
+  return !isSelecting ? (
+    <SelectTrigger />
+  ) : (
+    <div className="flex flex-row justify-center items-center gap-1">
+      <button
+        disabled={!numSelected}
+        className="btn-red font-bold"
+        onClick={() => setIsModalOpen(true)}>
+        <img src="/assets/icons/trash.svg" width={20} alt="trash" />
+        Delete <span>({numSelected})</span>
+      </button>
+      <CancelSelectButton />
+      <ConfirmationModal
+        isOpen={isModalOpen}
+        setIsOpen={setIsModalOpen}
+        onConfirm={async () => {
+          await handleDeleteAlbums();
+          endSelect();
+        }}
         prompt={`Are you sure you want to delete ${numSelected} album(s)?`}
       />
-    </>
+    </div>
   );
 }
 

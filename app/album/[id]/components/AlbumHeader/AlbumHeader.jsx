@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useSelect } from "@app/common/Select/SelectContext";
 function AlbumHeader({ albumData }) {
   const [isEditing, setIsEditing] = useState(false);
-  const { mode, beginSelect } = useSelect();
+  const { mode, beginSelect, isSelecting } = useSelect();
   const selectModes = { delete: "DELETE", thumbnail: "THUMBNAIL" };
 
   const onClickChangeThumbnail = () => {
@@ -28,11 +28,13 @@ function AlbumHeader({ albumData }) {
               mode={mode}
               albumData={albumData}
             />
-            <AlbumMenu
-              onClickChangeThumbnail={onClickChangeThumbnail}
-              setIsEditing={setIsEditing}
-              albumData={albumData}
-            />
+            {!isSelecting && (
+              <AlbumMenu
+                onClickChangeThumbnail={onClickChangeThumbnail}
+                setIsEditing={setIsEditing}
+                albumData={albumData}
+              />
+            )}
           </div>
         </div>
       )}
