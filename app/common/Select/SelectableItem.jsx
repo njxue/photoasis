@@ -1,7 +1,12 @@
 import { useSelect } from "./SelectContext";
 
-const SelectableItem = ({ children, item }) => {
-  const { isSelecting, isSelected, selectItem } = useSelect();
+const SelectableItem = ({ children, item, comparator }) => {
+  const { isSelecting, isSelected, selectItem, setComparator } = useSelect();
+
+  if (comparator) {
+    setComparator(() => comparator);
+  }
+
   return (
     <div
       className={`relative cursor-pointer ${

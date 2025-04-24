@@ -53,7 +53,9 @@ function AlbumBody({ photos, minimalisticView }) {
           handleDrop={(e) => handleDrop(e, photo.pid)}
           handleDrag={(e) => handleDrag(e, photo.pid)}
           key={photo.pid}>
-          <SelectableItem item={photo.pid}>
+          <SelectableItem
+            item={photo}
+            comparator={(i1, i2) => i1.pid === i2.pid}>
             <PhotoCard photo={photo} minimalisticView={minimalisticView} />
           </SelectableItem>
         </DraggableAndDroppable>

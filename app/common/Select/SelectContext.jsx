@@ -13,11 +13,13 @@ export const SelectProvider = ({ children }) => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [allowMulti, setAllowMulti] = useState(DEFAULT_ALLOW_MULTI);
   const [mode, setMode] = useState("");
+  const [comparator, setComparator] = useState(() => (a, b) => a === b);
 
   const endSelect = () => {
     setIsSelecting(false);
     setSelectedItems([]);
   };
+
   const beginSelect = ({
     allowMultiple = DEFAULT_ALLOW_MULTI,
     mode = "",
@@ -33,14 +35,22 @@ export const SelectProvider = ({ children }) => {
       setSelectedItems([item]);
       return;
     }
-    if (selectedItems.includes(item)) {
-      setSelectedItems(selectedItems.filter((i) => i !== item));
+    if (
+      selectedItems.find((existingItem) => comparator?.(existingItem, item))
+    ) {
+      setSelectedItems(
+        selectedItems.filter(
+          (existingItem) => !comparator?.(existingItem, item)
+        )
+      );
     } else {
       setSelectedItems([...selectedItems, item]);
     }
   };
   const numSelected = selectedItems.length;
-  const isSelected = (item) => selectedItems.includes(item);
+  const isSelected = (item) =>
+    selectedItems.find((existingItem) => comparator?.(existingItem, item)) !=
+    null;
 
   const value = {
     isSelecting,
@@ -51,6 +61,7 @@ export const SelectProvider = ({ children }) => {
     numSelected,
     isSelected,
     mode,
+    setComparator,
   };
   return (
     <SelectContext.Provider value={value}>{children}</SelectContext.Provider>

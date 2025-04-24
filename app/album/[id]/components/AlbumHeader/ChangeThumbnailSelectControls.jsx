@@ -14,7 +14,7 @@ export default function ChangeThumbnailSelectControls({ albumData }) {
       return;
     }
 
-    const selectedPhotoPid = selectedItems[0];
+    const selectedPhotoPid = selectedItems[0]?.pid;
 
     try {
       setIsLoading(true);

@@ -1,10 +1,6 @@
 import React from "react";
 import { useSelect } from "./SelectContext";
-export default function SelectTrigger({
-  allowMultiple = true,
-  mode = "",
-  renderTrigger,
-}) {
+export default function SelectTrigger({ allowMultiple = true, renderTrigger }) {
   const { beginSelect } = useSelect();
   return renderTrigger ? (
     renderTrigger
@@ -14,7 +10,7 @@ export default function SelectTrigger({
       alt="select"
       width={30}
       className="cursor-pointer"
-      onClick={() => beginSelect({ allowMultiple, mode })}
+      onClick={() => beginSelect({ allowMultiple })}
     />
   );
 }

@@ -13,7 +13,7 @@ function SelectControls({ albumData, selectModes }) {
   async function handleDeletePhotos() {
     const res = await deletePhotos({
       aid: albumData.aid,
-      pids: selectedItems,
+      pids: selectedItems.map((i) => i.pid),
     });
     if (res.ok) {
       toast.success("Photo(s) deleted successfully");
@@ -27,7 +27,7 @@ function SelectControls({ albumData, selectModes }) {
     <>
       {!isSelecting && <SelectTrigger />}
       {mode === selectModes.thumbnail ? (
-        <ChangeThumbnailSelectControls albumData={albumData}/>
+        <ChangeThumbnailSelectControls albumData={albumData} />
       ) : (
         <DeleteSelectedControls
           handleDelete={handleDeletePhotos}
