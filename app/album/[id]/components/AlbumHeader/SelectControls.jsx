@@ -34,7 +34,7 @@ function SelectControls({ albumData, selectModes }) {
     setIsLoading(true);
     const toastId = toast.loading(`Downloading ${selectedItems.length} photos`);
     try {
-      await Promise.all(
+      const res = await Promise.allSettled(
         selectedItems.map(async (item) => {
           const downloadUrl = await b2GetDownloadUrl(
             item.uid,
@@ -42,15 +42,36 @@ function SelectControls({ albumData, selectModes }) {
             item.name
           );
           window.location.href = downloadUrl;
+          return item.name;
         })
       );
+      const fulfilledFileNames = new Set(
+        res.filter((r) => r.status === "fulfilled").map((r) => r.value)
+      );
+      const numFulfilled = fulfilledFileNames.size;
+      const numRejected = res.length - numFulfilled;
 
-      toast.update(toastId, {
-        render: `${selectedItems.length} photos downloaded`,
-        type: toast.TYPE.SUCCESS,
-        autoClose: 3000,
-        isLoading: false,
-      });
+      if (numFulfilled === res.length) {
+        toast.update(toastId, {
+          render: `${selectedItems.length} photo(s) downloaded`,
+          type: toast.TYPE.SUCCESS,
+          autoClose: 3000,
+          isLoading: false,
+        });
+      } else {
+        const rejectedFileNames = selectedItems
+          .filter((item) => !fulfilledFileNames.has(item.name))
+          .map((item) => item.name);
+
+        toast.update(toastId, {
+          render: `${numFulfilled} photo(s) downloaded. Failed to download ${numRejected} photo(s): ${rejectedFileNames.join(
+            ", "
+          )}`,
+          type: toast.TYPE.WARNING,
+          autoClose: 3000,
+          isLoading: false,
+        });
+      }
     } catch (err) {
       toast.update(toastId, {
         render: `Failed to download photos`,
@@ -73,7 +94,7 @@ function SelectControls({ albumData, selectModes }) {
     <div className="flex flex-row justify-center items-center gap-1">
       <button
         disabled={!numSelected || isLoading}
-        className="ml-5 btn-gray font-bold"
+        className="btn-gray font-bold "
         onClick={async () => {
           await handleDownloadPhotos();
           endSelect();

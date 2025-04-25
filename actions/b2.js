@@ -70,17 +70,27 @@ const b2DownloadFileById = async (fileId) => {
 
 // https://www.backblaze.com/apidocs/b2-download-file-by-name
 const b2GetDownloadUrl = async (uid, aid, fileName) => {
-  const auth = await b2Authorize();
-  const contentDisposition = "attachment";
-  const downloadAuth = await b2.getDownloadAuthorization({
-    bucketId: process.env.BACKBLAZE_BUCKET_ID,
-    fileNamePrefix: `${uid}/${aid}/`,
-    validDurationInSeconds: 60,
-    b2ContentDisposition: contentDisposition,
-  });
-  const baseDownloadUrl = auth?.downloadUrl;
-  const fullDownloadUrl = `${baseDownloadUrl}/file/${process.env.NEXT_PUBLIC_BACKBLAZE_BUCKET_NAME}/${uid}/${aid}/${fileName}?Authorization=${downloadAuth?.data?.authorizationToken}&b2ContentDisposition=${contentDisposition}`;
-  return fullDownloadUrl;
+  try {
+    const auth = await b2Authorize();
+    if (!auth) {
+      throw new Error("Not authorised");
+    }
+    const contentDisposition = "attachment";
+    const downloadAuth = await b2.getDownloadAuthorization({
+      bucketId: process.env.BACKBLAZE_BUCKET_ID,
+      fileNamePrefix: `${uid}/${aid}/`,
+      validDurationInSeconds: 60,
+      b2ContentDisposition: contentDisposition,
+    });
+    if (!downloadAuth?.data) {
+      throw new Error("Not authorised");
+    }
+    const baseDownloadUrl = auth.downloadUrl;
+    const fullDownloadUrl = `${baseDownloadUrl}/file/${process.env.NEXT_PUBLIC_BACKBLAZE_BUCKET_NAME}/${uid}/${aid}/${fileName}?Authorization=${downloadAuth.data.authorizationToken}&b2ContentDisposition=${contentDisposition}`;
+    return fullDownloadUrl;
+  } catch (err) {
+    throw err;
+  }
 };
 
 export {
