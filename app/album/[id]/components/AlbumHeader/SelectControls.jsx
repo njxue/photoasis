@@ -32,7 +32,9 @@ function SelectControls({ albumData, selectModes }) {
 
   async function handleDownloadPhotos() {
     setIsLoading(true);
-    const toastId = toast.loading(`Downloading ${selectedItems.length} photos`);
+    const toastId = toast.loading(
+      `Preparing to download ${selectedItems.length} photos`
+    );
     try {
       const res = await Promise.allSettled(
         selectedItems.map(async (item) => {
@@ -41,19 +43,26 @@ function SelectControls({ albumData, selectModes }) {
             item.aid,
             item.name
           );
-          window.location.href = downloadUrl;
-          return item.name;
+          return { url: downloadUrl, name: item.name };
         })
       );
+
+      // Some browsers may prevent spammy pop-ups, so add a delay between downloads
+      res.forEach((item, i) => {
+        setTimeout(() => {
+          window.open(item.value.url, "_self");
+        }, i * 2000);
+      });
+
       const fulfilledFileNames = new Set(
-        res.filter((r) => r.status === "fulfilled").map((r) => r.value)
+        res.filter((r) => r.status === "fulfilled").map((r) => r.value.name)
       );
       const numFulfilled = fulfilledFileNames.size;
       const numRejected = res.length - numFulfilled;
 
       if (numFulfilled === res.length) {
         toast.update(toastId, {
-          render: `${selectedItems.length} photo(s) downloaded`,
+          render: `Download started for ${selectedItems.length} photo(s)`,
           type: toast.TYPE.SUCCESS,
           autoClose: 3000,
           isLoading: false,
@@ -64,7 +73,7 @@ function SelectControls({ albumData, selectModes }) {
           .map((item) => item.name);
 
         toast.update(toastId, {
-          render: `${numFulfilled} photo(s) downloaded. Failed to download ${numRejected} photo(s): ${rejectedFileNames.join(
+          render: `Download started for ${numFulfilled} photo(s). Unable to download ${numRejected} photo(s): ${rejectedFileNames.join(
             ", "
           )}`,
           type: toast.TYPE.WARNING,
