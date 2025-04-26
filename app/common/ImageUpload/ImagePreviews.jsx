@@ -46,8 +46,6 @@ const ImagePreviews = () => {
                     alt="Remove"
                     width={16}
                     onClick={(e) => {
-                      // Stops modal from closing once the image (and this img tag) is removed from the DOM
-                      e.stopPropagation();
                       handleRemoveFile(file.id);
                     }}
                     className="invert"

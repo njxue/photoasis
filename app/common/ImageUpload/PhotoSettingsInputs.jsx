@@ -35,7 +35,7 @@ const PhotoSettingsInputs = ({ fileData }) => {
           />
         </div>
         <div className="flex justify-end items-center basis-2/3 text-wrap">
-          <p>{fileData?.name}</p>
+          {<p>{fileData?.name}</p>}
         </div>
       </div>
     </div>

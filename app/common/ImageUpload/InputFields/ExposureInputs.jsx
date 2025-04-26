@@ -3,6 +3,7 @@ import MeteringInput from "./MeteringMode/MeteringModeInput";
 import ExposureModeInput from "./ExposureMode/ExposureModeInput";
 import { FORM_FIELDS } from "@utils/imageUploadUtils";
 
+// fileData is mutable. It is only meant for form submission and should not be used as a state
 function ExposureInputs({ fileData }) {
   const rowStyle = "flex flex-rows items-center justify-around gap-2";
   const colStyle = "w-1/2 flex flex-col gap-2";
@@ -50,6 +51,7 @@ function ExposureInputs({ fileData }) {
           </label>
           <FancyInput
             type="number"
+            step={1}
             name={FORM_FIELDS.ISO.name}
             min={0}
             defaultValue={fileData[FORM_FIELDS.ISO.name]}

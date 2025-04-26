@@ -68,7 +68,9 @@ function FancyInput({
           required={required}
           onFocus={() => setIsFocused(true)}
           onChange={(e) => {
-            onChange?.(e.target.value);
+            let val = e.target.value;
+            if (type === "number") val = parseFloat(e.target.value);
+            onChange?.(val);
           }}
         />
       )}

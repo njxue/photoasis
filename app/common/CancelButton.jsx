@@ -2,11 +2,12 @@
 
 import { useFormStatus } from "react-dom";
 
-function CancelButton({ text, onCancel, disabled }) {
+function CancelButton({ text, onCancel, disabled, className }) {
   const { pending } = useFormStatus();
   return (
     <button
-      className="btn-white w-full h-9 font-bold"
+      type="button"
+      className={`btn-white w-full h-9 font-bold ${className}`}
       disabled={pending || disabled}
       onClick={onCancel}>
       {text ?? "Cancel"}

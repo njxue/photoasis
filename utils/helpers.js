@@ -102,11 +102,72 @@ const isEqualDeep = (obj1, obj2) => {
 
   return keys1.every((key) => isEqualDeep(obj1[key], obj2[key]));
 };
+
+const formatPhotoData = (photo) => {
+  const formattedPhotoData = {};
+  const unFormattedFields = [
+    "name",
+    "shutterspeed",
+    "description",
+    "meteringMode",
+    "exposureMode",
+    "lensModel",
+    "cameraModel",
+    "editingSoftware",
+  ];
+
+  unFormattedFields.forEach((field) => {
+    if (photo[field]) {
+      formattedPhotoData[field] = photo[field];
+    }
+  });
+
+  if (photo.aperture) {
+    let aperture = photo.aperture;
+    if (typeof aperture === "string") {
+      aperture = parseFloat(aperture);
+    }
+    if (isNaN(aperture)) {
+      throw new Error("Aperture is not a valid float");
+    }
+    formattedPhotoData.aperture = parseFloat(aperture.toFixed(1));
+  }
+
+  if (photo.iso) {
+    let iso = photo.iso;
+    if (typeof iso === "string") {
+      iso = parseInt(iso);
+    }
+    if (isNaN(iso)) {
+      throw new Error("ISO is not a valid integer");
+    }
+    formattedPhotoData.iso = iso;
+  }
+
+  if (photo.focalLength) {
+    let focalLength = photo.focalLength;
+    if (typeof focalLength === "string") {
+      focalLength = parseInt(focalLength);
+    }
+    if (isNaN(focalLength)) {
+      throw new Error("Focal length is not a valid integer");
+    }
+    formattedPhotoData.focalLength = focalLength;
+  }
+
+  if (photo.date) {
+    formattedPhotoData.date = photo.date + "T00:00:00Z";
+  }
+
+  return formattedPhotoData;
+};
+
 export {
   capitalize,
   parseDate,
   arrayToFileList,
   isEqualDeep,
+  formatPhotoData,
   METERING_MODES,
   EXPOSURE_MODES,
 };

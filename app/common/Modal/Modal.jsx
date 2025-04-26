@@ -24,6 +24,8 @@ const Modal = ({
 }) => {
   const modalRef = useRef();
   useEffect(() => {
+    // Use capture phase so we can detect clicks before React potentially removes the clicked element from the DOM
+    const USE_CAPTURE = true;
     const handleClick = (e) => {
       // Clicked out
       if (!modalRef.current?.contains(e.target)) {
@@ -32,10 +34,10 @@ const Modal = ({
     };
 
     if (isOpen && closeOnClickOutside) {
-      document.addEventListener("click", handleClick);
+      document.addEventListener("click", handleClick, USE_CAPTURE);
     }
     return () => {
-      document.removeEventListener("click", handleClick);
+      document.removeEventListener("click", handleClick, USE_CAPTURE);
     };
   }, [isOpen, modalRef]);
 

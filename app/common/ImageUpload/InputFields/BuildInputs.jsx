@@ -1,6 +1,7 @@
 import FancyInput from "@app/common/FancyInput";
 import { FORM_FIELDS } from "@utils/imageUploadUtils";
 
+// fileData is mutable. It is only meant for form submission and should not be used as a state
 function BuildInputs({ fileData }) {
   const rowStyle = "flex flex-rows items-center justify-around gap-2";
   const colStyle = "w-1/2 flex flex-col gap-2";
@@ -64,7 +65,13 @@ function BuildInputs({ fileData }) {
             <FancyInput
               type="date"
               name={FORM_FIELDS.DATE.name}
-              defaultValue={fileData[FORM_FIELDS.DATE.name]}
+              defaultValue={
+                fileData[FORM_FIELDS.DATE.name]
+                  ? new Date(fileData[FORM_FIELDS.DATE.name])
+                      .toISOString()
+                      .split("T")[0]
+                  : null
+              }
               onChange={(v) => {
                 fileData[FORM_FIELDS.DATE.name] = v;
               }}
