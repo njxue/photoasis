@@ -8,19 +8,28 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import FancyInput from "@app/common/FancyInput";
-import { FORM_FIELDS, uploadPhotos } from "@utils/imageUploadUtils";
+import { uploadPhotos } from "@utils/imageUploadUtils";
 import { useImageUploadContext } from "@app/common/ImageUpload/ImageUploadContext";
+import useProgress from "@app/common/Progress/useProgress";
+import ProgressRing from "@app/common/Progress/ProgressRing";
+import { useState } from "react";
 const NewAlbumForm = () => {
-  const errorMessage = "Unable to create album. Please try again later";
+  const [isLoading, setIsLoading] = useState(false);
+  const [albumName, setAlbumName] = useState("");
+
   const { data: session } = useSession();
   const uid = session?.user.id;
   const router = useRouter();
-
+  const { incrementProgress, resetProgress, getProgressPercentage } =
+    useProgress();
   const { files } = useImageUploadContext();
 
-  async function handleCreateAlbum(formdata) {
+  const errorMessage = "Unable to create album. Please try again later";
+
+  async function handleCreateAlbum(e) {
+    e.preventDefault();
+    setIsLoading(true);
     try {
-      const albumName = formdata.get(FORM_FIELDS.ALBUM_NAME.name);
       const albumRes = await createAlbum({
         albumName,
       });
@@ -38,7 +47,7 @@ const NewAlbumForm = () => {
         return;
       }
 
-      const res = await uploadPhotos(aid, uid, files);
+      const res = await uploadPhotos(aid, uid, files, incrementProgress);
       if (res.status !== 200) {
         toast.error(res.message);
         // Rollback album creation
@@ -51,22 +60,37 @@ const NewAlbumForm = () => {
     } catch (err) {
       console.log(err);
       toast.error(errorMessage);
+    } finally {
+      resetProgress();
+      setIsLoading(false);
     }
   }
 
   return (
     <form
       className="flex flex-col gap-3 p-2 w-full h-full justify-between"
-      action={handleCreateAlbum}>
+      onSubmit={handleCreateAlbum}>
       <div className="flex flex-col h-full gap-2">
         <div>
-          <FancyInput name="albumName" label="Album Name" required />
+          <FancyInput
+            name="albumName"
+            label="Album Name"
+            onChange={(v) => setAlbumName(v)}
+            required
+          />
         </div>
         <div className="grow max-h-[100%]">
-          <DroppableFileInput />
+          <DroppableFileInput
+            customDropzone={
+              isLoading &&
+              files.length > 0 && (
+                <ProgressRing progress={getProgressPercentage(files.length)} />
+              )
+            }
+          />
         </div>
       </div>
-      <SubmitButton text="Create" preventBrowserRefresh />
+      <SubmitButton text="Create" preventBrowserRefresh disabled={isLoading} />
     </form>
   );
 };

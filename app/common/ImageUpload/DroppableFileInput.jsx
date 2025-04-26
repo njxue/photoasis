@@ -5,7 +5,7 @@ import LoadingSpinner from "../LoadingSpinner";
 import { useFormStatus } from "react-dom";
 import { useImageUploadContext } from "./ImageUploadContext";
 
-const DroppableFileInput = ({ required }) => {
+const DroppableFileInput = ({ required, customDropzone }) => {
   const inputRef = useRef();
   const { pending } = useFormStatus();
   const { handleAddFiles, isLoading, files } = useImageUploadContext();
@@ -33,33 +33,37 @@ const DroppableFileInput = ({ required }) => {
   }
 
   return (
-    <div className="flex flex-col h-full md:flex-row">
-      <div
-        className="border border-dashed border-black h-full w-full rounded flex flex-col justify-center items-center gap-5 opacity-50 text-center text-lg cursor-pointer p-3 hover:opacity-100 transition-all"
-        onClick={handleClick}
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}>
-        <p>Drag or click to upload files</p>
-        <img
-          src="/assets/icons/upload.svg"
-          className="w-[35px]"
-          alt="uploadIcon"
-        />
-        <input
-          type="file"
-          name="_" // Don't need name; we are not getting the files from this input
-          multiple
-          className="hidden"
-          ref={inputRef}
-          onChange={handleChange}
-          accept="image/*"
-          required={required}
-          disabled={pending}
-          onClick={(e) => {
-            e.target.value = null;
-          }}
-        />
-      </div>
+    <div className="flex flex-col h-full md:flex-row md:gap-3">
+      {customDropzone ? (
+        customDropzone
+      ) : (
+        <div
+          className="border border-dashed border-black h-full w-full rounded flex flex-col justify-center items-center gap-5 opacity-50 text-center text-lg cursor-pointer hover:opacity-100 transition-all"
+          onClick={handleClick}
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}>
+          <p>Drag or click to upload files</p>
+          <img
+            src="/assets/icons/upload.svg"
+            className="w-[35px]"
+            alt="uploadIcon"
+          />
+          <input
+            type="file"
+            name="_" // Don't need name; we are not getting the files from this input
+            multiple
+            className="hidden"
+            ref={inputRef}
+            onChange={handleChange}
+            accept="image/*"
+            required={required}
+            disabled={pending}
+            onClick={(e) => {
+              e.target.value = null;
+            }}
+          />
+        </div>
+      )}
       {(files.length > 0 || isLoading) && (
         <div className="w-full h-full">
           {isLoading ? (

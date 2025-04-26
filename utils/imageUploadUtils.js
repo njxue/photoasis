@@ -98,7 +98,7 @@ export const extractFileMetadata = async (file) => {
   };
 };
 
-export const uploadPhotos = async (aid, uid, files) => {
+export const uploadPhotos = async (aid, uid, files, onUploaded) => {
   return new Promise((resolve, reject) => {
     (async () => {
       try {
@@ -132,7 +132,11 @@ export const uploadPhotos = async (aid, uid, files) => {
 
           // Attempt to upload
           let b2Ids = await Promise.all(
-            unuploadedFilesWithToken.map(uploadFile)
+            unuploadedFilesWithToken.map(async (file) => {
+              const fileId = await uploadFile(file);
+              if (fileId) onUploaded?.();
+              return fileId;
+            })
           );
 
           // Success

@@ -8,29 +8,47 @@ import DroppableFileInput from "@app/common/ImageUpload/DroppableFileInput";
 import { toast } from "react-toastify";
 import CancelButton from "@app/common/CancelButton";
 import { useImageUploadContext } from "@app/common/ImageUpload/ImageUploadContext";
+import { useState } from "react";
+import useProgress from "@app/common/Progress/useProgress";
+import ProgressRing from "@app/common/Progress/ProgressRing";
 
 const AddPhotosForm = ({ albumData, show, setShow }) => {
-  const errorMessage = "Unable to add photo(s). Please try again later";
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { incrementProgress, resetProgress, getProgressPercentage } =
+    useProgress();
   const { data: session } = useSession();
+
+  const errorMessage = "Unable to add photo(s). Please try again later";
+
   const { aid } = albumData;
 
   const { resetFiles, files } = useImageUploadContext();
 
-  async function handleSubmit() {
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setIsLoading(true);
     try {
-      const res = await uploadPhotos(aid, session?.user.id, files);
+      const res = await uploadPhotos(
+        aid,
+        session?.user.id,
+        files,
+        incrementProgress
+      );
 
       if (res.status !== 200) {
         toast.error(res.message);
         return;
       }
 
-      setShow(false);
       toast.success("New photo(s) added!");
       resetFiles();
+      setShow(false);
     } catch (err) {
-      console.log(err);
       toast.error(errorMessage);
+    } finally {
+      resetProgress();
+      setIsLoading(false);
     }
   }
   return (
@@ -39,15 +57,27 @@ const AddPhotosForm = ({ albumData, show, setShow }) => {
         <div className="h-[90vh] w-[80vw]">
           <form
             className="flex flex-col gap-3 p-2 w-full h-full justify-between"
-            action={handleSubmit}
+            onSubmit={handleSubmit}
             noValidate>
-            <DroppableFileInput required />
+            <DroppableFileInput
+              customDropzone={
+                isLoading && (
+                  <ProgressRing
+                    progress={getProgressPercentage(files.length)}
+                  />
+                )
+              }
+              required
+            />
             <div className="flex flex-row gap-2">
-              <CancelButton onCancel={() => setShow(false)} />
+              <CancelButton
+                onCancel={() => setShow(false)}
+                disabled={isLoading}
+              />
               <SubmitButton
                 text="Add Photos"
                 preventBrowserRefresh
-                disabled={files.length === 0}
+                disabled={files.length === 0 || isLoading}
               />
             </div>
           </form>
