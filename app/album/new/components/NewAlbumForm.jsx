@@ -20,9 +20,11 @@ const NewAlbumForm = () => {
   const { data: session } = useSession();
   const uid = session?.user.id;
   const router = useRouter();
-  const { incrementProgress, resetProgress, getProgressPercentage } =
-    useProgress();
+
   const { files } = useImageUploadContext();
+  const { incrementProgress, resetProgress, progressPercentage } = useProgress(
+    files.length
+  );
 
   const errorMessage = "Unable to create album. Please try again later";
 
@@ -83,9 +85,7 @@ const NewAlbumForm = () => {
           <DroppableFileInput
             customDropzone={
               isLoading &&
-              files.length > 0 && (
-                <ProgressRing progress={getProgressPercentage(files.length)} />
-              )
+              files.length > 0 && <ProgressRing progress={progressPercentage} />
             }
           />
         </div>

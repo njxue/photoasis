@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function useProgress() {
+export default function useProgress(total) {
   const [numCompleted, setNumCompleted] = useState(0);
 
   const incrementProgress = () => {
@@ -11,12 +11,12 @@ export default function useProgress() {
     setNumCompleted(0);
   };
 
-  const getProgressPercentage = (total) =>
+  const progressPercentage =
     total <= 0 ? 0 : Math.round((numCompleted * 100) / total);
 
   return {
     incrementProgress,
     resetProgress,
-    getProgressPercentage,
+    progressPercentage,
   };
 }

@@ -15,8 +15,6 @@ import ProgressRing from "@app/common/Progress/ProgressRing";
 const AddPhotosForm = ({ albumData, show, setShow }) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const { incrementProgress, resetProgress, getProgressPercentage } =
-    useProgress();
   const { data: session } = useSession();
 
   const errorMessage = "Unable to add photo(s). Please try again later";
@@ -24,6 +22,10 @@ const AddPhotosForm = ({ albumData, show, setShow }) => {
   const { aid } = albumData;
 
   const { resetFiles, files } = useImageUploadContext();
+
+  const { incrementProgress, resetProgress, progressPercentage } = useProgress(
+    files.length
+  );
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -61,11 +63,7 @@ const AddPhotosForm = ({ albumData, show, setShow }) => {
             noValidate>
             <DroppableFileInput
               customDropzone={
-                isLoading && (
-                  <ProgressRing
-                    progress={getProgressPercentage(files.length)}
-                  />
-                )
+                isLoading && <ProgressRing progress={progressPercentage} />
               }
               required
             />
