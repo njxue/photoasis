@@ -9,7 +9,7 @@ const OptimisedImage = ({
   name,
   id,
   onClick,
-  className,
+  className: customClassName,
   hover,
   quality = QUALITY_MID,
   priority = false,
@@ -26,7 +26,26 @@ const OptimisedImage = ({
   const dimensions = "h-full w-full max-w-[90vw] max-h-[90vh]";
 
   const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
+
   const widthAndHeightProps = fill ? {} : { width, height };
+  const className = `
+      ${objectFit} cursor-pointer 
+      ${hover && hoverStyles} 
+      ${dimensions} ${customClassName}
+    `;
+
+  if (isError) {
+    return (
+      <img
+        src={src}
+        onClick={onClick}
+        className={className}
+        {...widthAndHeightProps}
+      />
+    );
+  }
+
   return (
     <>
       {isLoading && showLoader && (
@@ -39,11 +58,7 @@ const OptimisedImage = ({
         alt={name}
         id={id ?? name}
         name={name}
-        className={`
-        ${objectFit} cursor-pointer 
-        ${hover && hoverStyles} 
-        ${dimensions} ${className}
-      `}
+        className={className}
         sizes={sizes}
         quality={quality}
         onClick={onClick}
@@ -54,6 +69,9 @@ const OptimisedImage = ({
         onLoad={() => {
           setIsLoading(false);
           onLoad();
+        }}
+        onError={(e) => {
+          setIsError(true);
         }}
       />
     </>
