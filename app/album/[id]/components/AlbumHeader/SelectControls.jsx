@@ -32,7 +32,7 @@ function SelectControls({ albumData, selectModes }) {
   async function handleDownloadPhotosAsZip() {
     setIsLoading(true);
     const toastId = toast.loading(
-      `Preparing to download ${selectedItems.length} photos`
+      `Preparing to download ${selectedItems.length} photos. Please remain on the page until the download starts`
     );
     const fileIdsAndNames = selectedItems.map((file) => ({
       id: file.pid,
@@ -67,7 +67,7 @@ function SelectControls({ albumData, selectModes }) {
 
       setIsLoading(false);
       toast.update(toastId, {
-        render: `Download started for ${selectedItems.length} photo(s). Please remain on the page until the download starts`,
+        render: `Download started for ${selectedItems.length} photo(s)`,
         type: toast.TYPE.SUCCESS,
         autoClose: 3000,
         isLoading: false,
