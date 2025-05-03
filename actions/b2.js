@@ -3,7 +3,7 @@ import BackBlazeB2 from "backblaze-b2";
 let b2;
 
 const b2Authorize = async () => {
-  if (!b2) {
+  if (!b2?.authorizationToken) {
     b2 = new BackBlazeB2({
       applicationKey: process.env.BACKBLAZE_APP_KEY,
       applicationKeyId: process.env.BACKBLAZE_KEY_ID,
@@ -41,25 +41,53 @@ const b2GetUploadUrls = async (num) => {
 
 const b2DownloadFileById = async (fileId) => {
   try {
+    const auth = await b2Authorize();
+    const { downloadUrl, authorizationToken } = auth;
+
+    const res = await fetch(
+      `${downloadUrl}/b2api/v3/b2_download_file_by_id?fileId=${fileId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: authorizationToken,
+        },
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error(`Failed to download file: ${fileId}`);
+    }
+    return {
+      ok: true,
+      status: res.status,
+      data: res.body,
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      ok: false,
+      message: err.message,
+    };
+  }
+};
+const b2DownloadFileById2 = async (fileId) => {
+  try {
     await b2Authorize();
 
     const res = await b2.downloadFileById({
       fileId,
       responseType: "arraybuffer",
     });
+    const buf = Buffer.from(res.data);
 
-    const data = res.data;
-    const mimeType = res.headers["content-type"];
-    const buf = Buffer.from(data);
-    const base64 = buf.toString("base64");
     return {
       status: res.status,
       message: "Successfully downloaded",
-      data: { content: base64, mimeType },
+      data: { buffer: buf },
       ok: true,
     };
   } catch (err) {
-    console.log(err.message);
+    console.log(err);
     return {
       status: err.response.status,
       message: err.message,

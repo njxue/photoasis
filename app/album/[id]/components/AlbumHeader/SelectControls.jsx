@@ -4,7 +4,6 @@ import { useSelect } from "@app/common/Select/SelectContext";
 import { toast } from "react-toastify";
 import SelectTrigger from "@app/common/Select/SelectTrigger";
 import ChangeThumbnailSelectControls from "./ChangeThumbnailSelectControls";
-import { b2GetDownloadUrl } from "@actions/b2";
 import { useState } from "react";
 import CancelSelectButton from "@app/common/Select/CancelSelectButton";
 import ConfirmationModal from "@app/common/ConfirmationModal";
@@ -29,67 +28,52 @@ function SelectControls({ albumData, selectModes }) {
     }
     setIsLoading(false);
   }
-
-  async function handleDownloadPhotos() {
+  console.log(selectedItems);
+  async function handleDownloadPhotosAsZip() {
     setIsLoading(true);
     const toastId = toast.loading(
       `Preparing to download ${selectedItems.length} photos`
     );
-    try {
-      const res = await Promise.allSettled(
-        selectedItems.map(async (item) => {
-          const downloadUrl = await b2GetDownloadUrl(
-            item.uid,
-            item.aid,
-            item.name
-          );
-          return { url: downloadUrl, name: item.name };
-        })
-      );
+    const fileIdsAndNames = selectedItems.map((file) => ({
+      id: file.pid,
+      name: file.name,
+    }));
 
-      // Some browsers may prevent spammy pop-ups, so add a delay between downloads
-      res.forEach((item, i) => {
-        setTimeout(() => {
-          window.open(item.value.url, "_self");
-        }, i * 2000);
+    try {
+      const res = await fetch("/api/download-zip", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ fileIdsAndNames }),
       });
 
-      const fulfilledFileNames = new Set(
-        res.filter((r) => r.status === "fulfilled").map((r) => r.value.name)
-      );
-      const numFulfilled = fulfilledFileNames.size;
-      const numRejected = res.length - numFulfilled;
-
-      if (numFulfilled === res.length) {
-        toast.update(toastId, {
-          render: `Download started for ${selectedItems.length} photo(s)`,
-          type: toast.TYPE.SUCCESS,
-          autoClose: 3000,
-          isLoading: false,
-        });
-      } else {
-        const rejectedFileNames = selectedItems
-          .filter((item) => !fulfilledFileNames.has(item.name))
-          .map((item) => item.name);
-
-        toast.update(toastId, {
-          render: `Download started for ${numFulfilled} photo(s). Unable to download ${numRejected} photo(s): ${rejectedFileNames.join(
-            ", "
-          )}`,
-          type: toast.TYPE.WARNING,
+      if (res.status !== 200) {
+        return toast.update(toastId, {
+          render: "Download failed",
+          type: toast.TYPE.ERROR,
           autoClose: 3000,
           isLoading: false,
         });
       }
-    } catch (err) {
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${albumData.name}.zip`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+
+      setIsLoading(false);
       toast.update(toastId, {
-        render: `Failed to download photos`,
-        type: toast.TYPE.ERROR,
+        render: `Download started for ${selectedItems.length} photo(s). Please remain on the page until the download starts`,
+        type: toast.TYPE.SUCCESS,
         autoClose: 3000,
         isLoading: false,
       });
-    } finally {
-      setIsLoading(false);
+    } catch (err) {
+      console.log(err);
     }
   }
 
@@ -105,7 +89,7 @@ function SelectControls({ albumData, selectModes }) {
         disabled={!numSelected || isLoading}
         className="btn-gray font-bold "
         onClick={async () => {
-          await handleDownloadPhotos();
+          await handleDownloadPhotosAsZip();
           endSelect();
         }}>
         <img src="/assets/icons/download.svg" width={20} alt="download" />
