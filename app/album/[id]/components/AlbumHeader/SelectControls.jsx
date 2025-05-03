@@ -28,7 +28,6 @@ function SelectControls({ albumData, selectModes }) {
     }
     setIsLoading(false);
   }
-  console.log(selectedItems);
   async function handleDownloadPhotosAsZip() {
     setIsLoading(true);
     const toastId = toast.loading(
