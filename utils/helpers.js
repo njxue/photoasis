@@ -130,7 +130,7 @@ const formatPhotoData = (photo) => {
     if (isNaN(aperture)) {
       throw new Error("Aperture is not a valid float");
     }
-    formattedPhotoData.aperture = parseFloat(aperture.toFixed(1));
+    formattedPhotoData.aperture = parseFloat(aperture.toFixed(2));
   }
 
   if (photo.iso) {
