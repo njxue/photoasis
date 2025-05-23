@@ -6,9 +6,11 @@ import DraggableAndDroppable from "@app/common/DragAndDrop/DraggableAndDroppable
 import updateAlbum from "@actions/updateAlbum";
 import { toast } from "react-toastify";
 import { useAlbum } from "../AlbumContext";
+import PhotoCarousel from "@app/common/Cards/Photo/PhotoCarousel";
 function AlbumBody({ minimalisticView }) {
   const album = useAlbum();
 
+  const [currentExpanded, setCurrentExpanded] = useState(null);
   const [sortedPhotos, setSortedPhotos] = useState(album?.photos);
 
   function handleDrop(e, pidFrom) {
@@ -51,7 +53,7 @@ function AlbumBody({ minimalisticView }) {
 
   return (
     <div className="photo-grid">
-      {sortedPhotos.map((photo) => (
+      {sortedPhotos.map((photo, idx) => (
         <DraggableAndDroppable
           handleDrop={(e) => handleDrop(e, photo.pid)}
           handleDrag={(e) => handleDrag(e, photo.pid)}
@@ -59,10 +61,21 @@ function AlbumBody({ minimalisticView }) {
           <SelectableItem
             item={photo}
             comparator={(i1, i2) => i1.pid === i2.pid}>
-            <PhotoCard photo={photo} minimalisticView={minimalisticView} />
+            <PhotoCard
+              photo={photo}
+              minimalisticView={minimalisticView}
+              onClick={() => setCurrentExpanded(idx)}
+            />
           </SelectableItem>
         </DraggableAndDroppable>
       ))}
+      {currentExpanded != null && (
+        <PhotoCarousel
+          photos={album.photos}
+          defaultIndex={currentExpanded}
+          onClose={() => setCurrentExpanded(null)}
+        />
+      )}
     </div>
   );
 }

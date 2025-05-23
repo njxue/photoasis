@@ -8,8 +8,6 @@ import SelectTrigger from "@app/common/Select/SelectTrigger";
 import useClickOutside from "@app/common/hooks/useClickOutside";
 import { useAlbum } from "@app/album/[id]/AlbumContext";
 const AlbumMenu = ({ setIsEditing, onClickChangeThumbnail }) => {
-  const album = useAlbum();
-
   const [isDeletingAlbum, setIsDeletingAlbum] = useState(false);
   const [isAddingPhotos, setIsAddingPhotos] = useState(false);
 

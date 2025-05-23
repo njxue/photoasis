@@ -4,6 +4,7 @@ import MinimalisticViewToggle from "@app/common/MinimalisticViewToggle";
 import PhotoCard from "@app/common/Cards/Photo/PhotoCard";
 import { useState } from "react";
 import { notFound } from "next/navigation";
+import PhotoCarousel from "@app/common/Cards/Photo/PhotoCarousel";
 
 const GalleryContainer = ({ photos }) => {
   if (!photos) {
@@ -13,6 +14,8 @@ const GalleryContainer = ({ photos }) => {
     notFound();
   }
   const [minimalisticView, setMinimalisticView] = useState(false);
+  const [currentExpanded, setCurrentExpanded] = useState(null);
+
   return (
     <>
       <div>
@@ -26,15 +29,22 @@ const GalleryContainer = ({ photos }) => {
         )}
         <div className="photo-grid">
           {photos &&
-            photos.map((photo) => (
+            photos.map((photo, idx) => (
               <PhotoCard
                 key={photo.pid}
                 photo={photo}
-                expandable
                 minimalisticView={minimalisticView}
+                onClick={() => setCurrentExpanded(idx)}
               />
             ))}
         </div>
+        {currentExpanded != null && (
+          <PhotoCarousel
+            photos={photos}
+            defaultIndex={currentExpanded}
+            onClose={() => setCurrentExpanded(null)}
+          />
+        )}
       </div>
       <MinimalisticViewToggle
         minimalisticView={minimalisticView}

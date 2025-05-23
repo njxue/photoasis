@@ -27,7 +27,7 @@ const ExpandedPhotoInfo = ({ photo }) => {
     <div className="col-span-2 bg-gray-500 h-[1px] w-full my-1"></div>
   );
   return (
-    <div className="flex flex-col items-end p-2 text-xs">
+    <div className="flex flex-col items-start p-2 text-xs">
       {!isEditing && (
         <img
           src="/assets/icons/info.svg"

@@ -1,12 +1,10 @@
 "use client";
 import { useState } from "react";
-import ExpandedPhoto from "./ExpandedPhoto";
 import PhotoInfo from "./PhotoInfo";
 import Photo from "../Photo";
 import { useUserPreferences } from "@app/UserPreferencesContext";
 
-const PhotoCard = ({ photo, minimalisticView }) => {
-  const [expandPhoto, setExpandPhoto] = useState(false);
+const PhotoCard = ({ photo, minimalisticView, onClick }) => {
   const [showPhotoInfo, setShowPhotoInfo] = useState(false);
 
   const { userPreferences } = useUserPreferences();
@@ -22,7 +20,7 @@ const PhotoCard = ({ photo, minimalisticView }) => {
   return (
     <div
       onClick={() => {
-        setExpandPhoto(true);
+        onClick?.();
       }}>
       <div
         className="card relative"
@@ -41,13 +39,6 @@ const PhotoCard = ({ photo, minimalisticView }) => {
           </div>
         )}
       </div>
-      {expandPhoto && (
-        <ExpandedPhoto
-          expandPhoto={expandPhoto}
-          setExpandPhoto={setExpandPhoto}
-          photo={photo}
-        />
-      )}
     </div>
   );
 };
