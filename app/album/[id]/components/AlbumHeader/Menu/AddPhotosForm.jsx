@@ -11,28 +11,25 @@ import { useImageUploadContext } from "@app/common/ImageUpload/ImageUploadContex
 import { useState } from "react";
 import useProgress from "@app/common/Progress/useProgress";
 import ProgressRing from "@app/common/Progress/ProgressRing";
+import { useAlbum } from "@app/album/[id]/AlbumContext";
 
-const AddPhotosForm = ({ albumData, show, setShow }) => {
+const AddPhotosForm = ({ show, setShow }) => {
   const [isLoading, setIsLoading] = useState(false);
-
-  const { data: session } = useSession();
-
-  const errorMessage = "Unable to add photo(s). Please try again later";
-
-  const { aid } = albumData;
-
+  const album = useAlbum();
   const { resetFiles, files } = useImageUploadContext();
-
+  const { data: session } = useSession();
   const { incrementProgress, resetProgress, progressPercentage } = useProgress(
     files.length
   );
+
+  const errorMessage = "Unable to add photo(s). Please try again later";
 
   async function handleSubmit(e) {
     e.preventDefault();
     setIsLoading(true);
     try {
       const res = await uploadPhotos(
-        aid,
+        album.aid,
         session?.user.id,
         files,
         incrementProgress

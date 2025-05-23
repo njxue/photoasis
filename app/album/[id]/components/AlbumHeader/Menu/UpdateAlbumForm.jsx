@@ -1,12 +1,14 @@
 import updateAlbum from "@actions/updateAlbum";
+import { useAlbum } from "@app/album/[id]/AlbumContext";
 import { FORM_FIELDS } from "@utils/imageUploadUtils";
 import { toast } from "react-toastify";
 
-const UpdateAlbumForm = ({ albumData, setIsEditing }) => {
-  const { aid } = albumData;
+const UpdateAlbumForm = ({ setIsEditing }) => {
+  const album = useAlbum();
+
   async function handleUpdateAlbum(formdata) {
     const albumName = formdata.get(FORM_FIELDS.ALBUM_NAME.name);
-    const res = await updateAlbum({ aid, albumName });
+    const res = await updateAlbum({ aid: album.aid, albumName });
     if (res.ok) {
       setIsEditing(false);
       toast.success("Album successfully updated");
@@ -21,7 +23,7 @@ const UpdateAlbumForm = ({ albumData, setIsEditing }) => {
       <input
         type="text"
         name="albumName"
-        defaultValue={albumData.name}
+        defaultValue={album.name}
         className="px-2 py-1 rounded w-full text-3xl"
       />
       <div className="flex flex-row justify-center items-center gap-2">

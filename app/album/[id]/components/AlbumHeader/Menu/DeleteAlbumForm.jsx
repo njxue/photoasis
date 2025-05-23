@@ -1,16 +1,14 @@
 "use client";
 
 import deleteAlbum from "@actions/deleteAlbum";
+import { useAlbum } from "@app/album/[id]/AlbumContext";
 import ConfirmationModal from "@app/common/ConfirmationModal";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
-const DeleteAlbumForm = ({
-  albumData,
-  isDeletingAlbum,
-  setIsDeletingAlbum,
-}) => {
-  const { aid, name } = albumData;
+const DeleteAlbumForm = ({ isDeletingAlbum, setIsDeletingAlbum }) => {
+  const album = useAlbum();
+  const { aid, name } = album;
   const router = useRouter();
 
   async function handleDeleteAlbum() {

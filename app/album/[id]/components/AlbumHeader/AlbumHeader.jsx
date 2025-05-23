@@ -4,7 +4,9 @@ import AlbumMenu from "./Menu/AlbumMenu";
 import UpdateAlbumForm from "./Menu/UpdateAlbumForm";
 import { useState } from "react";
 import { useSelect } from "@app/common/Select/SelectContext";
-function AlbumHeader({ albumData }) {
+import { useAlbum } from "../../AlbumContext";
+function AlbumHeader() {
+  const album = useAlbum();
   const [isEditing, setIsEditing] = useState(false);
   const { mode, beginSelect, isSelecting } = useSelect();
   const selectModes = { delete: "DELETE", thumbnail: "THUMBNAIL" };
@@ -16,27 +18,21 @@ function AlbumHeader({ albumData }) {
   return (
     <div className="page-heading">
       {isEditing ? (
-        <UpdateAlbumForm setIsEditing={setIsEditing} albumData={albumData} />
+        <UpdateAlbumForm setIsEditing={setIsEditing} />
       ) : (
         <div className="flex flex-row flex-wrap justify-between gap-3 items-center">
-          <p className="line-clamp-2 grow">{albumData.name}</p>
+          <p className="line-clamp-2 grow">{album.name}</p>
           <div className="flex flex-row justify-end grow gap-2 text-base">
-            <SelectControls
-              selectModes={selectModes}
-              mode={mode}
-              albumData={albumData}
-            />
+            <SelectControls selectModes={selectModes} mode={mode} />
             {!isSelecting && (
               <AlbumMenu
                 onClickChangeThumbnail={onClickChangeThumbnail}
                 setIsEditing={setIsEditing}
-                albumData={albumData}
               />
             )}
           </div>
         </div>
       )}
-
       <hr className="mb-3" />
     </div>
   );

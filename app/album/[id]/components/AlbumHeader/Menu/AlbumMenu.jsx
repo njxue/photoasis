@@ -1,12 +1,15 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import DeleteAlbumForm from "./DeleteAlbumForm";
 import AddPhotosForm from "./AddPhotosForm";
 import ImageUploadProvider from "@app/common/ImageUpload/ImageUploadContext";
 import SelectTrigger from "@app/common/Select/SelectTrigger";
 import useClickOutside from "@app/common/hooks/useClickOutside";
-const AlbumMenu = ({ setIsEditing, albumData, onClickChangeThumbnail }) => {
+import { useAlbum } from "@app/album/[id]/AlbumContext";
+const AlbumMenu = ({ setIsEditing, onClickChangeThumbnail }) => {
+  const album = useAlbum();
+
   const [isDeletingAlbum, setIsDeletingAlbum] = useState(false);
   const [isAddingPhotos, setIsAddingPhotos] = useState(false);
 
@@ -59,16 +62,11 @@ const AlbumMenu = ({ setIsEditing, albumData, onClickChangeThumbnail }) => {
         )}
       </div>
       <DeleteAlbumForm
-        albumData={albumData}
         isDeletingAlbum={isDeletingAlbum}
         setIsDeletingAlbum={setIsDeletingAlbum}
       />
       <ImageUploadProvider>
-        <AddPhotosForm
-          albumData={albumData}
-          show={isAddingPhotos}
-          setShow={setIsAddingPhotos}
-        />
+        <AddPhotosForm show={isAddingPhotos} setShow={setIsAddingPhotos} />
       </ImageUploadProvider>
     </>
   );

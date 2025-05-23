@@ -4,6 +4,7 @@ import { notFound, redirect } from "next/navigation";
 import prisma from "@prisma/prisma";
 import AlbumContainer from "./components/AlbumContainer";
 import { unstable_cache } from "next/cache";
+import { AlbumProvider } from "./AlbumContext";
 export const fetchAlbumData = unstable_cache(
   async (aid, uid) => {
     try {
@@ -46,7 +47,11 @@ const Page = async ({ params }) => {
   if (!albumData) {
     return notFound();
   }
-  return <AlbumContainer albumData={albumData} />;
+  return (
+    <AlbumProvider value={albumData}>
+      <AlbumContainer />;
+    </AlbumProvider>
+  );
 };
 
 export default Page;

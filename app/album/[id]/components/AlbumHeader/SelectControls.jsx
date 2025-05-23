@@ -7,17 +7,19 @@ import ChangeThumbnailSelectControls from "./ChangeThumbnailSelectControls";
 import { useState } from "react";
 import CancelSelectButton from "@app/common/Select/CancelSelectButton";
 import ConfirmationModal from "@app/common/ConfirmationModal";
+import { useAlbum } from "../../AlbumContext";
 
-function SelectControls({ albumData, selectModes }) {
+function SelectControls({ selectModes }) {
   const { selectedItems, numSelected, mode, endSelect, isSelecting } =
     useSelect();
+  const album = useAlbum();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   async function handleDeletePhotos() {
     setIsLoading(true);
     const res = await deletePhotos({
-      aid: albumData.aid,
+      aid: album.aid,
       pids: selectedItems.map((i) => i.pid),
     });
     if (res.ok) {
@@ -60,11 +62,10 @@ function SelectControls({ albumData, selectModes }) {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${albumData.name}.zip`;
+      a.download = `${album.name}.zip`;
       a.click();
       window.URL.revokeObjectURL(url);
 
-      setIsLoading(false);
       toast.update(toastId, {
         render: `Download started for ${selectedItems.length} photo(s)`,
         type: toast.TYPE.SUCCESS,
@@ -73,13 +74,15 @@ function SelectControls({ albumData, selectModes }) {
       });
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsLoading(false);
     }
   }
 
   if (!isSelecting) return <SelectTrigger />;
 
   if (mode === selectModes.thumbnail) {
-    return <ChangeThumbnailSelectControls albumData={albumData} />;
+    return <ChangeThumbnailSelectControls />;
   }
 
   return (

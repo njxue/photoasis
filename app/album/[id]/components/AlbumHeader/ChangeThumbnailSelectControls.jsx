@@ -4,8 +4,10 @@ import updateAlbum from "@actions/updateAlbum";
 import OptimisedImage from "@app/common/Image/OptimisedImage";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import { useAlbum } from "../../AlbumContext";
 
-export default function ChangeThumbnailSelectControls({ albumData }) {
+export default function ChangeThumbnailSelectControls() {
+  const album = useAlbum();
   const { isSelecting, numSelected, selectedItems, endSelect } = useSelect();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -20,11 +22,11 @@ export default function ChangeThumbnailSelectControls({ albumData }) {
       setIsLoading(true);
       const toastId = toast.loading("Updating thumbnail");
       const res = await updateAlbum({
-        aid: albumData.aid,
+        aid: album.aid,
         thumbnailPid: selectedPhotoPid,
       });
 
-      const photoUrl = albumData.photos.find(
+      const photoUrl = album.photos.find(
         (photo) => photo.pid === selectedPhotoPid
       )?.url;
 

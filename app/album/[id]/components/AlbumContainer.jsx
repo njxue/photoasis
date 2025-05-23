@@ -6,13 +6,17 @@ import { SelectProvider } from "@app/common/Select/SelectContext";
 import AlbumBody from "./AlbumBody";
 import { notFound } from "next/navigation";
 import { toast } from "react-toastify";
-const AlbumContainer = ({ albumData }) => {
-  if (!albumData) {
+import { useAlbum } from "../AlbumContext";
+const AlbumContainer = () => {
+  const album = useAlbum();
+
+  if (!album) {
     toast.error("Unable to fetch album. Please try again later", {
       toastId: "Error: Fetch album",
     });
     notFound();
   }
+
   const [minimalisticView, setMinimalisticView] = useState(false);
 
   return (
@@ -22,12 +26,8 @@ const AlbumContainer = ({ albumData }) => {
         setMinimalisticView={setMinimalisticView}
       />
       <SelectProvider>
-        {!minimalisticView && <AlbumHeader albumData={albumData} />}
-        <AlbumBody
-          photos={albumData.photos}
-          minimalisticView={minimalisticView}
-          key={albumData.photos}
-        />
+        {!minimalisticView && <AlbumHeader />}
+        <AlbumBody minimalisticView={minimalisticView} key={album.photos} />
       </SelectProvider>
     </div>
   );

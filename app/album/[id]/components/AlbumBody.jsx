@@ -5,9 +5,12 @@ import { useState } from "react";
 import DraggableAndDroppable from "@app/common/DragAndDrop/DraggableAndDroppable";
 import updateAlbum from "@actions/updateAlbum";
 import { toast } from "react-toastify";
-function AlbumBody({ photos, minimalisticView }) {
-  const [sortedPhotos, setSortedPhotos] = useState(photos);
-  const aid = photos && photos[0]?.aid;
+import { useAlbum } from "../AlbumContext";
+function AlbumBody({ minimalisticView }) {
+  const album = useAlbum();
+
+  const [sortedPhotos, setSortedPhotos] = useState(album?.photos);
+
   function handleDrop(e, pidFrom) {
     const pidTo = e.dataTransfer.getData("pid");
     if (pidTo === pidFrom) {
@@ -38,7 +41,7 @@ function AlbumBody({ photos, minimalisticView }) {
 
   async function updateSortOrder(sorted) {
     const sortedPids = sorted.map((photo) => photo.pid);
-    const res = await updateAlbum({ aid, photoOrder: sortedPids });
+    const res = await updateAlbum({ aid: album.aid, photoOrder: sortedPids });
     if (!res.ok) {
       toast.error(res.message, {
         toastId: "Error: Update photos sort order",
