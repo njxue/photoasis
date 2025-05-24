@@ -23,10 +23,13 @@ export const fetchAlbumData = unstable_cache(
       }));
 
       const sortedPids = data.photoOrder;
-      if (sortedPids) {
+
+      if (sortedPids.length) {
         data.photos.sort(
           (p1, p2) => sortedPids.indexOf(p1.pid) - sortedPids.indexOf(p2.pid)
         );
+      } else {
+        data.photos.sort((p1, p2) => p1.pid.localeCompare(p2.pid));
       }
       return data;
     } catch (err) {
