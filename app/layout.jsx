@@ -12,9 +12,6 @@ export const metadata = {
   title: "Photoasis",
   description:
     "An online photo gallery to store your photos along with your photo settings",
-  other: {
-    "google-site-verification": "vf0TcYOKrdnpkV-emUHc7c1dIQpkr0k-MS35tWBJ8qQ",
-  },
 };
 
 const Layout = async ({ children }) => {
