@@ -5,6 +5,12 @@ import { v4 as uuidv4 } from "uuid";
 import { encode } from "blurhash";
 import updateAlbum from "@actions/updateAlbum";
 
+const imageUploadConfigs = {
+  batchSize: 10,
+  maxRetries: 3,
+  maxCompressedSize: 0.3, // in mb
+  maxCompressedWidthOrHeight: 200,
+};
 export const formatFormData = (formData, fileList) => {
   // Use the files in fileList instead of the files in the form, because we are manually keeping track of the files
   fileList.forEach((file) => {
@@ -15,12 +21,12 @@ export const formatFormData = (formData, fileList) => {
 
 // Batch process to reduce load on client and reduce lag
 export const processFiles = async (files) => {
-  const BATCH_SIZE = 10;
+  const batchSize = imageUploadConfigs.batchSize;
   const processedFiles = [];
 
-  for (let i = 0; i < files.length; i += BATCH_SIZE) {
+  for (let i = 0; i < files.length; i += batchSize) {
     const processedFilesInBatch = await Promise.all(
-      files.slice(i, Math.min(i + BATCH_SIZE, files.length)).map(processFile)
+      files.slice(i, Math.min(i + batchSize, files.length)).map(processFile)
     );
     processedFilesInBatch.forEach((fileData, j) => {
       processedFiles.push({
@@ -125,11 +131,13 @@ export const uploadPhotos = async (aid, uid, files, onUploaded) => {
       try {
         const b2Folder = `${uid}/${aid}/`; // Folder to upload the photos to
 
-        const MAX_RETRIES = 3;
         let num_tries = 0;
         let unuploadedFiles = [...files];
 
-        while (unuploadedFiles.length > 0 && num_tries < MAX_RETRIES) {
+        while (
+          unuploadedFiles.length > 0 &&
+          num_tries < imageUploadConfigs.maxRetries
+        ) {
           if (process.env.NODE_ENV === "development") {
             console.log(
               `Attempt #${num_tries + 1} with ${unuploadedFiles.length} files`
@@ -215,8 +223,8 @@ const compressAndGenerateBlurhash = async (
   componentY = 4
 ) => {
   const compressed = await compress(file, {
-    maxSizeMB: 0.3,
-    maxWidthOrHeight: 200,
+    maxSizeMB: imageUploadConfigs.maxCompressedSize,
+    maxWidthOrHeight: imageUploadConfigs.maxCompressedWidthOrHeight,
   });
 
   const imageData = await getImageData(compressed);
