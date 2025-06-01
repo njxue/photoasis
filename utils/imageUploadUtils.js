@@ -26,7 +26,7 @@ export const processFiles = async (files) => {
 
   for (let i = 0; i < files.length; i += batchSize) {
     const processedFilesInBatch = await Promise.all(
-      files.slice(i, Math.min(i + batchSize, files.length)).map(processFile)
+      files.slice(i, i + batchSize).map(processFile)
     );
     processedFilesInBatch.forEach((fileData, j) => {
       processedFiles.push({
