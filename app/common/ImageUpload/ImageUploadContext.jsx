@@ -1,6 +1,7 @@
 "use client";
-import { processFile } from "@utils/imageUploadUtils";
+import { processFile, processFiles } from "@utils/imageUploadUtils";
 import { createContext, useContext, useState } from "react";
+import { toast } from "react-toastify";
 
 const ImageUploadContext = createContext(null);
 
@@ -15,17 +16,17 @@ const ImageUploadProvider = ({ children }) => {
 
   const handleAddFiles = async (newFiles) => {
     setIsLoading(true);
-    let processedFiles = await Promise.all(newFiles.map(processFile));
-    processedFiles = processedFiles.map((file, i) => ({
-      rawFile: newFiles[i],
-      fileData: file,
-    }));
-
-    setFiles([...files, ...processedFiles]);
-    if (files.length === 0) {
-      setSelectedFile(processedFiles[0]);
+    try {
+      const processedFiles = await processFiles(newFiles);
+      setFiles([...files, ...processedFiles]);
+      if (files.length === 0) {
+        setSelectedFile(processedFiles[0]);
+      }
+    } catch (err) {
+      toast.error("Unable to process images");
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const handleRemoveFile = (fileId) => {

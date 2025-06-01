@@ -4,12 +4,33 @@ import { b2GetUploadUrls } from "@actions/b2";
 import { v4 as uuidv4 } from "uuid";
 import { encode } from "blurhash";
 import updateAlbum from "@actions/updateAlbum";
+
 export const formatFormData = (formData, fileList) => {
   // Use the files in fileList instead of the files in the form, because we are manually keeping track of the files
   fileList.forEach((file) => {
     formData.append(FORM_FIELDS.FILES.name, file);
   });
   return formData;
+};
+
+// Batch process to reduce load on client and reduce lag
+export const processFiles = async (files) => {
+  const BATCH_SIZE = 10;
+  const processedFiles = [];
+
+  for (let i = 0; i < files.length; i += BATCH_SIZE) {
+    const processedFilesInBatch = await Promise.all(
+      files.slice(i, Math.min(i + BATCH_SIZE, files.length)).map(processFile)
+    );
+    processedFilesInBatch.forEach((fileData, j) => {
+      processedFiles.push({
+        rawFile: files[i + j],
+        fileData,
+      });
+    });
+  }
+
+  return processedFiles;
 };
 
 export const processFile = async (file) => {
