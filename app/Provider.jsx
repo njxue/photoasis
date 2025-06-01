@@ -4,11 +4,14 @@ import React from "react";
 import { SessionProvider } from "next-auth/react";
 import { PostHogProvider } from "./PosthogProvider";
 const Provider = ({ children, session }) => {
-  return (
-    <PostHogProvider>
-      <SessionProvider session={session}>{children}</SessionProvider>
-    </PostHogProvider>
-  );
+  if (process.env.NEXT_PUBLIC_ENABLE_TRACKING === "true") {
+    return (
+      <PostHogProvider>
+        <SessionProvider session={session}>{children}</SessionProvider>
+      </PostHogProvider>
+    );
+  }
+  return <SessionProvider session={session}>{children}</SessionProvider>;
 };
 
 export default Provider;
