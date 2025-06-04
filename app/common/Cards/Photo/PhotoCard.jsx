@@ -1,46 +1,56 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 import PhotoInfo from "./PhotoInfo";
 import Photo from "../Photo";
 import { useUserPreferences } from "@app/UserPreferencesContext";
 
-const PhotoCard = ({ photo, minimalisticView, onClick }) => {
-  const [showPhotoInfo, setShowPhotoInfo] = useState(false);
+const PhotoCard = React.memo(
+  ({ photo, minimalisticView, onClick }) => {
+    console.log("Rerender");
 
-  const { userPreferences } = useUserPreferences();
+    const [showPhotoInfo, setShowPhotoInfo] = useState(false);
 
-  function handleShowPhotoInfo() {
-    setShowPhotoInfo(!minimalisticView);
-  }
+    const { userPreferences } = useUserPreferences();
 
-  function handleHidePhotoInfo() {
-    setShowPhotoInfo(false);
-  }
+    function handleShowPhotoInfo() {
+      setShowPhotoInfo(!minimalisticView);
+    }
 
-  return (
-    <div
-      onClick={() => {
-        onClick?.();
-      }}>
+    function handleHidePhotoInfo() {
+      setShowPhotoInfo(false);
+    }
+
+    return (
       <div
-        className="card relative"
-        onMouseEnter={handleShowPhotoInfo}
-        onMouseLeave={handleHidePhotoInfo}>
-        <Photo
-          src={photo.url}
-          name={photo.name}
-          blurhash={photo.blurhash}
-          objectFit={userPreferences.objectFit}
-        />
+        onClick={() => {
+          onClick?.();
+        }}>
+        <div
+          className="card relative"
+          onMouseEnter={handleShowPhotoInfo}
+          onMouseLeave={handleHidePhotoInfo}>
+          <Photo
+            src={photo.url}
+            name={photo.name}
+            blurhash={photo.blurhash}
+            objectFit={userPreferences.objectFit}
+          />
 
-        {showPhotoInfo && (
-          <div className="absolute bottom-0 bg-black opacity-70 w-full h-full animate-slideUp">
-            <PhotoInfo photo={photo} />
-          </div>
-        )}
+          {showPhotoInfo && (
+            <div className="absolute bottom-0 bg-black opacity-70 w-full h-full animate-slideUp">
+              <PhotoInfo photo={photo} />
+            </div>
+          )}
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  },
+  (prevProps, nextProps) => {
+    return (
+      prevProps.photo.pid === nextProps.photo.pid &&
+      prevProps.minimalisticView === nextProps.minimalisticView
+    );
+  }
+);
 
 export default PhotoCard;
