@@ -1,11 +1,14 @@
+import { useEffect } from "react";
 import { useSelect } from "./SelectContext";
 
 const SelectableItem = ({ children, item, comparator }) => {
   const { isSelecting, isSelected, selectItem, setComparator } = useSelect();
 
-  if (comparator) {
-    setComparator(() => comparator);
-  }
+  useEffect(() => {
+    if (comparator) {
+      setComparator(() => comparator);
+    }
+  }, [comparator]);
 
   return (
     <div
