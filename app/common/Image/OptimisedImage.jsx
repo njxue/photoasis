@@ -49,7 +49,7 @@ const OptimisedImage = ({
   return (
     <>
       {isLoading && showLoader && (
-        <div className="absolute w-10">
+        <div className="absolute w-10 left-1/2 top-1/2">
           <LoadingSpinner />
         </div>
       )}

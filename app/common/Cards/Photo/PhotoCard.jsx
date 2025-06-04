@@ -6,8 +6,6 @@ import { useUserPreferences } from "@app/UserPreferencesContext";
 
 const PhotoCard = React.memo(
   ({ photo, minimalisticView, onClick }) => {
-    console.log("Rerender");
-
     const [showPhotoInfo, setShowPhotoInfo] = useState(false);
 
     const { userPreferences } = useUserPreferences();
