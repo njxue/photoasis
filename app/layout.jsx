@@ -7,6 +7,7 @@ import { inter } from "@styles/fonts";
 import Login from "./components/Login";
 import ToastContainerWrapper from "./ToastContainerWrapper";
 import { UserPreferencesProvider } from "./UserPreferencesContext";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata = {
   title: "Photoasis",
@@ -20,6 +21,7 @@ const Layout = async ({ children }) => {
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
+        <SpeedInsights />
         <Provider>
           <main className="app">
             {session?.user ? (
