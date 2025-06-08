@@ -4,7 +4,7 @@ import Link from "next/link";
 import Photo from "../Photo";
 import { useUserPreferences } from "@app/UserPreferencesContext";
 
-const AlbumCard = ({ data }) => {
+const AlbumCard = ({ data, lazy = true }) => {
   let { uid, name, aid, thumbnail } = data;
   if (thumbnail) {
     thumbnail = `${process.env.NEXT_PUBLIC_CLOUDFLARE_URL}/${uid}/${aid}/${thumbnail?.name}`;
@@ -19,6 +19,7 @@ const AlbumCard = ({ data }) => {
             name={name}
             objectFit={userPreferences.objectFit}
             blurhash={data.thumbnail?.blurhash}
+            lazy={lazy}
           />
           <div className="absolute bottom-2 px-[0.5em] text-white text-border font-bold text-start line-clamp-2 text-sm xs:text-lg sm:text-xl  sm:px-5">
             {name}

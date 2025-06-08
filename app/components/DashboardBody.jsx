@@ -5,6 +5,7 @@ import AlbumCard from "@app/common/Cards/Album/AlbumCard";
 import DraggableAndDroppable from "@app/common/DragAndDrop/DraggableAndDroppable";
 import updateUser from "@actions/updateUser";
 import { toast } from "react-toastify";
+import { NUM_IMAGES_ABOVE_FOLD } from "@app/configs/imageConfigs";
 function DashboardBody({ albums }) {
   const [sortedAlbums, setSortedAlbums] = useState(albums);
 
@@ -48,13 +49,13 @@ function DashboardBody({ albums }) {
 
   return (
     <div className="photo-grid">
-      {sortedAlbums?.map((album) => (
+      {sortedAlbums?.map((album, idx) => (
         <DraggableAndDroppable
           handleDrop={(e) => handleDrop(e, album.aid)}
           handleDrag={(e) => handleDrag(e, album.aid)}
           key={album.aid}>
           <SelectableItem item={album.aid}>
-            <AlbumCard data={album} />
+            <AlbumCard data={album} lazy={idx >= NUM_IMAGES_ABOVE_FOLD} />
           </SelectableItem>
         </DraggableAndDroppable>
       ))}

@@ -20,7 +20,7 @@ const ExpandedPhoto = ({ photo, onClose }) => {
       {showButtons && (
         <>
           <div className="absolute top-0 left-0">
-            <ExpandedPhotoInfo photo={photo} />
+            <ExpandedPhotoInfo photo={photo} priority />
           </div>
           <div className="absolute top-0 right-0 p-2">
             <img

@@ -5,7 +5,7 @@ import Photo from "../Photo";
 import { useUserPreferences } from "@app/UserPreferencesContext";
 
 const PhotoCard = React.memo(
-  ({ photo, minimalisticView, onClick }) => {
+  ({ photo, minimalisticView, onClick, lazy = true }) => {
     const [showPhotoInfo, setShowPhotoInfo] = useState(false);
 
     const { userPreferences } = useUserPreferences();
@@ -32,6 +32,7 @@ const PhotoCard = React.memo(
             name={photo.name}
             blurhash={photo.blurhash}
             objectFit={userPreferences.objectFit}
+            lazy={lazy}
           />
 
           {showPhotoInfo && (

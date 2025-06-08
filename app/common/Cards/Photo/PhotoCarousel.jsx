@@ -42,7 +42,7 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
     <Modal isOpen={true} className="bg-transparent">
       <div className="flex flex-row items-center justify-center gap-3 w-[85vw]">
         <div className="max-xs:hidden">{renderLeftArrow()}</div>
-        <ExpandedPhoto photo={photo} onClose={onClose} />
+        <ExpandedPhoto photo={photo} onClose={onClose} priority />
         <div className="max-xs:hidden">{renderRightArrow()}</div>
       </div>
       <div className="mt-3 w-full flex flex-row justify-between items-center gap-3 ">

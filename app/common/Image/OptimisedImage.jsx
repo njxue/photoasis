@@ -42,6 +42,8 @@ const OptimisedImage = ({
         onClick={onClick}
         className={className}
         {...widthAndHeightProps}
+        fetchPriority={priority ? "high" : "auto"}
+        loading={priority ? "eager" : "lazy"}
       />
     );
   }

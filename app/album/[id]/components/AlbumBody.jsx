@@ -7,6 +7,7 @@ import updateAlbum from "@actions/updateAlbum";
 import { toast } from "react-toastify";
 import { useAlbum } from "../AlbumContext";
 import PhotoCarousel from "@app/common/Cards/Photo/PhotoCarousel";
+import { NUM_IMAGES_ABOVE_FOLD } from "@app/configs/imageConfigs";
 function AlbumBody({ minimalisticView }) {
   const album = useAlbum();
 
@@ -65,6 +66,7 @@ function AlbumBody({ minimalisticView }) {
               photo={photo}
               minimalisticView={minimalisticView}
               onClick={() => setCurrentExpanded(idx)}
+              lazy={idx >= NUM_IMAGES_ABOVE_FOLD}
             />
           </SelectableItem>
         </DraggableAndDroppable>

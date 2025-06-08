@@ -2,7 +2,13 @@ import OptimisedImage from "../Image/OptimisedImage";
 import { QUALITY_LOW, QUALITY_MAX, QUALITY_MID } from "../Image/constants";
 import { Blurhash } from "react-blurhash";
 
-const Photo = ({ src, name, objectFit = "object-cover", blurhash = "" }) => {
+const Photo = ({
+  src,
+  name,
+  objectFit = "object-cover",
+  blurhash = "",
+  lazy = true,
+}) => {
   const placeholder = "/assets/images/placeholder.png";
   return (
     <>
@@ -27,6 +33,7 @@ const Photo = ({ src, name, objectFit = "object-cover", blurhash = "" }) => {
             sizes=""
             className="absolute blur-xs opacity-95"
             objectFit="object-cover"
+            priority={!lazy}
           />
         )
       )}
@@ -36,6 +43,7 @@ const Photo = ({ src, name, objectFit = "object-cover", blurhash = "" }) => {
         quality={QUALITY_MID}
         className="absolute"
         objectFit={objectFit}
+        priority={!lazy}
       />
     </>
   );

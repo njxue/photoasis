@@ -5,6 +5,7 @@ import PhotoCard from "@app/common/Cards/Photo/PhotoCard";
 import { useState } from "react";
 import { notFound } from "next/navigation";
 import PhotoCarousel from "@app/common/Cards/Photo/PhotoCarousel";
+import { NUM_IMAGES_ABOVE_FOLD } from "@app/configs/imageConfigs";
 
 const GalleryContainer = ({ photos }) => {
   if (!photos) {
@@ -35,6 +36,7 @@ const GalleryContainer = ({ photos }) => {
                 photo={photo}
                 minimalisticView={minimalisticView}
                 onClick={() => setCurrentExpanded(idx)}
+                lazy={idx >= NUM_IMAGES_ABOVE_FOLD}
               />
             ))}
         </div>
