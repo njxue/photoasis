@@ -2,6 +2,7 @@ import {
   CLOUDINARY_URL,
   IMAGE_TRANSFORM_ENABLED,
   IMAGE_PLACEHOLDER,
+  IMAGE_TRANSFORMATION_RULES,
 } from "@app/configs/imageConfigs";
 import OptimisedImage from "../Image/OptimisedImage";
 import { QUALITY_LOW } from "../Image/constants";
@@ -15,10 +16,9 @@ const Photo = ({
   lazy = true,
   isLocal = false,
 }) => {
-  const imageTransformations = "w_200/f_auto/";
   const imgUrl = src
     ? IMAGE_TRANSFORM_ENABLED && !isLocal
-      ? `${CLOUDINARY_URL}/${imageTransformations}/${src}`
+      ? `${CLOUDINARY_URL}/${IMAGE_TRANSFORMATION_RULES}/${src}`
       : src
     : IMAGE_PLACEHOLDER;
 
