@@ -9,6 +9,7 @@ const ExpandedPhoto = ({ photo, onClose }) => {
   return (
     <div className="relative">
       <OptimisedImage
+        key={photo.url}
         src={photo.url}
         name={photo.name}
         quality={QUALITY_MID}
