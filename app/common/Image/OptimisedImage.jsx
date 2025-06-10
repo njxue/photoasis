@@ -3,9 +3,11 @@ import Image from "next/image";
 import { QUALITY_MID } from "./constants";
 import { useState } from "react";
 import LoadingSpinner from "../LoadingSpinner";
+import { IMAGE_PLACEHOLDER } from "@app/configs/imageConfigs";
 
 const OptimisedImage = ({
   src,
+  fallback = IMAGE_PLACEHOLDER,
   name,
   id,
   onClick,
@@ -25,6 +27,7 @@ const OptimisedImage = ({
     "hover:opacity-50 transition-opacity ease-in-out duration-50";
   const dimensions = "h-full w-full max-w-[90vw] max-h-[90vh]";
 
+  const [imgSrc, setImgSrc] = useState(src);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
@@ -35,15 +38,24 @@ const OptimisedImage = ({
       ${dimensions} ${customClassName}
     `;
 
+  /**
+   * Possible errors:
+   * 1. 402: Exceeded the image optimisation limit for free tier
+   * 2. 400: Exceeded the image size limit of 10MB for image transformation with Cloudinary
+   */
   if (isError) {
+    // Try to render again with original src. If it fails again, use the fallback
     return (
       <img
-        src={src}
+        src={imgSrc}
         onClick={onClick}
         className={className}
         {...widthAndHeightProps}
         fetchPriority={priority ? "high" : "auto"}
         loading={priority ? "eager" : "lazy"}
+        onError={(e) => {
+          setImgSrc(fallback);
+        }}
       />
     );
   }
@@ -56,7 +68,7 @@ const OptimisedImage = ({
         </div>
       )}
       <Image
-        src={src}
+        src={imgSrc}
         alt={name}
         id={id ?? name}
         name={name}

@@ -17,7 +17,11 @@ const FitOption = ({
       }`}
       onClick={handleClick}>
       <div className="relative w-full h-full">
-        <Photo src="/assets/images/placeholder.jpg" objectFit={objectFit} />
+        <Photo
+          src="/assets/images/placeholder.jpg"
+          objectFit={objectFit}
+          isLocal
+        />
       </div>
       <p className="mt-2 font-semibold text-sm">
         {objectFit === "object-cover" ? "Cover" : "Contain"}

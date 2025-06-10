@@ -1,9 +1,10 @@
 import {
   CLOUDINARY_URL,
   IMAGE_TRANSFORM_ENABLED,
+  IMAGE_PLACEHOLDER,
 } from "@app/configs/imageConfigs";
 import OptimisedImage from "../Image/OptimisedImage";
-import { QUALITY_LOW, QUALITY_MAX, QUALITY_MID } from "../Image/constants";
+import { QUALITY_LOW } from "../Image/constants";
 import { Blurhash } from "react-blurhash";
 
 const Photo = ({
@@ -12,14 +13,14 @@ const Photo = ({
   objectFit = "object-cover",
   blurhash = "",
   lazy = true,
+  isLocal = false,
 }) => {
-  const placeholder = "/assets/images/placeholder.png";
   const imageTransformations = "w_200/f_auto/";
   const imgUrl = src
-    ? IMAGE_TRANSFORM_ENABLED
+    ? IMAGE_TRANSFORM_ENABLED && !isLocal
       ? `${CLOUDINARY_URL}/${imageTransformations}/${src}`
       : src
-    : placeholder;
+    : IMAGE_PLACEHOLDER;
 
   return (
     <>
@@ -39,6 +40,7 @@ const Photo = ({
         src && (
           <OptimisedImage
             src={imgUrl}
+            fallback={src}
             name={name}
             quality={QUALITY_LOW}
             sizes=""
@@ -50,6 +52,7 @@ const Photo = ({
       )}
       <OptimisedImage
         src={imgUrl}
+        fallback={src}
         name={name}
         quality={QUALITY_LOW}
         className="absolute"

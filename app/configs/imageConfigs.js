@@ -5,3 +5,4 @@ export const IMAGE_TRANSFORM_ENABLED =
   process.env.NEXT_PUBLIC_ENABLE_IMAGE_TRANSFORM === "true";
 export const IMAGE_SIZE_RESTRICTION_ENABLED =
   process.env.NEXT_PUBLIC_ENABLE_IMAGE_SIZE_RESTRICTION === "true";
+export const IMAGE_PLACEHOLDER = "/assets/images/placeholder.png";
