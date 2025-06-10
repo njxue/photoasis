@@ -21,7 +21,7 @@ const NewAlbumForm = () => {
   const uid = session?.user.id;
   const router = useRouter();
 
-  const { files } = useImageUploadContext();
+  const { files, hasFileError } = useImageUploadContext();
   const { incrementProgress, resetProgress, progressPercentage } = useProgress(
     files.length
   );
@@ -90,7 +90,11 @@ const NewAlbumForm = () => {
           />
         </div>
       </div>
-      <SubmitButton text="Create" preventBrowserRefresh disabled={isLoading} />
+      <SubmitButton
+        text="Create"
+        preventBrowserRefresh
+        disabled={isLoading || hasFileError}
+      />
     </form>
   );
 };

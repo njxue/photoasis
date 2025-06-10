@@ -1,5 +1,9 @@
 "use client";
-import { processFile, processFiles } from "@utils/imageUploadUtils";
+import {
+  MAX_SIZE_BYTES,
+  IMAGE_SIZE_RESTRICTION_ENABLED,
+} from "@app/configs/imageConfigs";
+import { processFiles } from "@utils/imageUploadUtils";
 import { createContext, useContext, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -13,6 +17,10 @@ const ImageUploadProvider = ({ children }) => {
   const [files, setFiles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState();
+
+  const hasFileError =
+    IMAGE_SIZE_RESTRICTION_ENABLED &&
+    files.some((file) => file.fileData.size > MAX_SIZE_BYTES);
 
   const handleAddFiles = async (newFiles) => {
     setIsLoading(true);
@@ -68,6 +76,7 @@ const ImageUploadProvider = ({ children }) => {
     selectedFile,
     files,
     resetFiles,
+    hasFileError,
   };
 
   return (

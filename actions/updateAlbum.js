@@ -5,6 +5,10 @@ import { authOptions } from "@app/api/auth/[...nextauth]/route";
 import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { formatPhotoData } from "@utils/helpers";
+import {
+  MAX_SIZE_BYTES,
+  IMAGE_SIZE_RESTRICTION_ENABLED,
+} from "@app/configs/imageConfigs";
 
 async function updateAlbum(data, revalidate = true) {
   const prisma = new PrismaClient();
@@ -23,6 +27,15 @@ async function updateAlbum(data, revalidate = true) {
     }
 
     if (photos) {
+      if (
+        IMAGE_SIZE_RESTRICTION_ENABLED &&
+        photos.some((photo) => photo.size > MAX_SIZE_BYTES)
+      ) {
+        return {
+          status: 400,
+          message: `Contains file(s) that exceed ${MAX_SIZE_BYTES} bytes`,
+        };
+      }
       // Insert photos
       const formattedPhotoData = photos.map((photo) => {
         const formattedData = formatPhotoData(photo);

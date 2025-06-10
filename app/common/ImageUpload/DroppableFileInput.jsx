@@ -4,6 +4,11 @@ import ImagePreviews from "@app/common/ImageUpload/ImagePreviews";
 import LoadingSpinner from "../LoadingSpinner";
 import { useFormStatus } from "react-dom";
 import { useImageUploadContext } from "./ImageUploadContext";
+import { bytesToMegabytes } from "@utils/helpers";
+import {
+  IMAGE_SIZE_RESTRICTION_ENABLED,
+  MAX_SIZE_BYTES,
+} from "@app/configs/imageConfigs";
 
 const DroppableFileInput = ({ required, customDropzone }) => {
   const inputRef = useRef();
@@ -38,14 +43,20 @@ const DroppableFileInput = ({ required, customDropzone }) => {
         customDropzone
       ) : (
         <div
-          className="border border-dashed border-black h-full w-full rounded flex flex-col justify-center items-center gap-5 opacity-50 text-center text-lg cursor-pointer hover:opacity-100 transition-all"
+          className="border border-dashed border-black h-full w-full rounded flex flex-col justify-center items-center opacity-50 text-center text-lg cursor-pointer hover:opacity-100 transition-all"
           onClick={handleClick}
           onDrop={handleDrop}
           onDragOver={handleDragOver}>
           <p>Drag or click to upload files</p>
+          {IMAGE_SIZE_RESTRICTION_ENABLED && (
+            <p className="mt-2">{`(max ${bytesToMegabytes(
+              MAX_SIZE_BYTES
+            )}MB per file)`}</p>
+          )}
+
           <img
             src="/assets/icons/upload.svg"
-            className="w-[35px]"
+            className="w-[35px] mt-5"
             alt="uploadIcon"
           />
           <input

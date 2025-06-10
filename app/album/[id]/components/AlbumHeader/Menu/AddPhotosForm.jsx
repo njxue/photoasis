@@ -16,7 +16,7 @@ import { useAlbum } from "@app/album/[id]/AlbumContext";
 const AddPhotosForm = ({ show, setShow }) => {
   const [isLoading, setIsLoading] = useState(false);
   const album = useAlbum();
-  const { resetFiles, files } = useImageUploadContext();
+  const { resetFiles, files, hasFileError } = useImageUploadContext();
   const { data: session } = useSession();
   const { incrementProgress, resetProgress, progressPercentage } = useProgress(
     files.length
@@ -72,7 +72,7 @@ const AddPhotosForm = ({ show, setShow }) => {
               <SubmitButton
                 text="Add Photos"
                 preventBrowserRefresh
-                disabled={files.length === 0 || isLoading}
+                disabled={files.length === 0 || isLoading || hasFileError}
               />
             </div>
           </form>

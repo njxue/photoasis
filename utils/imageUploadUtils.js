@@ -4,6 +4,10 @@ import { b2GetUploadUrls } from "@actions/b2";
 import { v4 as uuidv4 } from "uuid";
 import { encode } from "blurhash";
 import updateAlbum from "@actions/updateAlbum";
+import {
+  MAX_SIZE_BYTES,
+  IMAGE_SIZE_RESTRICTION_ENABLED,
+} from "@app/configs/imageConfigs";
 
 const imageUploadConfigs = {
   batchSize: 10,
@@ -122,10 +126,23 @@ export const extractFileMetadata = async (file) => {
     lensModel,
     cameraModel,
     name: file.name,
+    size: file.size,
   };
 };
 
 export const uploadPhotos = async (aid, uid, files, onUploaded) => {
+  // Validate file sizes
+  if (
+    IMAGE_SIZE_RESTRICTION_ENABLED &&
+    files.some((file) => {
+      file.rawFile.size > MAX_SIZE_BYTES;
+    })
+  ) {
+    return {
+      status: 400,
+      message: `Contains file(s) that exceed ${MAX_SIZE_BYTES} bytes`,
+    };
+  }
   return new Promise((resolve, reject) => {
     (async () => {
       try {
@@ -200,6 +217,9 @@ export const uploadPhotos = async (aid, uid, files, onUploaded) => {
 };
 
 const uploadFile = async (file) => {
+  if (IMAGE_SIZE_RESTRICTION_ENABLED && file.size > MAX_SIZE_BYTES) {
+    throw new Error(`File size exceeded ${MAX_SIZE_BYTES}`);
+  }
   const b2data = file.b2data;
   const res = await fetch(b2data.url, {
     method: "POST",

@@ -1,4 +1,4 @@
-const capitalize = (str) => {
+export const capitalize = (str) => {
   if (!str || str.length === 0) {
     return str;
   }
@@ -6,7 +6,7 @@ const capitalize = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-const parseDate = (str) => {
+export const parseDate = (str) => {
   if (!str) {
     return;
   }
@@ -22,7 +22,7 @@ const parseDate = (str) => {
   return dateObj.toLocaleDateString("en-SG", options);
 };
 
-const METERING_MODES = [
+export const METERING_MODES = [
   {
     label: "Matrix",
     value: "Pattern",
@@ -45,7 +45,7 @@ const METERING_MODES = [
   },
 ];
 
-const EXPOSURE_MODES = [
+export const EXPOSURE_MODES = [
   {
     label: "Program",
     value: "Normal program",
@@ -73,7 +73,7 @@ const EXPOSURE_MODES = [
   },
 ];
 
-const arrayToFileList = (filesArray) => {
+export const arrayToFileList = (filesArray) => {
   const dataTransfer = new DataTransfer();
 
   filesArray.forEach((file) => {
@@ -83,7 +83,7 @@ const arrayToFileList = (filesArray) => {
   return dataTransfer.files;
 };
 
-const isEqualDeep = (obj1, obj2) => {
+export const isEqualDeep = (obj1, obj2) => {
   if (
     typeof obj1 !== "object" ||
     typeof obj2 !== "object" ||
@@ -103,7 +103,7 @@ const isEqualDeep = (obj1, obj2) => {
   return keys1.every((key) => isEqualDeep(obj1[key], obj2[key]));
 };
 
-const formatPhotoData = (photo) => {
+export const formatPhotoData = (photo) => {
   const formattedPhotoData = {};
   const unFormattedFields = [
     "name",
@@ -162,12 +162,12 @@ const formatPhotoData = (photo) => {
   return formattedPhotoData;
 };
 
-export {
-  capitalize,
-  parseDate,
-  arrayToFileList,
-  isEqualDeep,
-  formatPhotoData,
-  METERING_MODES,
-  EXPOSURE_MODES,
+export const bytesToMegabytes = (bytes) => {
+  if (bytes < 0) {
+    throw new Error("Bytes must be a non-negative integer");
+  }
+  if (!Number.isInteger(bytes)) {
+    throw new Error("Bytes must be an integer");
+  }
+  return Math.floor(bytes / 1024 ** 2);
 };
