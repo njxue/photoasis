@@ -1,4 +1,7 @@
-import { CLOUDINARY_URL } from "@app/configs/imageConfigs";
+import {
+  CLOUDINARY_URL,
+  IMAGE_TRANSFORM_ENABLED,
+} from "@app/configs/imageConfigs";
 import OptimisedImage from "../Image/OptimisedImage";
 import { QUALITY_LOW, QUALITY_MAX, QUALITY_MID } from "../Image/constants";
 import { Blurhash } from "react-blurhash";
@@ -12,7 +15,11 @@ const Photo = ({
 }) => {
   const placeholder = "/assets/images/placeholder.png";
   const imageTransformations = "w_200/f_auto/";
-  const transformedImageUrl = `${CLOUDINARY_URL}/${imageTransformations}/${src}`;
+  const imgUrl = src
+    ? IMAGE_TRANSFORM_ENABLED
+      ? `${CLOUDINARY_URL}/${imageTransformations}/${src}`
+      : src
+    : placeholder;
 
   return (
     <>
@@ -31,7 +38,7 @@ const Photo = ({
         // Create blurhash effect for older photos without blurhash (before it was implemented)
         src && (
           <OptimisedImage
-            src={src ? transformedImageUrl : placeholder}
+            src={imgUrl}
             name={name}
             quality={QUALITY_LOW}
             sizes=""
@@ -42,7 +49,7 @@ const Photo = ({
         )
       )}
       <OptimisedImage
-        src={src ? transformedImageUrl : placeholder}
+        src={imgUrl}
         name={name}
         quality={QUALITY_LOW}
         className="absolute"
