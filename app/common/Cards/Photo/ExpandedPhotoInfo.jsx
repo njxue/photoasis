@@ -32,7 +32,7 @@ const ExpandedPhotoInfo = ({ photo }) => {
         <img
           src="/assets/icons/info.svg"
           alt="info"
-          className="block w-7 opacity-50 p-1 hover:opacity-100 cursor-pointer"
+          className="block w-7 opacity-80 p-1 hover:opacity-100 cursor-pointer"
           onMouseOver={() => {
             setShowInfo(true);
           }}

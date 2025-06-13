@@ -1,40 +1,23 @@
 import ExpandedPhotoInfo from "./ExpandedPhotoInfo";
 import OptimisedImage from "../../Image/OptimisedImage";
-import DownloadPhoto from "./DownloadPhoto";
 import { QUALITY_MID } from "@app/common/Image/constants";
-import { useState } from "react";
-const ExpandedPhoto = ({ photo, onClose }) => {
-  const [showButtons, setShowButtons] = useState(false);
-
+const ExpandedPhoto = ({ photo }) => {
   return (
-    <div className="relative">
+    <div className="relative h-full">
       <OptimisedImage
         key={photo.url}
         src={photo.url}
         name={photo.name}
         quality={QUALITY_MID}
         priority
-        sizes="100vw"
         showLoader
-        onLoad={() => setShowButtons(true)}
+        objectFit="object-contain"
+        o
       />
-      {showButtons && (
-        <>
-          <div className="absolute top-0 left-0">
-            <ExpandedPhotoInfo photo={photo} />
-          </div>
-          <div className="absolute top-0 right-0 p-2">
-            <img
-              src="/assets/icons/cross-square.svg"
-              className="cursor-pointer opacity-50 hover:opacity-100 transition-opacity w-6"
-              onClick={onClose}
-            />
-          </div>
-          <div className="absolute bottom-0 left-0">
-            <DownloadPhoto photo={photo} />
-          </div>
-        </>
-      )}
+
+      <div className="absolute top-0 left-0">
+        <ExpandedPhotoInfo photo={photo} />
+      </div>
     </div>
   );
 };

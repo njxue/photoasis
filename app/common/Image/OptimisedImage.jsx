@@ -21,7 +21,7 @@ const OptimisedImage = ({
   fill = false,
   showLoader = false,
   objectFit = "object-cover",
-  onLoad = () => {},
+  onLoad,
 }) => {
   const hoverStyles =
     "hover:opacity-50 transition-opacity ease-in-out duration-50";
@@ -43,22 +43,6 @@ const OptimisedImage = ({
    * 1. 402: Exceeded the image optimisation limit for free tier
    * 2. 400: Exceeded the image size limit of 10MB for image transformation with Cloudinary
    */
-  if (isError) {
-    // Try to render again with original src. If it fails again, use the fallback
-    return (
-      <img
-        src={imgSrc}
-        onClick={onClick}
-        className={className}
-        {...widthAndHeightProps}
-        fetchPriority={priority ? "high" : "auto"}
-        loading={priority ? "eager" : "lazy"}
-        onError={(e) => {
-          setImgSrc(fallback);
-        }}
-      />
-    );
-  }
 
   return (
     <>
@@ -67,27 +51,45 @@ const OptimisedImage = ({
           <LoadingSpinner />
         </div>
       )}
-      <Image
-        src={imgSrc}
-        alt={name}
-        id={id ?? name}
-        name={name}
-        className={className}
-        sizes={sizes}
-        quality={quality}
-        onClick={onClick}
-        priority={priority}
-        placeholder="empty"
-        fill={fill}
-        {...widthAndHeightProps}
-        onLoad={() => {
-          setIsLoading(false);
-          onLoad();
-        }}
-        onError={(e) => {
-          setIsError(true);
-        }}
-      />
+      {isError ? (
+        <img
+          src={imgSrc}
+          onClick={onClick}
+          className={className}
+          {...widthAndHeightProps}
+          fetchPriority={priority ? "high" : "auto"}
+          loading={priority ? "eager" : "lazy"}
+          onError={(e) => {
+            setImgSrc(fallback);
+          }}
+          onLoad={() => {
+            setIsLoading(false);
+            onLoad?.();
+          }}
+        />
+      ) : (
+        <Image
+          src={imgSrc}
+          alt={name}
+          id={id ?? name}
+          name={name}
+          className={className}
+          sizes={sizes}
+          quality={quality}
+          onClick={onClick}
+          priority={priority}
+          placeholder="empty"
+          fill={fill}
+          {...widthAndHeightProps}
+          onLoad={() => {
+            setIsLoading(false);
+            onLoad?.();
+          }}
+          onError={() => {
+            setIsError(true);
+          }}
+        />
+      )}
     </>
   );
 };

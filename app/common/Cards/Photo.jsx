@@ -58,7 +58,6 @@ const Photo = ({
         className="absolute"
         objectFit={objectFit}
         priority={!lazy}
-        sizes="100vw"
         fill={true}
       />
     </>
