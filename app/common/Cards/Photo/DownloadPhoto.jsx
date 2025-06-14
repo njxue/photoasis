@@ -37,7 +37,7 @@ function DownloadPhoto({ photo }) {
 
   return (
     <div
-      className={`p-2 flex flex-row gap-2 opacity-50 hover:opacity-100 cursor-pointer ${
+      className={`flex flex-row gap-2 opacity-50 hover:opacity-100 cursor-pointer ${
         isDownloading && "pointer-events-none"
       }`}
       onClick={handleDownload}>
@@ -49,7 +49,7 @@ function DownloadPhoto({ photo }) {
             <LoadingSpinner />
           </div>
         )}
-        <span className="text-gray-400 text-xs font-sans">Download</span>
+        <span className="text-gray-400 text-sm font-sans">Download</span>
       </div>
     </div>
   );

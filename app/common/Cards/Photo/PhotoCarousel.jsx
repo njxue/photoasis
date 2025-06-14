@@ -2,6 +2,9 @@ import { useState } from "react";
 import ExpandedPhoto from "./ExpandedPhoto";
 import Modal from "@app/common/Modal/Modal";
 import DownloadPhoto from "./DownloadPhoto";
+import ExpandedPhotoInfo from "./ExpandedPhotoInfo";
+import OptimisedImage from "@app/common/Image/OptimisedImage";
+import { QUALITY_MID } from "@app/common/Image/constants";
 
 const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
   const [selectedIndex, setSelectedIndex] = useState(defaultIndex ?? 0);
@@ -13,7 +16,7 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
   const navigatorStyles =
     "max-sm:grow sm:w-[42px] flex cursor-pointer h-full hover:bg-black hover:opacity-50 items-center transition-all duration-50";
   const topAndBottomBorderStyles =
-    "flex flex-row justify-between items-center w-full bg-black opacity-90 h-[36px] px-2";
+    "flex flex-row justify-between items-center w-full bg-black opacity-90 px-2 grow";
 
   return (
     <Modal isOpen={true} className="bg-transparent">
@@ -31,7 +34,7 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
         </div>
 
         {/** Photo */}
-        <div className="flex items-center justify-between bg-black bg-opacity-75 grow min-h-0">
+        <div className="flex items-center justify-between bg-black bg-opacity-75 h-[80vh] sm:h-[85vh]">
           <div
             className={`${navigatorStyles} justify-start ${
               !selectedIndex && "pointer-events-none"
@@ -47,8 +50,16 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
               />
             )}
           </div>
-          <div className="flex items-center justify-center h-[calc(100vh-90px)]">
-            <ExpandedPhoto photo={photo} />
+          <div className="flex items-center justify-center h-full py-2">
+            <OptimisedImage
+              key={photo.url}
+              src={photo.url}
+              name={photo.name}
+              quality={QUALITY_MID}
+              priority
+              showLoader
+              objectFit="object-contain"
+            />
           </div>
           <div
             className={`${navigatorStyles} justify-end ${
@@ -68,8 +79,12 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
         </div>
 
         {/** Bottom bar */}
-        <div className={topAndBottomBorderStyles}>
-          <div className="text-xs text-gray-200 line-clamp-1 text-center flex-1">
+        <div className={`${topAndBottomBorderStyles} relative`}>
+          <div className="absolute top-1/2 -translate-y-full left-2">
+            <ExpandedPhotoInfo photo={photo} />
+          </div>
+
+          <div className="absolute text-xs text-gray-200 line-clamp-1 text-center flex-1 w-full">
             {photo.description}
           </div>
         </div>

@@ -12,12 +12,7 @@ const ExpandedPhoto = ({ photo }) => {
         priority
         showLoader
         objectFit="object-contain"
-        o
       />
-
-      <div className="absolute top-0 left-0">
-        <ExpandedPhotoInfo photo={photo} />
-      </div>
     </div>
   );
 };
