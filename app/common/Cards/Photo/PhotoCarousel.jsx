@@ -1,5 +1,4 @@
-import { useState } from "react";
-import ExpandedPhoto from "./ExpandedPhoto";
+import { useEffect, useCallback, useState } from "react";
 import Modal from "@app/common/Modal/Modal";
 import DownloadPhoto from "./DownloadPhoto";
 import ExpandedPhotoInfo from "./ExpandedPhotoInfo";
@@ -17,6 +16,41 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
     "max-sm:grow sm:w-[42px] flex cursor-pointer h-full hover:bg-black hover:opacity-50 items-center transition-all duration-50";
   const topAndBottomBorderStyles =
     "flex flex-row justify-between items-center w-full bg-black opacity-90 px-2 grow";
+
+  const handleNextImage = useCallback(() => {
+    if (selectedIndex === photos.length - 1) {
+      return;
+    }
+    setSelectedIndex((prev) => prev + 1);
+  }, [selectedIndex]);
+
+  const handlePreviousImage = useCallback(() => {
+    if (selectedIndex === 0) {
+      return;
+    }
+    setSelectedIndex((prev) => prev - 1);
+  }, [selectedIndex]);
+
+  useEffect(() => {
+    function handleKeyDown(e) {
+      switch (e.code) {
+        case "Escape":
+          onClose();
+          break;
+        case "ArrowRight":
+          handleNextImage();
+          break;
+        case "ArrowLeft":
+          handlePreviousImage();
+          break;
+        default:
+          break;
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [handleNextImage, handlePreviousImage, onClose]);
 
   return (
     <Modal isOpen={true} className="bg-transparent">
@@ -39,9 +73,7 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
             className={`${navigatorStyles} justify-start ${
               !selectedIndex && "pointer-events-none"
             }`}
-            onClick={() => {
-              setSelectedIndex((prev) => prev - 1);
-            }}>
+            onClick={handlePreviousImage}>
             {selectedIndex > 0 && (
               <img
                 src="/assets/icons/arrow-left.svg"
@@ -65,9 +97,7 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
             className={`${navigatorStyles} justify-end ${
               selectedIndex === photos.length - 1 && "pointer-events-none"
             }`}
-            onClick={() => {
-              setSelectedIndex((prev) => prev + 1);
-            }}>
+            onClick={handleNextImage}>
             {selectedIndex < photos.length - 1 && (
               <img
                 src="/assets/icons/arrow-right.svg"
