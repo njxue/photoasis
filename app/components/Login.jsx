@@ -5,6 +5,7 @@ import { getProviders, signIn } from "next-auth/react";
 import { useEffect, useState } from "react";
 const Login = () => {
   const [providers, setProviders] = useState(null);
+  const [navigatedToForm, setNavigatedToForm] = useState(false);
   const LOGIN_DISABLED = process.env.NEXT_PUBLIC_DISABLE_LOGIN === "true";
 
   useEffect(() => {
@@ -12,13 +13,13 @@ const Login = () => {
       const res = await getProviders();
       setProviders(res);
     })();
+
+    setNavigatedToForm(localStorage.getItem("navigatedToForm") === "true");
   }, []);
 
   const handleClickGoogleForm = () => {
     localStorage.setItem("navigatedToForm", "true");
   };
-
-  const navigatedToForm = localStorage.getItem("navigatedToForm") === "true";
 
   return (
     <div className="relative w-screen h-screen flex flex-row justify-center items-center bg-[url('/assets/images/polaroid.jpg')] bg-cover bg-center bg-no-repeat">
