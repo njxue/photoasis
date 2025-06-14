@@ -17,6 +17,7 @@ const AvatarMenu = ({ avatar }) => {
         height={0}
         className="rounded-full w-7 h-7 cursor-pointer"
         name="avatar"
+        alt="profile avatar"
         onClick={() => setIsVisible(true)}
       />
       {isVisible && (

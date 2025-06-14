@@ -54,6 +54,7 @@ const OptimisedImage = ({
       {isError ? (
         <img
           src={imgSrc}
+          alt={name}
           onClick={onClick}
           className={className}
           {...widthAndHeightProps}
