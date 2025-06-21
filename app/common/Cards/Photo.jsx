@@ -1,9 +1,3 @@
-import {
-  CLOUDINARY_URL,
-  IMAGE_TRANSFORM_ENABLED,
-  IMAGE_PLACEHOLDER,
-  IMAGE_TRANSFORMATION_RULES,
-} from "@app/configs/imageConfigs";
 import OptimisedImage from "../Image/OptimisedImage";
 import { QUALITY_LOW } from "../Image/constants";
 import { Blurhash } from "react-blurhash";
@@ -16,12 +10,6 @@ const Photo = ({
   lazy = true,
   isLocal = false,
 }) => {
-  const imgUrl = src
-    ? IMAGE_TRANSFORM_ENABLED && !isLocal
-      ? `${CLOUDINARY_URL}/${IMAGE_TRANSFORMATION_RULES}/${src}`
-      : src
-    : IMAGE_PLACEHOLDER;
-
   return (
     <>
       {blurhash ? (
@@ -39,26 +27,26 @@ const Photo = ({
         // Create blurhash effect for older photos without blurhash (before it was implemented)
         src && (
           <OptimisedImage
-            src={imgUrl}
-            fallback={src}
+            src={src}
             name={name}
             quality={QUALITY_LOW}
             sizes=""
             className="absolute blur-xs opacity-95"
             objectFit="object-cover"
             priority={!lazy}
+            isLocal={isLocal}
           />
         )
       )}
       <OptimisedImage
-        src={imgUrl}
-        fallback={src}
+        src={src}
         name={name}
         quality={QUALITY_LOW}
         className="absolute"
         objectFit={objectFit}
         priority={!lazy}
         fill={true}
+        isLocal={isLocal}
       />
     </>
   );

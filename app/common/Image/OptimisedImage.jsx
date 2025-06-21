@@ -3,11 +3,16 @@ import Image from "next/image";
 import { QUALITY_MID } from "./constants";
 import { useState } from "react";
 import LoadingSpinner from "../LoadingSpinner";
-import { IMAGE_PLACEHOLDER, USE_NEXT_IMAGE } from "@app/configs/imageConfigs";
+import {
+  CLOUDINARY_URL,
+  IMAGE_PLACEHOLDER,
+  IMAGE_TRANSFORM_ENABLED,
+  USE_NEXT_IMAGE,
+} from "@app/configs/imageConfigs";
 
 const OptimisedImage = ({
   src,
-  fallback = IMAGE_PLACEHOLDER,
+  fallback,
   name,
   id,
   onClick,
@@ -17,11 +22,13 @@ const OptimisedImage = ({
   priority = false,
   width = 10,
   height = 10,
-  sizes = "100vw",
+  sizes,
+  srcset,
   fill = false,
   showLoader = false,
   objectFit = "object-cover",
   onLoad,
+  isLocal = false,
 }) => {
   const hoverStyles =
     "hover:opacity-50 transition-opacity ease-in-out duration-50";
@@ -38,11 +45,21 @@ const OptimisedImage = ({
       ${dimensions} ${customClassName}
     `;
 
-  /**
-   * Possible errors:
-   * 1. 402: Exceeded the image optimisation limit for free tier
-   * 2. 400: Exceeded the image size limit of 10MB for image transformation with Cloudinary
-   */
+  const handleError = () => {
+    /**
+     * Possible errors:
+     * 1. 402: Exceeded the image optimisation limit for free tier
+     * 2. 400: Exceeded the image size limit of 10MB for image transformation with Cloudinary
+     */
+
+    setIsError(true);
+    setImgSrc(IMAGE_TRANSFORM_ENABLED && !fallback ? src : fallback);
+  };
+
+  const handleLoad = () => {
+    setIsLoading(false);
+    onLoad?.();
+  };
 
   return (
     <>
@@ -60,13 +77,20 @@ const OptimisedImage = ({
           {...widthAndHeightProps}
           fetchPriority={priority ? "high" : "auto"}
           loading={priority ? "eager" : "lazy"}
-          onError={() => {
-            setImgSrc(fallback);
-          }}
-          onLoad={() => {
-            setIsLoading(false);
-            onLoad?.();
-          }}
+          onError={handleError}
+          onLoad={handleLoad}
+          sizes={sizes ?? "100vw"}
+          srcSet={
+            isError
+              ? imgSrc
+              : `${CLOUDINARY_URL}/w_360/f_auto/${src} 360w,
+                ${CLOUDINARY_URL}/w_540/f_auto/${src} 540w,
+                ${CLOUDINARY_URL}/w_720/f_auto/${src} 720w,
+                ${CLOUDINARY_URL}/w_960/f_auto/${src} 960w,
+                ${CLOUDINARY_URL}/w_1200/f_auto/${src} 1200w,
+                ${CLOUDINARY_URL}/w_1440/f_auto/${src} 1440w,
+                ${CLOUDINARY_URL}/w_1920/f_auto/${src} 1920w`
+          }
         />
       ) : (
         <Image
@@ -75,20 +99,15 @@ const OptimisedImage = ({
           id={id ?? name}
           name={name}
           className={className}
-          sizes={sizes}
+          sizes={sizes ?? "100vw"}
           quality={quality}
           onClick={onClick}
           priority={priority}
           placeholder="empty"
           fill={fill}
           {...widthAndHeightProps}
-          onLoad={() => {
-            setIsLoading(false);
-            onLoad?.();
-          }}
-          onError={() => {
-            setIsError(true);
-          }}
+          onLoad={handleLoad}
+          onError={handleError}
         />
       )}
     </>
