@@ -83,7 +83,9 @@ const OptimisedImage = ({
           srcSet={
             isError
               ? imgSrc
-              : `${CLOUDINARY_URL}/w_360/f_auto/${src} 360w,
+              : srcset ??
+                `${CLOUDINARY_URL}/w_100/f_auto/${src} 100w,
+                ${CLOUDINARY_URL}/w_250/f_auto/${src} 250w,
                 ${CLOUDINARY_URL}/w_540/f_auto/${src} 540w,
                 ${CLOUDINARY_URL}/w_720/f_auto/${src} 720w,
                 ${CLOUDINARY_URL}/w_960/f_auto/${src} 960w,

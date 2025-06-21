@@ -30,11 +30,11 @@ const Photo = ({
             src={src}
             name={name}
             quality={QUALITY_LOW}
-            sizes=""
             className="absolute blur-xs opacity-95"
             objectFit="object-cover"
             priority={!lazy}
             isLocal={isLocal}
+            sizes="(max-width: 450px) 20px, (max-width: 640px) 50px, 100px"
           />
         )
       )}
@@ -47,6 +47,7 @@ const Photo = ({
         priority={!lazy}
         fill={true}
         isLocal={isLocal}
+        sizes="(max-width: 450px) 50px, (max-width: 640px) 64px, 125px"
       />
     </>
   );
