@@ -3,7 +3,7 @@ import Image from "next/image";
 import { QUALITY_MID } from "./constants";
 import { useState } from "react";
 import LoadingSpinner from "../LoadingSpinner";
-import { IMAGE_PLACEHOLDER } from "@app/configs/imageConfigs";
+import { IMAGE_PLACEHOLDER, USE_NEXT_IMAGE } from "@app/configs/imageConfigs";
 
 const OptimisedImage = ({
   src,
@@ -51,7 +51,7 @@ const OptimisedImage = ({
           <LoadingSpinner />
         </div>
       )}
-      {isError ? (
+      {isError || !USE_NEXT_IMAGE ? (
         <img
           src={imgSrc}
           alt={name}
@@ -60,7 +60,7 @@ const OptimisedImage = ({
           {...widthAndHeightProps}
           fetchPriority={priority ? "high" : "auto"}
           loading={priority ? "eager" : "lazy"}
-          onError={(e) => {
+          onError={() => {
             setImgSrc(fallback);
           }}
           onLoad={() => {
