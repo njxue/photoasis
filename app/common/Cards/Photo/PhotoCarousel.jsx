@@ -91,7 +91,7 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
               priority
               showLoader
               objectFit="object-contain"
-              sizes="(max-width: 450px) 50px, (max-width: 640px) 64px, 125px"
+              sizes="(max-width: 450px) 100px, (max-width: 640px) 128px, 250px"
             />
           </div>
           <div

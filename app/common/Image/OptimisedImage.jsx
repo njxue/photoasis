@@ -1,7 +1,6 @@
-"use client";
 import Image from "next/image";
 import { QUALITY_MID } from "./constants";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import LoadingSpinner from "../LoadingSpinner";
 import {
   CLOUDINARY_URL,
@@ -38,6 +37,8 @@ const OptimisedImage = ({
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
+  const imgRef = useRef();
+
   const widthAndHeightProps = fill ? {} : { width, height };
   const className = `
       ${objectFit} cursor-pointer 
@@ -51,7 +52,6 @@ const OptimisedImage = ({
      * 1. 402: Exceeded the image optimisation limit for free tier
      * 2. 400: Exceeded the image size limit of 10MB for image transformation with Cloudinary
      */
-
     setIsError(true);
     setImgSrc(IMAGE_TRANSFORM_ENABLED && !fallback ? src : fallback);
   };
@@ -60,6 +60,17 @@ const OptimisedImage = ({
     setIsLoading(false);
     onLoad?.();
   };
+
+  useEffect(() => {
+    const img = imgRef.current;
+    if (img && img.complete) {
+      if (img.naturalWidth === 0) {
+        handleError();
+      } else {
+        handleLoad();
+      }
+    }
+  }, []);
 
   return (
     <>
@@ -70,6 +81,7 @@ const OptimisedImage = ({
       )}
       {isError || !USE_NEXT_IMAGE ? (
         <img
+          ref={imgRef}
           src={imgSrc}
           alt={name}
           onClick={onClick}
