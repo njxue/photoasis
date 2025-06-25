@@ -41,9 +41,6 @@ const ImagePreviews = () => {
                     "opacity-20"
                   }`}
                   src={file.url}
-                  name={file.name}
-                  id={file.id}
-                  quality={QUALITY_LOW}
                 />
               </div>
 
