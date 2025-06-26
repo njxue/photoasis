@@ -20,6 +20,11 @@ const Layout = async ({ children }) => {
 
   return (
     <html lang="en">
+      <head>
+        <meta
+          http-equiv="delegate-ch"
+          content="sec-ch-width https://res.cloudinary.com; sec-ch-dpr https://res.cloudinary.com; sec-ch-viewport-width https://res.cloudinary.com;"></meta>
+      </head>
       <body className={`${inter.className} antialiased`}>
         <SpeedInsights />
         <Provider>
