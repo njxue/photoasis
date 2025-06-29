@@ -19,7 +19,7 @@
 }
 
 .btn {
-  @apply px-2 py-1 rounded flex flex-row justify-center items-center gap-1 disabled:opacity-50  transition-opacity duration-100 shadow-sm hover:opacity-70;
+  @apply px-2 py-1 rounded flex flex-row justify-center items-center gap-1 disabled:opacity-50 transition-opacity duration-100 shadow-sm hover:opacity-70;
 }
 
 .btn-red {
@@ -67,6 +67,16 @@
   }
 }
 
+@keyframes fadeInAndSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20%);
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 @keyframes slideUp {
   0% {
     transform: translateY(5%);
@@ -86,6 +96,10 @@
 
 .animate-fadeInAndSlideDown {
   animation: fadeInAndSlideDown 1s ease-out;
+}
+
+.animate-fadeInAndSlideUp {
+  animation: fadeInAndSlideUp 1s ease-out;
 }
 
 .animate-slideUp {

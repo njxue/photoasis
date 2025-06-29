@@ -2,8 +2,13 @@ import prisma from "@prisma/prisma";
 import NextAuth from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
 import { revalidatePath } from "next/cache";
+import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcrypt";
 
 const authOptions = {
+  pages: {
+    signIn: "/login",
+  },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_ID,
@@ -14,6 +19,35 @@ const authOptions = {
           access_type: "offline",
           response_type: "code",
         },
+      },
+    }),
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        const { email, password } = credentials;
+        const user = await prisma.user.findUnique({ where: { email } });
+
+        // If password is empty, account was created using Google provider, not with credentials
+        if (!user || !user.password) {
+          throw new Error("Invalid email and/or password");
+        }
+
+        const isValidPassword = await bcrypt.compare(password, user.password);
+
+        if (!isValidPassword) {
+          throw new Error("Invalid email and/or password");
+        }
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          image: user.image,
+        };
       },
     }),
   ],
@@ -31,7 +65,10 @@ const authOptions = {
 
       return session;
     },
-    async signIn({ profile }) {
+    async signIn({ account, profile }) {
+      if (account.provider !== "google") return true;
+
+      // Create new user if register using google
       try {
         let user = await prisma.user.findUnique({
           where: { email: profile.email },

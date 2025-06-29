@@ -1,5 +1,7 @@
 export const NUM_IMAGES_ABOVE_FOLD = 35;
 export const CLOUDINARY_URL = process.env.NEXT_PUBLIC_CLOUDINARY_URL;
+export const CLOUDINARY_PROXY_URL =
+  process.env.NEXT_PUBLIC_CLOUDINARY_PROXY_URL;
 export const MAX_SIZE_BYTES = 10485760;
 export const IMAGE_TRANSFORM_ENABLED =
   process.env.NEXT_PUBLIC_ENABLE_IMAGE_TRANSFORM === "true";

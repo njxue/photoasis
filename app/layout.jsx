@@ -1,12 +1,7 @@
-import Nav from "@app/components/Nav/Nav";
 import Provider from "@app/Provider";
 import "@styles/globals.css";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/route";
 import { inter } from "@styles/fonts";
-import Login from "./components/Login";
 import ToastContainerWrapper from "./ToastContainerWrapper";
-import { UserPreferencesProvider } from "./UserPreferencesContext";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata = {
@@ -16,8 +11,6 @@ export const metadata = {
 };
 
 const Layout = async ({ children }) => {
-  const session = await getServerSession(authOptions);
-
   return (
     <html lang="en">
       <head>
@@ -28,20 +21,7 @@ const Layout = async ({ children }) => {
       <body className={`${inter.className} antialiased`}>
         <SpeedInsights />
         <Provider>
-          <main className="app">
-            {session?.user ? (
-              <div className="flex flex-col h-screen md:flex-row">
-                <div className="h-12 w-screen md:w-12 md:h-screen fixed z-50">
-                  <Nav />
-                </div>
-                <div className="grow mt-12 md:ml-12 md:mt-0 p-3 bg-gray-200 overflow-auto">
-                  <UserPreferencesProvider>{children}</UserPreferencesProvider>
-                </div>
-              </div>
-            ) : (
-              <Login />
-            )}
-          </main>
+          <main className="app w-screen h-screen">{children}</main>
           <ToastContainerWrapper />
         </Provider>
       </body>

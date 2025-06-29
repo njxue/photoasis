@@ -1,4 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require("@prisma/client");
 
 const prismaClientSingleton = () => {
   return new PrismaClient();
@@ -8,6 +8,8 @@ global.prisma = global.prisma || prismaClientSingleton();
 
 module.exports = global.prisma;
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== "production") {
   global.prisma = module.exports;
 }
+
+// npx prisma migrate dev --name migration-name
