@@ -43,12 +43,14 @@ const LoginForm = ({ providers }) => {
           label="Email"
           placeholder="Email"
           error={error}
+          required
         />
         <Input
           type="password"
           name="password"
           label="Password"
           placeholder="Password"
+          required
         />
         <SubmitButton text="Sign in" />
       </form>

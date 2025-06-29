@@ -52,6 +52,7 @@ const RegisterForm = ({ providers }) => {
           label="Email"
           placeholder="Email"
           error={state.validationErrors?.email?.[0] || errors?.email?.[0]}
+          required
         />
 
         <Input
@@ -61,6 +62,7 @@ const RegisterForm = ({ providers }) => {
           label="Password"
           placeholder="Password (at least 8 characters)"
           error={state.validationErrors?.password?.[0] || errors?.password?.[0]}
+          required
         />
         <SubmitButton text="Sign up" />
       </form>

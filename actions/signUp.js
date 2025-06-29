@@ -2,6 +2,7 @@
 import prisma from "@prisma/prisma";
 import { registerSchema } from "@zodSchema/registerSchema";
 import bcrypt from "bcrypt";
+import sendEmailVerification from "./sendEmailVerification";
 async function signUp(_, formData) {
   try {
     const data = Object.fromEntries(formData);
@@ -17,6 +18,7 @@ async function signUp(_, formData) {
 
     const { email, password } = data;
 
+    // Check if user exists
     let user = await prisma.user.findUnique({
       where: { email },
     });
@@ -25,6 +27,7 @@ async function signUp(_, formData) {
       return { success: false, error: "User already exists" };
     }
 
+    // Create user
     user = await prisma.user.create({
       data: {
         email,
@@ -32,6 +35,18 @@ async function signUp(_, formData) {
         password: await bcrypt.hash(password, 10),
       },
     });
+
+    // Send email verification
+    const emailRes = await sendEmailVerification(email);
+    console.log(emailRes);
+
+    // Roll-back user creation if failed to send email verification
+    if (!emailRes.success) {
+      await prisma.user.delete({
+        where: { email },
+      });
+      return { success: false, error: "Unable to create user" };
+    }
 
     return {
       form: data,

@@ -31,8 +31,10 @@ const authOptions = {
         const { email, password } = credentials;
         const user = await prisma.user.findUnique({ where: { email } });
 
-        // If password is empty, account was created using Google provider, not with credentials
-        if (!user || !user.password) {
+        // 1. A user with that email does not exist
+        // 2. User with that email exists, but is created using Google Provider, not with credentials
+        // 3. User is not verified
+        if (!user || !user.password || !user.isVerified) {
           throw new Error("Invalid email and/or password");
         }
 
@@ -80,6 +82,7 @@ const authOptions = {
               email: profile.email,
               name: profile.name,
               image: profile.image,
+              isVerified: true,
             },
           });
         }
