@@ -1,4 +1,4 @@
-import ImageUploadProvider from "@app/common/ImageUpload/ImageUploadContext";
+import ImageUploadProvider from "@app/(protected)/components/ImageUpload/ImageUploadContext";
 import NewAlbumForm from "./components/NewAlbumForm";
 
 const Page = () => {
