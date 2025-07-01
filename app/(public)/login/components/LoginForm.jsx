@@ -32,7 +32,7 @@ const LoginForm = ({ providers }) => {
       }
       return;
     }
-    router.push("/dashboard");
+    // No need to redirect; already handled by layout
   };
 
   return (
