@@ -2,14 +2,14 @@
 
 import createAlbum from "@actions/createAlbum";
 import deleteAlbum from "@actions/deleteAlbum";
-import DroppableFileInput from "@app/common/ImageUpload/DroppableFileInput";
+import DroppableFileInput from "@app/(protected)/components/ImageUpload/DroppableFileInput";
 import SubmitButton from "@app/common/SubmitButton";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import FancyInput from "@app/(protected)/components/FancyInput";
 import { uploadPhotos } from "@utils/imageUploadUtils";
-import { useImageUploadContext } from "@app/common/ImageUpload/ImageUploadContext";
+import { useImageUploadContext } from "@app/(protected)/components/ImageUpload/ImageUploadContext";
 import useProgress from "@app/(protected)/components/Progress/useProgress";
 import ProgressRing from "@app/(protected)/components/Progress/ProgressRing";
 import { useState } from "react";
