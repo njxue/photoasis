@@ -35,13 +35,13 @@ const authOptions = {
         // 2. User with that email exists, but is created using Google Provider, not with credentials
         // 3. User is not verified
         if (!user || !user.password || !user.isVerified) {
-          throw new Error("Invalid email and/or password");
+          return null;
         }
 
         const isValidPassword = await bcrypt.compare(password, user.password);
 
         if (!isValidPassword) {
-          throw new Error("Invalid email and/or password");
+          return null;
         }
 
         return {

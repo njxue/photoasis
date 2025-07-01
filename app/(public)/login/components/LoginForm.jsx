@@ -26,7 +26,7 @@ const LoginForm = ({ providers }) => {
 
     if (!res.ok) {
       if (res.status === 401) {
-        setError(res.error);
+        setError("Invalid email and/or password");
       } else {
         toast.error(res.error);
       }
