@@ -33,13 +33,13 @@ const authOptions = {
 
         // If password is empty, account was created using Google provider, not with credentials
         if (!user || !user.password) {
-          throw new Error("Invalid email and/or password");
+          return null;
         }
 
         const isValidPassword = await bcrypt.compare(password, user.password);
 
         if (!isValidPassword) {
-          throw new Error("Invalid email and/or password");
+          return null;
         }
 
         return {
