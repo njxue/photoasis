@@ -38,7 +38,7 @@ const ImagePreviews = () => {
                     IMAGE_SIZE_RESTRICTION_ENABLED &&
                     file.size > MAX_SIZE_BYTES &&
                     "opacity-20"
-                  }`}
+                  } object-cover`}
                   src={file.url}
                 />
               </div>
