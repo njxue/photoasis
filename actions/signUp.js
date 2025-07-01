@@ -1,7 +1,7 @@
 "use server";
 import prisma from "@prisma/prisma";
 import { registerSchema } from "@zodSchema/registerSchema";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import sendEmailVerification from "./sendEmailVerification";
 async function signUp(_, formData) {
   try {

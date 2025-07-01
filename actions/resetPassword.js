@@ -2,7 +2,7 @@
 
 import prisma from "@prisma/prisma";
 import { passwordSchema } from "@zodSchema/passwordSchema";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 export async function resetPassword(token, password) {

@@ -3,7 +3,7 @@ import NextAuth from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
 import { revalidatePath } from "next/cache";
 import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 const authOptions = {
   pages: {
@@ -31,10 +31,8 @@ const authOptions = {
         const { email, password } = credentials;
         const user = await prisma.user.findUnique({ where: { email } });
 
-        // 1. A user with that email does not exist
-        // 2. User with that email exists, but is created using Google Provider, not with credentials
-        // 3. User is not verified
-        if (!user || !user.password || !user.isVerified) {
+        // If password is empty, account was created using Google provider, not with credentials
+        if (!user || !user.password) {
           return null;
         }
 
@@ -82,7 +80,6 @@ const authOptions = {
               email: profile.email,
               name: profile.name,
               image: profile.image,
-              isVerified: true,
             },
           });
         }
