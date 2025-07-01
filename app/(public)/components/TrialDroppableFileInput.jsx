@@ -11,6 +11,7 @@ const TrialDroppableFileInput = () => {
 
   const acceptedFileTypes = ["jpg", "jpeg", "png"];
   async function handleUpload(file) {
+    if (!(file instanceof File)) return;
     try {
       setIsLoading(true);
       const mimeType = file.type.toLocaleLowerCase();
@@ -50,7 +51,7 @@ const TrialDroppableFileInput = () => {
 
   async function handleDrop(e) {
     e.preventDefault();
-    const file = e.dataTransfer.files[0];
+    const file = e.dataTransfer.files?.[0];
     handleUpload(file);
   }
 
@@ -93,25 +94,27 @@ const TrialDroppableFileInput = () => {
           />
         </div>
       ) : (
-        photo && (
-          <div
-            className="flex flex-col justify-center items-center gap-2 h-full animate-fadeIn"
-            onDrop={handleDrop}
-            onDragOver={handleDragOver}>
-            <div className="relative max-h-full">
-              <img src={photo.url} className="max-h-[80vh]" />
-              <div className="absolute -translate-y-[106%] left-1">
-                <ExpandedPhotoInfo photo={photo} defaultShow readonly />
-              </div>
+        <div
+          className="flex flex-col justify-center items-center gap-2 h-full animate-fadeIn"
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}>
+          <div className="relative max-h-full">
+            <img
+              src={photo.url}
+              className="max-h-[80vh] w-full"
+              alt={photo.name}
+            />
+            <div className="absolute -translate-y-[106%] left-1">
+              <ExpandedPhotoInfo photo={photo} defaultShow readonly />
             </div>
-
-            <button
-              onClick={() => setPhoto()}
-              className="bg-zinc-700 rounded px-3 py-1 text-white font-semibold">
-              Reset
-            </button>
           </div>
-        )
+
+          <button
+            onClick={() => setPhoto(null)}
+            className="bg-zinc-900 rounded-sm py-1 text-white font-semibold w-20">
+            Reset
+          </button>
+        </div>
       )}
     </div>
   );
