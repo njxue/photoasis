@@ -3,8 +3,12 @@ import { parseDate, METERING_MODES, EXPOSURE_MODES } from "@utils/helpers";
 import { useState } from "react";
 import MetaDataItem from "./MetaDataItem";
 import UpdatePhotoForm from "./UpdatePhotoForm";
-const ExpandedPhotoInfo = ({ photo }) => {
-  const [showInfo, setShowInfo] = useState(false);
+const ExpandedPhotoInfo = ({
+  photo,
+  defaultShow = false,
+  readonly = false,
+}) => {
+  const [showInfo, setShowInfo] = useState(defaultShow);
   const [anchorInfo, setAnchorInfo] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -30,7 +34,7 @@ const ExpandedPhotoInfo = ({ photo }) => {
   return (
     <div className="relative text-xs flex flex-col items-start w-full">
       <div className="mb-10 sm:mb-6">
-        {isEditing ? (
+        {isEditing && !readonly ? (
           <UpdatePhotoForm
             photo={photo}
             onCancel={(e) => {
@@ -57,13 +61,15 @@ const ExpandedPhotoInfo = ({ photo }) => {
                   <p className="col-span-2 text-xs mt-1">{photo.description}</p>
                 )}
               </div>
-              <img
-                src="/assets/icons/pen-square.svg"
-                className="invert w-5 h-fit opacity-30 hover:opacity-100 hover:cursor-pointer transition-opacity"
-                onClick={(e) => {
-                  setIsEditing(true);
-                }}
-              />
+              {!readonly && (
+                <img
+                  src="/assets/icons/pen-square.svg"
+                  className="invert w-5 h-fit opacity-30 hover:opacity-100 hover:cursor-pointer transition-opacity"
+                  onClick={(e) => {
+                    setIsEditing(true);
+                  }}
+                />
+              )}
             </div>
 
             {DIVIDER}
