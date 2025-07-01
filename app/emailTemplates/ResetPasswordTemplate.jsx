@@ -1,5 +1,7 @@
+import { BASE_URL } from "@app/configs/emailConfigs";
+
 const ResetPasswordTemplate = (token) => {
-  const resetLink = `http://localhost:3000/resetPassword?token=${token}`;
+  const resetLink = `${BASE_URL}/resetPassword?token=${token}`;
   return (
     <div>
       <h1>Welcome to Photoasis!</h1>
@@ -8,20 +10,12 @@ const ResetPasswordTemplate = (token) => {
         Click the button below to set a new password. This link will expire in
         <strong> 5 minutes</strong>.
       </p>
-      <p style={{ margin: "20px 0" }}>
-        <a
-          href={resetLink}
-          style={{
-            backgroundColor: "#0D3B66",
-            color: "#fff",
-            padding: "10px 15px",
-            borderRadius: "5px",
-            textDecoration: "none",
-            display: "inline-block",
-          }}>
-          Reset Password
-        </a>
-      </p>
+
+      <a
+        href={resetLink}
+        className="bg-zinc-900 text-white mt-2 py-2 px-10 rounded-sm inline-block">
+        Reset Password
+      </a>
     </div>
   );
 };

@@ -2,7 +2,7 @@
 
 import { Resend } from "resend";
 import jwt from "jsonwebtoken";
-import EmailTemplate from "@app/(public)/components/EmailTemplate";
+import VerifyEmailTemplate from "@app/emailTemplates/VerifyEmailTemplate";
 import prisma from "@prisma/prisma";
 import {
   ADMIN_EMAIL_ADDRESS,
@@ -35,7 +35,7 @@ export default async function sendEmailVerification(email) {
       from: ADMIN_EMAIL_ADDRESS,
       to: email,
       subject: "Photoasis - Activate your account",
-      react: EmailTemplate(emailToken),
+      react: VerifyEmailTemplate(emailToken),
     });
 
     if (error) {
