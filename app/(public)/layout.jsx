@@ -1,6 +1,17 @@
 import Nav from "./components/Nav";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@app/api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
 const Layout = async ({ children }) => {
+  const session = await getServerSession(authOptions);
+
+  const isLoggedIn = !!session?.user;
+
+  if (isLoggedIn) {
+    redirect("/dashboard");
+  }
+  
   return (
     <div className="relative w-screen h-screen flex flex-col items-center bg-gradient-to-r from-[#ffcbcb] via-[#ebe9e5] to-[#8adcee] animate-bg-gradient">
       <Nav />

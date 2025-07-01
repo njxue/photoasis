@@ -63,7 +63,7 @@ const ResetPassword = () => {
           required
         />
         <SubmitButton
-          text={state?.success ? "Password resetted" : "Reset password"}
+          text={state?.success ? "Password has been reset" : "Reset password"}
           disabled={state?.success}
         />
       </form>
