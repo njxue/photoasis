@@ -1,8 +1,10 @@
 "use client";
 
 import sendEmailVerification from "@actions/sendEmailVerification";
+import FormContainer from "@app/(public)/components/FormContainer";
 import Input from "@app/common/Input";
 import SubmitButton from "@app/common/SubmitButton";
+import Link from "next/link";
 import { toast } from "react-toastify";
 
 const ResendEmailVerificationForm = () => {
@@ -18,7 +20,7 @@ const ResendEmailVerificationForm = () => {
   };
 
   return (
-    <div className="border border-black p-3">
+    <FormContainer>
       <div
         className={`bg-red-100 p-2 rounded-sm border border-red-300 text-red-800`}>
         <p className="font-semibold">Link is invalid or has expired</p>
@@ -37,7 +39,12 @@ const ResendEmailVerificationForm = () => {
         />
         <SubmitButton text="Resend" disableDuration={30} />
       </form>
-    </div>
+      <Link
+        href="/login"
+        className="text-center text-sm font-semibold text-sky-600 hover:text-sky-800 hover:underline transition-all mt-6">
+        Back to login
+      </Link>
+    </FormContainer>
   );
 };
 

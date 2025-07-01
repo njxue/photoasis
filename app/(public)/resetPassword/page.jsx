@@ -7,6 +7,8 @@ import { confirmPasswordSchema } from "@zodSchema/confirmPasswordSchema";
 import { useState } from "react";
 import { useFormState } from "react-dom";
 import { toast } from "react-toastify";
+import FormContainer from "../components/FormContainer";
+import Link from "next/link";
 
 const ResetPassword = () => {
   const searchParams = useSearchParams();
@@ -40,7 +42,7 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="border border-black p-3">
+    <FormContainer>
       <h1 className="text-2xl font-semibold">Reset password</h1>
 
       <form onSubmit={handleSubmit} action={formAction} className="mt-6">
@@ -65,7 +67,12 @@ const ResetPassword = () => {
           disabled={state?.success}
         />
       </form>
-    </div>
+      <Link
+        href="/login"
+        className="text-center text-sm font-semibold text-sky-600 hover:text-sky-800 hover:underline transition-all mt-6">
+        Back to login
+      </Link>
+    </FormContainer>
   );
 };
 

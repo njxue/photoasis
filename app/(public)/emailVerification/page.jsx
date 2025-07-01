@@ -3,9 +3,6 @@ import jwt from "jsonwebtoken";
 import Link from "next/link";
 import ResendEmailVerificationForm from "./components/ResendEmailVerificationForm";
 
-const InvalidToken = () => {
-  return <></>;
-};
 const EmailVerification = async ({ searchParams }) => {
   const { token } = searchParams;
 
@@ -23,13 +20,13 @@ const EmailVerification = async ({ searchParams }) => {
       <div className="flex flex-col justify-center items-center">
         <h1 className="text-3xl font-bold">Account activated!</h1>
         <p>
-          Click
+          Click&nbsp;
           <Link href="/login">
-            <span className="font-bold hover:text-orange-600 transition-all">
-              &nbsp;here&nbsp;
+            <span className="font-semibold text-sky-600 hover:text-sky-800 hover:underline transition-all ">
+              here
             </span>
           </Link>
-          to log in
+          &nbsp;to log in
         </p>
       </div>
     );

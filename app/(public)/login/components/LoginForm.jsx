@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const LoginForm = ({ providers }) => {
   const [error, setError] = useState("");
@@ -35,8 +36,8 @@ const LoginForm = ({ providers }) => {
   };
 
   return (
-    <div>
-      <form action={handleLogin}>
+    <div className="flex flex-col items-center gap-4">
+      <form action={handleLogin} className="w-full">
         <Input
           type="email"
           name="email"
@@ -52,13 +53,33 @@ const LoginForm = ({ providers }) => {
           placeholder="Password"
           required
         />
-        <SubmitButton text="Sign in" />
+        <div className="flex flex-col items-end gap-2">
+          <SubmitButton text="Sign in" />
+          <Link
+            href="/forgotPassword"
+            className="text-xs text-neutral-500 hover:text-black hover:underline transition-all">
+            Forgot password
+          </Link>
+        </div>
       </form>
-      <div className="mt-10 w-full">
+      <div className="flex items-center w-full gap-6 text-neutral-500">
+        <hr className="bg-gray-300 h-[1px] w-full" />
+        <p>or</p>
+        <hr className="bg-gray-300 h-[1px] w-full" />
+      </div>
+      <div className="w-full">
         {thirdPartyProviders.map((provider) => (
           <ProviderSignInButton provider={provider} key={provider.id} />
         ))}
-      </div>
+      </div>{" "}
+      <p className="text-sm text-neutral-500">
+        Don't have an account?&nbsp;
+        <Link
+          href="/register"
+          className="font-semibold text-sky-600 hover:text-sky-800 hover:underline transition-all">
+          Sign up
+        </Link>
+      </p>
     </div>
   );
 };

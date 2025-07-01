@@ -7,6 +7,7 @@ import { registerSchema } from "../../../../zodSchema/registerSchema";
 import { useState } from "react";
 import Input from "@app/common/Input";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
 const RegisterForm = ({ providers }) => {
   const thirdPartyProviders = Object.values(providers).filter(
@@ -39,12 +40,12 @@ const RegisterForm = ({ providers }) => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col items-center gap-4">
       <form
         action={formAction}
         onSubmit={handleSubmit}
         noValidate
-        className="flex flex-col gap-2">
+        className="w-full">
         <Input
           type="email"
           name="email"
@@ -66,12 +67,25 @@ const RegisterForm = ({ providers }) => {
         />
         <SubmitButton text="Sign up" />
       </form>
+      <div className="flex items-center w-full gap-6 text-neutral-500">
+        <hr className="bg-gray-300 h-[1px] w-full" />
+        <p>or</p>
+        <hr className="bg-gray-300 h-[1px] w-full" />
+      </div>
 
-      <div className="mt-10 w-full">
+      <div className="w-full">
         {thirdPartyProviders.map((provider) => (
           <ProviderSignInButton provider={provider} key={provider.id} />
         ))}
       </div>
+      <p className="text-sm text-neutral-500">
+        Already have an account?&nbsp;
+        <Link
+          href="/login"
+          className="font-semibold text-sky-600 hover:text-sky-800 hover:underline transition-all">
+          Sign in
+        </Link>
+      </p>
     </div>
   );
 };
