@@ -7,6 +7,11 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import {
+  PAGE_ROUTE_DASHBOARD,
+  PAGE_ROUTE_FORGOT_PASSWORD,
+  PAGE_ROUTE_REGISTER,
+} from "@utils/pageRoutes";
 
 const LoginForm = ({ providers }) => {
   const [error, setError] = useState("");
@@ -32,7 +37,7 @@ const LoginForm = ({ providers }) => {
       }
       return;
     }
-    router.push("/dashboard");
+    router.push(PAGE_ROUTE_DASHBOARD);
   };
 
   return (
@@ -56,7 +61,7 @@ const LoginForm = ({ providers }) => {
         <div className="flex flex-col items-end gap-2">
           <SubmitButton text="Sign in" />
           <Link
-            href="/forgotPassword"
+            href={PAGE_ROUTE_FORGOT_PASSWORD}
             className="text-xs text-neutral-500 hover:text-black hover:underline transition-all">
             Forgot password
           </Link>
@@ -75,7 +80,7 @@ const LoginForm = ({ providers }) => {
       <p className="text-sm text-neutral-500">
         Don't have an account?&nbsp;
         <Link
-          href="/register"
+          href={PAGE_ROUTE_REGISTER}
           className="font-semibold text-sky-600 hover:text-sky-800 hover:underline transition-all">
           Sign up
         </Link>

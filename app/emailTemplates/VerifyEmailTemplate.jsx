@@ -1,7 +1,8 @@
 import { BASE_URL } from "@app/configs/emailConfigs";
+import { PAGE_ROUTE_EMAIL_VERIFICATION } from "@utils/pageRoutes";
 
 const VerifyEmailTemplate = (token) => {
-  const activationLink = `${BASE_URL}/emailVerification?token=${token}`;
+  const activationLink = `${BASE_URL}${PAGE_ROUTE_EMAIL_VERIFICATION}?token=${token}`;
   return (
     <div>
       <h1>Welcome to Photoasis!</h1>

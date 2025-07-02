@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import prisma from "@prisma/prisma";
 import Link from "next/link";
 import ResendEmailVerificationForm from "./components/ResendEmailVerificationForm";
+import { PAGE_ROUTE_LOGIN } from "@utils/pageRoutes";
 
 const EmailVerification = async ({ searchParams }) => {
   const { token } = searchParams;
@@ -21,7 +22,7 @@ const EmailVerification = async ({ searchParams }) => {
         <h1 className="text-3xl font-bold">Account activated!</h1>
         <p>
           Click&nbsp;
-          <Link href="/login">
+          <Link href={PAGE_ROUTE_LOGIN}>
             <span className="font-semibold text-sky-600 hover:text-sky-800 hover:underline transition-all ">
               here
             </span>

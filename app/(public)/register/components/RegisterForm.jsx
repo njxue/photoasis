@@ -8,6 +8,7 @@ import { useState } from "react";
 import Input from "@app/common/Input";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import { PAGE_ROUTE_LOGIN } from "@utils/pageRoutes";
 
 const RegisterForm = ({ providers }) => {
   const thirdPartyProviders = Object.values(providers).filter(
@@ -81,7 +82,7 @@ const RegisterForm = ({ providers }) => {
       <p className="text-sm text-neutral-500">
         Already have an account?&nbsp;
         <Link
-          href="/login"
+          href={PAGE_ROUTE_LOGIN}
           className="font-semibold text-sky-600 hover:text-sky-800 hover:underline transition-all">
           Sign in
         </Link>

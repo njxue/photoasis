@@ -1,12 +1,14 @@
 "use client";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { PAGE_ROUTE_LOGIN, PAGE_ROUTE_REGISTER } from "@utils/pageRoutes";
 
 const Nav = () => {
   const pathname = usePathname();
 
-  const linkHref = pathname === "/login" ? "/register" : "/login";
-  const buttonText = pathname === "/login" ? "Sign up" : "Sign in";
+  const linkHref =
+    pathname === PAGE_ROUTE_LOGIN ? PAGE_ROUTE_REGISTER : PAGE_ROUTE_LOGIN;
+  const buttonText = pathname === PAGE_ROUTE_LOGIN ? "Sign up" : "Sign in";
 
   return (
     <div className="flex items-center justify-between w-full h-[70px] px-4 z-50">

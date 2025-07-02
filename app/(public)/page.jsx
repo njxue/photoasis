@@ -1,6 +1,7 @@
 import Link from "next/link";
 import TrialDroppableFileInput from "./components/TrialDroppableFileInput";
 import Tooltip from "@app/common/Tooltip";
+import { PAGE_ROUTE_REGISTER } from "@utils/pageRoutes";
 
 const Landing = async () => {
   return (
@@ -24,7 +25,7 @@ const Landing = async () => {
           <span>, no loss!</span>
         </span>
 
-        <Link href="/register">
+        <Link href={PAGE_ROUTE_REGISTER}>
           <button className="bg-zinc-900 text-white font-semibold text-lg py-2 px-6 rounded-sm shadow mt-5 hover:bg-teal-700 transition-all animate-fadeInAndSlideUp">
             Get started
           </button>

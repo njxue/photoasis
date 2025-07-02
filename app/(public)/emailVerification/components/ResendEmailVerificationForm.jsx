@@ -4,6 +4,7 @@ import sendEmailVerification from "@actions/sendEmailVerification";
 import FormContainer from "@app/(public)/components/FormContainer";
 import Input from "@app/common/Input";
 import SubmitButton from "@app/common/SubmitButton";
+import { PAGE_ROUTE_LOGIN } from "@utils/pageRoutes";
 import Link from "next/link";
 import { toast } from "react-toastify";
 
@@ -40,7 +41,7 @@ const ResendEmailVerificationForm = () => {
         <SubmitButton text="Resend" disableDuration={30} />
       </form>
       <Link
-        href="/login"
+        href={PAGE_ROUTE_LOGIN}
         className="text-center text-sm font-semibold text-sky-600 hover:text-sky-800 hover:underline transition-all mt-6">
         Back to login
       </Link>

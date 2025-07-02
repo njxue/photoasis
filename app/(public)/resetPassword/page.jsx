@@ -9,6 +9,7 @@ import { useFormState } from "react-dom";
 import { toast } from "react-toastify";
 import FormContainer from "../components/FormContainer";
 import Link from "next/link";
+import { PAGE_ROUTE_LOGIN } from "@utils/pageRoutes";
 
 const ResetPassword = () => {
   const searchParams = useSearchParams();
@@ -68,7 +69,7 @@ const ResetPassword = () => {
         />
       </form>
       <Link
-        href="/login"
+        href={PAGE_ROUTE_LOGIN}
         className="text-center text-sm font-semibold text-sky-600 hover:text-sky-800 hover:underline transition-all mt-6">
         Back to login
       </Link>

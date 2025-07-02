@@ -1,7 +1,8 @@
 import { BASE_URL } from "@app/configs/emailConfigs";
+import { PAGE_ROUTE_RESET_PASSWORD } from "@utils/pageRoutes";
 
 const ResetPasswordTemplate = (token) => {
-  const resetLink = `${BASE_URL}/resetPassword?token=${token}`;
+  const resetLink = `${BASE_URL}${PAGE_ROUTE_RESET_PASSWORD}?token=${token}`;
   return (
     <div>
       <h1>Welcome to Photoasis!</h1>
