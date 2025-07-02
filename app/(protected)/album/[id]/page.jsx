@@ -42,9 +42,6 @@ export const fetchAlbumData = unstable_cache(
 );
 const Page = async ({ params }) => {
   const session = await getServerSession(authOptions);
-  if (!session?.user) {
-    redirect("/");
-  }
 
   const albumData = await fetchAlbumData(parseInt(params.id), session.user.id);
   if (!albumData) {

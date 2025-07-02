@@ -11,6 +11,7 @@ const Provider = ({ children, session }) => {
       </PostHogProvider>
     );
   }
+
   return <SessionProvider session={session}>{children}</SessionProvider>;
 };
 

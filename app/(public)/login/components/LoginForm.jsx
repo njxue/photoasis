@@ -5,7 +5,7 @@ import ProviderSignInButton from "@app/(public)/components/ProviderSignInButton"
 import { toast } from "react-toastify";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import {
   PAGE_ROUTE_DASHBOARD,
@@ -16,6 +16,8 @@ import {
 const LoginForm = ({ providers }) => {
   const [error, setError] = useState("");
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirectTo");
 
   const thirdPartyProviders = Object.values(providers).filter(
     (provider) => provider.id !== "credentials"
@@ -37,7 +39,9 @@ const LoginForm = ({ providers }) => {
       }
       return;
     }
-    router.push(PAGE_ROUTE_DASHBOARD);
+
+    const redirectUrl = redirectTo ?? PAGE_ROUTE_DASHBOARD;
+    router.push(redirectUrl);
   };
 
   return (

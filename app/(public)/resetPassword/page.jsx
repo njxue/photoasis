@@ -2,7 +2,7 @@
 import { resetPassword } from "@actions/resetPassword";
 import Input from "@app/common/Input";
 import SubmitButton from "@app/common/SubmitButton";
-import { useSearchParams } from "@node_modules/next/navigation";
+import { useSearchParams } from "next/navigation";
 import { confirmPasswordSchema } from "@zodSchema/confirmPasswordSchema";
 import { useState } from "react";
 import { useFormState } from "react-dom";
