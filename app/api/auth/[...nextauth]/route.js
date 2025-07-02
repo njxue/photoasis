@@ -53,23 +53,32 @@ const authOptions = {
   ],
 
   callbacks: {
-    async session({ session }) {
+    async session({ session, token }) {
       try {
-        const user = await prisma.user.findUniqueOrThrow({
-          where: { email: session.user.email },
-        });
-        session.user.id = user.id;
+        session.user.id = token.id;
       } catch (err) {
         console.log(err);
       }
-
       return session;
     },
+
+    async jwt({ token, user, profile, account }) {
+      // On sign in, add user id (from database) to token
+      if (user) {
+        if (account.provider === "google") {
+          token.id = profile.dbUserId;
+        } else {
+          token.id = user.id;
+        }
+      }
+      return token;
+    },
+
     async signIn({ account, profile }) {
       if (account.provider !== "google") return true;
 
-      // Create new user if register using google
       try {
+        // Create new user if register using google
         let user = await prisma.user.findUnique({
           where: { email: profile.email },
         });
@@ -83,7 +92,10 @@ const authOptions = {
             },
           });
         }
-        revalidatePath("/", "layout");
+
+        // To be accessed in jwt callback
+        profile.dbUserId = user.id;
+
         return true;
       } catch (err) {
         console.log(err);
