@@ -9,3 +9,4 @@ export const PAGE_ROUTE_EMAIL_VERIFICATION = "/emailVerification";
 export const PAGE_ROUTE_DASHBOARD = "/dashboard";
 export const PAGE_ROUTE_GALLERY = "/gallery";
 export const PAGE_ROUTE_NEW_ALBUM = "/album/new";
+export const PAGE_ROUTE_SETTINGS = "/settings";
