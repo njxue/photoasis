@@ -1,5 +1,5 @@
-import verifyUser from "@actions/verifyUser";
 import jwt from "jsonwebtoken";
+import prisma from "@prisma/prisma";
 import Link from "next/link";
 import ResendEmailVerificationForm from "./components/ResendEmailVerificationForm";
 
@@ -35,5 +35,33 @@ const EmailVerification = async ({ searchParams }) => {
     return <ResendEmailVerificationForm />;
   }
 };
+
+async function verifyUser(email) {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      return { success: false, error: "User not found" };
+    }
+
+    await prisma.user.update({
+      where: {
+        email,
+      },
+      data: {
+        isVerified: true,
+      },
+    });
+
+    return { success: true };
+  } catch (error) {
+    if (error instanceof Error) {
+      return { success: false, error: error.message };
+    }
+    return { success: false, error: String(error) };
+  }
+}
 
 export default EmailVerification;
