@@ -24,6 +24,7 @@ const deletePhotos = async ({ aid, pids }) => {
       },
       include: {
         thumbnail: true,
+        banner: true,
         photos: true,
       },
     });
@@ -59,6 +60,14 @@ const deletePhotos = async ({ aid, pids }) => {
           },
         };
       }
+    }
+
+    // Update banner
+    if (pids.includes(album.bannerPid)) {
+      newAlbumData = {
+        ...newAlbumData,
+        bannerPid: null,
+      };
     }
 
     // Remove deleted photos from photoOrder array

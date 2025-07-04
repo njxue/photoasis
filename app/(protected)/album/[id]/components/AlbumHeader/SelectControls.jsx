@@ -128,12 +128,36 @@ function SelectControls({ selectModes }) {
         // Add artificial delay for smoother transition
         setTimeout(updateToast, 500);
       } else {
-        toast.error("Unable to updated thumbnail. Please try again later");
+        toast.error("Unable to update thumbnail. Please try again later");
       }
     } catch (err) {
       console.log(err);
-      toast.error("Unable to updated thumbnail. Please try again later");
+      toast.error("Unable to update thumbnail. Please try again later");
       toast.dismiss(toastId);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function handleChangeBanner() {
+    if (selectedItems.length === 0) {
+      return;
+    }
+
+    const selectedPhotoPid = selectedItems[0]?.pid;
+
+    try {
+      setIsLoading(true);
+      const res = await updateAlbum({
+        aid: album.aid,
+        bannerPid: selectedPhotoPid,
+      });
+
+      if (res.ok) {
+        endSelect();
+      }
+    } catch (err) {
+      toast.error("Unable to change banner");
     } finally {
       setIsLoading(false);
     }
@@ -162,6 +186,16 @@ function SelectControls({ selectModes }) {
             className="btn-gray font-bold"
             onClick={handleChangeThumbail}>
             Set as thumbnail
+          </button>
+          <CancelSelectButton />
+        </>
+      ) : mode === selectModes.changeBanner ? (
+        <>
+          <button
+            disabled={!numSelected || isLoading}
+            className="btn-gray font-bold"
+            onClick={handleChangeBanner}>
+            Set as banner
           </button>
           <CancelSelectButton />
         </>

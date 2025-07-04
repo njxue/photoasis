@@ -14,6 +14,7 @@ export const fetchAlbumData = unstable_cache(
         },
         include: {
           photos: true,
+          banner: true,
         },
       });
 
@@ -30,6 +31,13 @@ export const fetchAlbumData = unstable_cache(
         );
       } else {
         data.photos.sort((p1, p2) => p1.pid.localeCompare(p2.pid));
+      }
+
+      if (data.banner) {
+        data.banner = {
+          ...data.banner,
+          url: `${process.env.NEXT_PUBLIC_CLOUDFLARE_URL}/${uid}/${aid}/${data.banner.name}`,
+        };
       }
       return data;
     } catch (err) {

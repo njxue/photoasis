@@ -1,7 +1,7 @@
 "use client";
 import SelectableItem from "@app/(protected)/components/Select/SelectableItem";
 import PhotoCard from "@app/(protected)/components/Cards/Photo/PhotoCard";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import DraggableAndDroppable from "@app/(protected)/components/DragAndDrop/DraggableAndDroppable";
 import updateAlbum from "@actions/updateAlbum";
 import { toast } from "react-toastify";
@@ -10,12 +10,16 @@ import PhotoCarousel from "@app/(protected)/components/Cards/Photo/PhotoCarousel
 import Photo from "@app/(protected)/components/Cards/Photo";
 import UpdateAlbumForm from "./AlbumHeader/Menu/UpdateAlbumForm";
 import AlbumMenu from "./AlbumHeader/Menu/AlbumMenu";
+import { useSelect } from "@app/(protected)/components/Select/SelectContext";
 function AlbumBody({ minimalisticView }) {
   const album = useAlbum();
 
   const [currentExpanded, setCurrentExpanded] = useState(null);
   const [sortedPhotos, setSortedPhotos] = useState(album?.photos);
   const [isEditing, setIsEditing] = useState(false);
+  const { selectedItems, mode } = useSelect();
+
+  const photoComparator = useCallback((i1, i2) => i1.pid === i2.pid, []);
 
   function handleDrop(e, pidFrom) {
     const pidTo = e.dataTransfer.getData("pid");
@@ -55,20 +59,26 @@ function AlbumBody({ minimalisticView }) {
     }
   }
 
-  const heroImage = sortedPhotos?.[0];
+  let banner;
+
+  if (mode === "changeBanner" && selectedItems?.[0]) {
+    banner = selectedItems[0];
+  } else {
+    banner = album.banner ?? sortedPhotos?.[0];
+  }
 
   return (
     <>
       <div className="relative">
-        <div className="relative h-[450px] hero cursor-pointer group">
+        <div className="relative h-[450px] cursor-pointer group">
           <div className="bg-black/30 absolute inset-0 z-50" />
-          {heroImage ? (
+          {banner ? (
             <Photo
-              src={heroImage.url}
+              src={banner.url}
               className="max-w-full group-hover:opacity-80 transition-all"
-              name={heroImage.name}
+              name={banner.name}
               lazy={false}
-              blurhash={heroImage.blurhash}
+              blurhash={banner.blurhash}
             />
           ) : (
             <div className="flex justify-center h-full">
@@ -109,9 +119,7 @@ function AlbumBody({ minimalisticView }) {
             handleDrop={(e) => handleDrop(e, photo.pid)}
             handleDrag={(e) => handleDrag(e, photo.pid)}
             key={photo.pid}>
-            <SelectableItem
-              item={photo}
-              comparator={(i1, i2) => i1.pid === i2.pid}>
+            <SelectableItem item={photo} comparator={photoComparator}>
               <PhotoCard
                 photo={photo}
                 minimalisticView={minimalisticView}

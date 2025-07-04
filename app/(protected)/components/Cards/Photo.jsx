@@ -37,6 +37,7 @@ const Photo = ({
             priority={!lazy}
             isLocal={isLocal}
             sizes="(max-width: 450px) 20px, (max-width: 640px) 50px, 100px"
+            key={src}
           />
         )
       )}
@@ -50,6 +51,7 @@ const Photo = ({
         fill={true}
         isLocal={isLocal}
         sizes={sizes}
+        key={src} // False re-render on error
       />
     </div>
   );

@@ -46,7 +46,6 @@ function DashboardBody({ albums }) {
       });
     }
   }
-
   return (
     <div className="photo-grid">
       {sortedAlbums?.map((album, idx) => (

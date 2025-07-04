@@ -36,6 +36,7 @@ model Photo {
   cameraModel       String?
   editingSoftware   String?
   thumbnailForAlbum Album?    @relation("thumbnail")
+  bannerForAlbum    Album?    @relation("banner")
   album             Album?    @relation(fields: [aid, uid], references: [aid, uid])
   description       String?
   date              DateTime?
@@ -48,6 +49,8 @@ model Album {
   uid          Int
   thumbnailPid String?  @unique
   thumbnail    Photo?   @relation("thumbnail", fields: [thumbnailPid], references: [pid])
+  bannerPid    String?  @unique
+  banner       Photo?   @relation("banner", fields: [bannerPid], references: [pid])
   user         User     @relation(fields: [uid], references: [id])
   photos       Photo[]
   photoOrder   String[]

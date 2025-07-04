@@ -16,7 +16,7 @@ async function updateAlbum(data, revalidate = true) {
   const uid = session?.user.id;
 
   // Only aid is compulsory
-  const { aid, photos, albumName, photoOrder, thumbnailPid } = data;
+  const { aid, photos, albumName, photoOrder, thumbnailPid, bannerPid } = data;
   const res = await prisma.$transaction(async (prisma) => {
     // If updated album name
     let albumData = albumName ? { name: albumName } : {};
@@ -61,9 +61,17 @@ async function updateAlbum(data, revalidate = true) {
       }
     }
 
+    // Update banner
+    if (bannerPid) {
+      albumData = {
+        ...albumData,
+        banner: { connect: { pid: bannerPid } },
+      };
+    }
+
     // Update thumbnail
     if (thumbnailPid) {
-      albumData = albumData = {
+      albumData = {
         ...albumData,
         thumbnail: {
           connect: {
