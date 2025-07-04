@@ -5,6 +5,7 @@ import LoadingSpinner from "../LoadingSpinner";
 import {
   CLOUDINARY_URL,
   IMAGE_TRANSFORM_ENABLED,
+  USE_CLIENT_HINTS,
   USE_NEXT_IMAGE,
 } from "@app/configs/imageConfigs";
 
@@ -28,7 +29,7 @@ const OptimisedImage = ({
   onLoad,
   isLocal = false,
 }) => {
-  const COMMON_TRANSFORMATIONS = "w_auto/f_auto/dpr_auto";
+  const COMMON_TRANSFORMATIONS = `${USE_CLIENT_HINTS ? "w_auto/" : ""}f_auto/dpr_auto`;
   const hoverStyles =
     "hover:opacity-50 transition-opacity ease-in-out duration-50";
   const dimensions = "h-full w-full max-w-[90vw] max-h-[90vh]";
@@ -97,14 +98,14 @@ const OptimisedImage = ({
             isError
               ? imgSrc
               : (srcset ??
-                `${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS}/${src} 100w,
-                ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS}/${src} 250w,
-                ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS}/${src} 540w,
-                ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS}/${src} 720w,
-                ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS}/${src} 960w,
-                ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS}/${src} 1200w,
-                ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS}/${src} 1440w,
-                ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS}/${src} 1920w`)
+                `${CLOUDINARY_URL}/w_100/${COMMON_TRANSFORMATIONS}/${src} 100w,
+                ${CLOUDINARY_URL}/w_250/${COMMON_TRANSFORMATIONS}/${src} 250w,
+                ${CLOUDINARY_URL}/w_540/${COMMON_TRANSFORMATIONS}/${src} 540w,
+                ${CLOUDINARY_URL}/w_720/${COMMON_TRANSFORMATIONS}/${src} 720w,
+                ${CLOUDINARY_URL}/w_960/${COMMON_TRANSFORMATIONS}/${src} 960w,
+                ${CLOUDINARY_URL}/w_1200/${COMMON_TRANSFORMATIONS}/${src} 1200w,
+                ${CLOUDINARY_URL}/w_1440/${COMMON_TRANSFORMATIONS}/${src} 1440w,
+                ${CLOUDINARY_URL}/w_1920/${COMMON_TRANSFORMATIONS}/${src} 1920w`)
           }
         />
       ) : (

@@ -3,6 +3,7 @@ import "@styles/globals.css";
 import { inter } from "@styles/fonts";
 import ToastContainerWrapper from "./ToastContainerWrapper";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { USE_CLIENT_HINTS } from "./configs/imageConfigs";
 
 export const metadata = {
   title: "Photoasis",
@@ -14,9 +15,11 @@ const Layout = async ({ children }) => {
   return (
     <html lang="en">
       <head>
-        <meta
-          http-equiv="delegate-ch"
-          content="sec-ch-width https://res.cloudinary.com; sec-ch-dpr https://res.cloudinary.com; sec-ch-viewport-width https://res.cloudinary.com;"></meta>
+        {USE_CLIENT_HINTS && (
+          <meta
+            http-equiv="delegate-ch"
+            content="sec-ch-width https://res.cloudinary.com; sec-ch-dpr https://res.cloudinary.com; sec-ch-viewport-width https://res.cloudinary.com;"></meta>
+        )}
       </head>
       <body className={`${inter.className} antialiased`}>
         <SpeedInsights />
