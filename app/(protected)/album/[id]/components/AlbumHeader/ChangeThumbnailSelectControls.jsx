@@ -66,7 +66,7 @@ export default function ChangeThumbnailSelectControls() {
   }
   return (
     isSelecting && (
-      <div className="flex flex-row justify-center items-center gap-1">
+      <>
         <button
           disabled={!numSelected || isLoading}
           className="btn-gray font-bold"
@@ -74,7 +74,7 @@ export default function ChangeThumbnailSelectControls() {
           Set as thumbnail
         </button>
         <CancelSelectButton />
-      </div>
+      </>
     )
   );
 }

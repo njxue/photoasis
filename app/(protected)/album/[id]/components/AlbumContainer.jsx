@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import MinimalisticViewToggle from "@app/(protected)/components/MinimalisticViewToggle";
-import AlbumHeader from "./AlbumHeader/AlbumHeader";
 import { SelectProvider } from "@app/(protected)/components/Select/SelectContext";
 import AlbumBody from "./AlbumBody";
 import { notFound } from "next/navigation";
@@ -20,13 +19,12 @@ const AlbumContainer = () => {
   const [minimalisticView, setMinimalisticView] = useState(false);
 
   return (
-    <div className="h-full p-1">
+    <div className="h-full">
       <MinimalisticViewToggle
         minimalisticView={minimalisticView}
         setMinimalisticView={setMinimalisticView}
       />
       <SelectProvider>
-        {!minimalisticView && <AlbumHeader />}
         <AlbumBody minimalisticView={minimalisticView} key={album.photos} />
       </SelectProvider>
     </div>

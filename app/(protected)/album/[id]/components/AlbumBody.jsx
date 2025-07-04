@@ -7,12 +7,15 @@ import updateAlbum from "@actions/updateAlbum";
 import { toast } from "react-toastify";
 import { useAlbum } from "../AlbumContext";
 import PhotoCarousel from "@app/(protected)/components/Cards/Photo/PhotoCarousel";
-import { NUM_IMAGES_ABOVE_FOLD } from "@app/configs/imageConfigs";
+import Photo from "@app/(protected)/components/Cards/Photo";
+import UpdateAlbumForm from "./AlbumHeader/Menu/UpdateAlbumForm";
+import AlbumMenu from "./AlbumHeader/Menu/AlbumMenu";
 function AlbumBody({ minimalisticView }) {
   const album = useAlbum();
 
   const [currentExpanded, setCurrentExpanded] = useState(null);
   const [sortedPhotos, setSortedPhotos] = useState(album?.photos);
+  const [isEditing, setIsEditing] = useState(false);
 
   function handleDrop(e, pidFrom) {
     const pidTo = e.dataTransfer.getData("pid");
@@ -52,33 +55,81 @@ function AlbumBody({ minimalisticView }) {
     }
   }
 
+  const heroImage = sortedPhotos?.[0];
+
   return (
-    <div className="photo-grid">
-      {sortedPhotos.map((photo, idx) => (
-        <DraggableAndDroppable
-          handleDrop={(e) => handleDrop(e, photo.pid)}
-          handleDrag={(e) => handleDrag(e, photo.pid)}
-          key={photo.pid}>
-          <SelectableItem
-            item={photo}
-            comparator={(i1, i2) => i1.pid === i2.pid}>
-            <PhotoCard
-              photo={photo}
-              minimalisticView={minimalisticView}
-              onClick={() => setCurrentExpanded(idx)}
-              lazy={idx >= NUM_IMAGES_ABOVE_FOLD}
+    <>
+      <div className="relative">
+        <div className="relative h-[450px] hero cursor-pointer group">
+          <div className="bg-black/30 absolute inset-0 z-50" />
+          {heroImage ? (
+            <Photo
+              src={heroImage.url}
+              className="max-w-full group-hover:opacity-80 transition-all"
+              name={heroImage.name}
+              lazy={false}
+              blurhash={heroImage.blurhash}
             />
-          </SelectableItem>
-        </DraggableAndDroppable>
-      ))}
-      {currentExpanded != null && (
-        <PhotoCarousel
-          photos={album.photos}
-          defaultIndex={currentExpanded}
-          onClose={() => setCurrentExpanded(null)}
-        />
-      )}
-    </div>
+          ) : (
+            <div className="flex justify-center h-full">
+              <img
+                src="/assets/images/placeholder.png"
+                className="object-contain"
+              />
+            </div>
+          )}
+          <div className="flex items-center gap-4 absolute bottom-6 left-6 font-bold text-4xl md:text-5xl text-white z-50 animate-fadeInAndSlideDown">
+            {isEditing ? (
+              <UpdateAlbumForm onClose={() => setIsEditing(false)} />
+            ) : (
+              <>
+                <h1>{album.name}</h1>
+                <button
+                  onClick={() => {
+                    setIsEditing(true);
+                  }}>
+                  <img
+                    src="/assets/icons/pencil.svg"
+                    className="w-6 opacity-50 hover:opacity-80 transition-all"
+                  />
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+        {/** Shouldn't trigger hover effects */}
+        <div className="absolute flex top-3 right-3 sm:bottom-3 sm:top-auto">
+          <AlbumMenu />
+        </div>
+      </div>
+
+      <div className="photo-grid p-2">
+        {sortedPhotos.map((photo, idx) => (
+          <DraggableAndDroppable
+            handleDrop={(e) => handleDrop(e, photo.pid)}
+            handleDrag={(e) => handleDrag(e, photo.pid)}
+            key={photo.pid}>
+            <SelectableItem
+              item={photo}
+              comparator={(i1, i2) => i1.pid === i2.pid}>
+              <PhotoCard
+                photo={photo}
+                minimalisticView={minimalisticView}
+                onClick={() => setCurrentExpanded(idx)}
+                lazy={true}
+              />
+            </SelectableItem>
+          </DraggableAndDroppable>
+        ))}
+        {currentExpanded != null && (
+          <PhotoCarousel
+            photos={album.photos}
+            defaultIndex={currentExpanded}
+            onClose={() => setCurrentExpanded(null)}
+          />
+        )}
+      </div>
+    </>
   );
 }
 

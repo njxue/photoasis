@@ -3,7 +3,7 @@ import NewAlbumForm from "./components/NewAlbumForm";
 
 const Page = () => {
   return (
-    <div className="flex flex-col  h-full">
+    <div className="flex flex-col h-full p-3">
       <div className="page-heading">
         <p>New Album</p>
       </div>

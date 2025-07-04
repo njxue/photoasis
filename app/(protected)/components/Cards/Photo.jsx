@@ -9,9 +9,11 @@ const Photo = ({
   blurhash = "",
   lazy = true,
   isLocal = false,
+  sizes = "100vw",
+  className = "",
 }) => {
   return (
-    <>
+    <div className={`flex justify-center ${className}`}>
       {blurhash ? (
         <div className="absolute w-full h-full">
           <Blurhash
@@ -47,9 +49,9 @@ const Photo = ({
         priority={!lazy}
         fill={true}
         isLocal={isLocal}
-        sizes="(max-width: 450px) 50px, (max-width: 640px) 64px, 125px"
+        sizes={sizes}
       />
-    </>
+    </div>
   );
 };
 

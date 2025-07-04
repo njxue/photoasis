@@ -45,7 +45,7 @@ const Home = async () => {
   const albums = await fetchAlbums(uid);
 
   return (
-    <div className="flex flex-center flex-col h-full w-full">
+    <div className="flex flex-center flex-col h-full w-full p-3">
       <Dashboard albums={albums} />
     </div>
   );

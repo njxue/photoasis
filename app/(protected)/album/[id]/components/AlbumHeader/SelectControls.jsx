@@ -3,11 +3,12 @@ import deletePhotos from "@actions/deletePhotos";
 import { useSelect } from "@app/(protected)/components/Select/SelectContext";
 import { toast } from "react-toastify";
 import SelectTrigger from "@app/(protected)/components/Select/SelectTrigger";
-import ChangeThumbnailSelectControls from "./ChangeThumbnailSelectControls";
+import updateAlbum from "@actions/updateAlbum";
 import { useState } from "react";
 import CancelSelectButton from "@app/(protected)/components/Select/CancelSelectButton";
 import ConfirmationModal from "@app/(protected)/components/Modal/ConfirmationModal";
 import { useAlbum } from "../../AlbumContext";
+import OptimisedImage from "@app/common/Image/OptimisedImage";
 
 function SelectControls({ selectModes }) {
   const { selectedItems, numSelected, mode, endSelect, isSelecting } =
@@ -15,6 +16,9 @@ function SelectControls({ selectModes }) {
   const album = useAlbum();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const btnClassName =
+    "btn text-white font-bold border-2 border-neutral-700 hover:border-neutral-500 hover:opacity-100";
 
   async function handleDeletePhotos() {
     setIsLoading(true);
@@ -79,43 +83,119 @@ function SelectControls({ selectModes }) {
     }
   }
 
-  if (!isSelecting) return <SelectTrigger />;
+  async function handleChangeThumbail() {
+    if (selectedItems.length === 0) {
+      return;
+    }
 
-  if (mode === selectModes.thumbnail) {
-    return <ChangeThumbnailSelectControls />;
+    const selectedPhotoPid = selectedItems[0]?.pid;
+    const toastId = toast.loading("Updating thumbnail");
+
+    try {
+      setIsLoading(true);
+      const res = await updateAlbum({
+        aid: album.aid,
+        thumbnailPid: selectedPhotoPid,
+      });
+
+      const photoUrl = album.photos.find(
+        (photo) => photo.pid === selectedPhotoPid
+      )?.url;
+
+      if (res.ok) {
+        const updateToast = () => {
+          toast.dismiss(toastId);
+
+          // New toast instead of update + delay for smoother effect
+          setTimeout(() => {
+            toast.success(
+              <div>
+                <div className="flex justify-center w-full">
+                  <div className="w-32 h-32 xs:w-60 xs:h-60">
+                    <OptimisedImage src={photoUrl} showLoader />
+                  </div>
+                </div>
+                <p className="mt-2">Thumbnail updated 😎</p>
+              </div>,
+              { icon: false }
+            );
+          }, 300);
+
+          endSelect();
+          setIsLoading(false);
+        };
+
+        // Add artificial delay for smoother transition
+        setTimeout(updateToast, 500);
+      } else {
+        toast.error("Unable to updated thumbnail. Please try again later");
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error("Unable to updated thumbnail. Please try again later");
+      toast.dismiss(toastId);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
-  return (
-    <div className="flex flex-row justify-center items-center gap-1">
-      <button
-        disabled={!numSelected || isLoading}
-        className="btn-gray font-bold "
-        onClick={async () => {
-          await handleDownloadPhotosAsZip();
-          endSelect();
-        }}>
-        <img src="/assets/icons/download.svg" width={20} alt="download" />
-        <span className="max-xs:hidden">Download</span>
-        <span className="text-sm">({numSelected})</span>
-      </button>
-      <button
-        disabled={!numSelected || isLoading}
-        className="btn-red font-bold"
-        onClick={() => setIsModalOpen(true)}>
-        <img src="/assets/icons/trash.svg" width={20} alt="trash" />
-        <span className="max-xs:hidden">Delete</span>
-        <span className="text-sm">({numSelected})</span>
-      </button>
-      <CancelSelectButton disabled={isLoading} />
-      <ConfirmationModal
-        isOpen={isModalOpen}
-        setIsOpen={setIsModalOpen}
-        onConfirm={async () => {
-          await handleDeletePhotos();
-          endSelect();
-        }}
-        prompt={`Are you sure you want to delete ${numSelected} photo(s)?`}
+  if (!isSelecting)
+    return (
+      <SelectTrigger
+        renderTrigger={
+          <img
+            src="/assets/icons/select-white.svg"
+            alt="select"
+            width={24}
+            className="cursor-pointer opacity-70 hover:opacity-90 transition"
+          />
+        }
       />
+    );
+
+  return (
+    <div className="flex flex-row justify-center items-center gap-1 animate-slideLeft">
+      {mode === selectModes.changeThumbnail ? (
+        <>
+          <button
+            disabled={!numSelected || isLoading}
+            className="btn-gray font-bold"
+            onClick={handleChangeThumbail}>
+            Set as thumbnail
+          </button>
+          <CancelSelectButton />
+        </>
+      ) : (
+        <>
+          <button
+            disabled={!numSelected || isLoading}
+            className={`${btnClassName} bg-black`}
+            onClick={async () => {
+              await handleDownloadPhotosAsZip();
+              endSelect();
+            }}>
+            <img src="/assets/icons/download.svg" width={20} alt="download" />
+            <span>Download ({numSelected})</span>
+          </button>
+          <button
+            disabled={!numSelected || isLoading}
+            className={`${btnClassName} bg-red-900 hover:border-red-700`}
+            onClick={() => setIsModalOpen(true)}>
+            <img src="/assets/icons/trash.svg" width={20} alt="trash" />
+            <span>Delete ({numSelected})</span>
+          </button>
+          <CancelSelectButton disabled={isLoading} />
+          <ConfirmationModal
+            isOpen={isModalOpen}
+            setIsOpen={setIsModalOpen}
+            onConfirm={async () => {
+              await handleDeletePhotos();
+              endSelect();
+            }}
+            prompt={`Are you sure you want to delete ${numSelected} photo(s)?`}
+          />
+        </>
+      )}
     </div>
   );
 }

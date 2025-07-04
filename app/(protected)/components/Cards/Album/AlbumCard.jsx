@@ -20,6 +20,7 @@ const AlbumCard = ({ data, lazy = true }) => {
             objectFit={userPreferences.objectFit}
             blurhash={data.thumbnail?.blurhash}
             lazy={lazy}
+            sizes="(max-width: 450px) 50px, (max-width: 640px) 64px, 125px"
           />
           <div className="absolute bottom-2 px-[0.5em] text-white text-border font-bold text-start line-clamp-2 text-sm xs:text-lg sm:text-xl  sm:px-5">
             {name}

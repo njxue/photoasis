@@ -7,7 +7,7 @@ export default function CancelSelectButton({ disabled }) {
       className="btn-white font-bold"
       onClick={endSelect}
       disabled={disabled}>
-      <img src="/assets/icons/cross.svg" width={20} alt="cross" />
+      <img src="/assets/icons/cross.svg" width={18} alt="cross" />
       Cancel
     </button>
   );

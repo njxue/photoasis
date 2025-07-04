@@ -5,6 +5,7 @@ import { useAlbum } from "../../../AlbumContext";
 import ConfirmationModal from "@app/(protected)/components/Modal/ConfirmationModal";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { PAGE_ROUTE_DASHBOARD } from "@utils/pageRoutes";
 
 const DeleteAlbumForm = ({ isDeletingAlbum, setIsDeletingAlbum }) => {
   const album = useAlbum();
@@ -14,7 +15,7 @@ const DeleteAlbumForm = ({ isDeletingAlbum, setIsDeletingAlbum }) => {
   async function handleDeleteAlbum() {
     const res = await deleteAlbum(aid);
     if (res.ok) {
-      router.push("/");
+      router.push(PAGE_ROUTE_DASHBOARD);
       toast.success(`Album "${name}" deleted`);
     } else {
       toast.error("Unable to delete album. Plase try again later");

@@ -19,7 +19,7 @@ const GalleryContainer = ({ photos }) => {
 
   return (
     <>
-      <div>
+      <div className="p-3">
         {!minimalisticView && (
           <div className="page-heading">
             <div className="flex flex-row items-center gap-3 mb-3 ">
