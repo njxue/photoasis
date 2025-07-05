@@ -33,6 +33,7 @@ const PhotoCard = React.memo(
             blurhash={photo.blurhash}
             objectFit={userPreferences.objectFit}
             lazy={lazy}
+            sizes="(max-width: 450px) 50px, (max-width: 640px) 64px, 125px"
           />
 
           {showPhotoInfo && (
