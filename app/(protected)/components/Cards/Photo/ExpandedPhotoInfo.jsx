@@ -62,13 +62,15 @@ const ExpandedPhotoInfo = ({
                 )}
               </div>
               {!readonly && (
-                <img
-                  src="/assets/icons/pen-square.svg"
-                  className="invert w-5 h-fit opacity-30 hover:opacity-100 hover:cursor-pointer transition-opacity"
-                  onClick={(e) => {
-                    setIsEditing(true);
-                  }}
-                />
+                <div className="invert">
+                  <img
+                    src="/assets/icons/pen-square.svg"
+                    className="w-5 h-fit opacity-30 hover:opacity-100 hover:cursor-pointer transition-opacity"
+                    onClick={(e) => {
+                      setIsEditing(true);
+                    }}
+                  />
+                </div>
               )}
             </div>
 
@@ -79,37 +81,30 @@ const ExpandedPhotoInfo = ({
                 label="Aperture"
                 value={photo.aperture}
                 icon="aperture.svg"
-                invertIcon
               />
               <MetaDataItem
                 label="Focal Length"
                 value={photo.focalLength}
                 icon="focal-length.svg"
-                invertIcon
               />
               <MetaDataItem
                 label="Shutter Speed"
                 value={photo.shutterspeed}
                 icon="shutterspeed.svg"
-                invertIcon
               />
               <div className="flex flex-row items-center gap-2">
                 {meteringMode && (
-                  <img
-                    src={`/assets/icons/${meteringMode.icon}`}
-                    width={16}
-                    alt={meteringMode.label}
-                    className="invert"
-                  />
+                  <div className="invert">
+                    <img
+                      src={`/assets/icons/${meteringMode.icon}`}
+                      width={16}
+                      alt={meteringMode.label}
+                    />
+                  </div>
                 )}
                 <p>{meteringMode?.label ?? "Metering: -"}</p>
               </div>
-              <MetaDataItem
-                label="ISO"
-                value={photo.iso}
-                icon="iso.svg"
-                invertIcon
-              />
+              <MetaDataItem label="ISO" value={photo.iso} icon="iso.svg" />
               <div className="flex flex-row gap-2 items-center">
                 {exposureMode && exposureMode.icon}
                 <p>{exposureMode?.label ?? "Exp. Mode: -"}</p>
@@ -122,7 +117,6 @@ const ExpandedPhotoInfo = ({
                   label="Lens Model"
                   value={photo.lensModel}
                   icon="lens.svg"
-                  invertIcon
                 />
               </div>
               <div className="col-span-2">
@@ -130,7 +124,6 @@ const ExpandedPhotoInfo = ({
                   label="Camera Model"
                   value={photo.cameraModel}
                   icon="camera.svg"
-                  invertIcon
                 />
               </div>
               <div className="col-span-2">
@@ -138,7 +131,6 @@ const ExpandedPhotoInfo = ({
                   label="Editing Software"
                   value={photo.editingSoftware}
                   icon="lightroom.svg"
-                  invertIcon
                 />
               </div>
             </div>

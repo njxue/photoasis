@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function MetaDataItem({ icon, label, value, invertIcon }) {
+function MetaDataItem({ icon, label, value }) {
   // Click to expand if truncated
   const [truncate, setTruncate] = useState(true);
 
@@ -9,12 +9,9 @@ function MetaDataItem({ icon, label, value, invertIcon }) {
       className="flex flex-row justify-start items-center gap-2 text-xs cursor-pointer"
       onClick={() => setTruncate((prev) => !prev)}>
       {icon && (
-        <img
-          src={`/assets/icons/${icon}`}
-          width={16}
-          alt={label}
-          className={`${invertIcon && "invert"}`}
-        />
+        <div className="invert">
+          <img src={`/assets/icons/${icon}`} width={16} alt={label} />
+        </div>
       )}
       <div
         className={`${truncate && "line-clamp-2"} break-words overflow-hidden`}>

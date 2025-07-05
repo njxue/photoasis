@@ -8,13 +8,12 @@ const Tab = ({ path, icon }) => {
   const activeStyles = "filter invert hue-rotate-180 brightness-200";
   return (
     <Link href={path}>
-      <img
-        src={`/assets/icons/${icon}.svg`}
-        alt={icon}
+      <div
         className={`${
           pathName === path && activeStyles
-        } hover:opacity-50 w-[25px] md:w-[30px]`}
-      />
+        } hover:opacity-50 w-[25px] md:w-[30px]`}>
+        <img src={`/assets/icons/${icon}.svg`} alt={icon} />
+      </div>
     </Link>
   );
 };

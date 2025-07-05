@@ -15,7 +15,7 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
   const navigatorStyles =
     "max-sm:grow sm:w-[42px] flex cursor-pointer h-full hover:bg-black hover:opacity-50 items-center transition-all duration-50";
   const topAndBottomBorderStyles =
-    "flex flex-row justify-between items-center w-full bg-black opacity-90 px-2 grow";
+    "flex flex-row justify-between items-center w-full bg-black opacity-90 px-2 h-[60px]";
 
   const handleNextImage = useCallback(() => {
     if (selectedIndex === photos.length - 1) {
@@ -60,15 +60,17 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
           <div className="flex flex-row gap-1 items-center">
             <DownloadPhoto photo={photo} />
           </div>
-          <img
-            src="/assets/icons/cross.svg"
-            className="cursor-pointer opacity-50 hover:opacity-100 transition-opacity w-6 invert"
-            onClick={onClose}
-          />
+          <div className="invert">
+            <img
+              src="/assets/icons/cross.svg"
+              className="cursor-pointer opacity-50 hover:opacity-100 transition-opacity w-6"
+              onClick={onClose}
+            />
+          </div>
         </div>
 
         {/** Photo */}
-        <div className="flex items-center justify-between bg-black bg-opacity-75 h-[80vh] sm:h-[85vh]">
+        <div className="flex items-center justify-between bg-black bg-opacity-75 grow">
           <div
             className={`${navigatorStyles} justify-start ${
               !selectedIndex && "pointer-events-none"
@@ -82,7 +84,7 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
               />
             )}
           </div>
-          <div className="flex items-center justify-center h-full py-2 max-w-[80vw]">
+          <div className="flex items-center justify-center h-full py-2 max-h-[80vh] max-w-[80vw]">
             <OptimisedImage
               key={photo.url}
               src={photo.url}
@@ -115,7 +117,7 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
             <ExpandedPhotoInfo photo={photo} />
           </div>
 
-          <div className="absolute text-xs text-gray-200 line-clamp-1 text-center flex-1 w-full">
+          <div className="absolute left-1/2 -translate-x-1/2 text-xs text-gray-200 line-clamp-2 text-center">
             {photo.description}
           </div>
         </div>

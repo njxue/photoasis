@@ -6,6 +6,7 @@ import {
   MAX_SIZE_BYTES,
   IMAGE_SIZE_RESTRICTION_ENABLED,
 } from "@app/configs/imageConfigs";
+import Tooltip from "@app/common/Tooltip";
 
 const ImagePreviews = () => {
   const { pending } = useFormStatus();
@@ -20,7 +21,7 @@ const ImagePreviews = () => {
         <div className="absolute top-0 left-0 w-full grid gap-1 grid-cols-3 xs:grid-cols-4 sm:grid-cols-5 md:grid-cols-4 lg:grid-cols-5">
           {fileData?.map((file) => (
             <div
-              className="relative h-[90px] cursor-pointer hover:opacity-50 transition-opacity ease-in-out duration-50"
+              className="relative h-[90px] cursor-pointer"
               key={file.id}
               onClick={() => {
                 handleClickImagePreview(file.id);
@@ -38,22 +39,23 @@ const ImagePreviews = () => {
                     IMAGE_SIZE_RESTRICTION_ENABLED &&
                     file.size > MAX_SIZE_BYTES &&
                     "opacity-20"
-                  } object-cover`}
+                  } object-cover hover:opacity-50 transition-opacity ease-in-out duration-50`}
                   src={file.url}
                 />
               </div>
 
               {!pending && (
-                <div className="bg-black absolute right-0 top-0 cursor-pointer opacity-0 hover:opacity-70">
-                  <img
-                    src="/assets/icons/cross.svg"
-                    alt="Remove"
-                    width={16}
-                    onClick={(e) => {
-                      handleRemoveFile(file.id);
-                    }}
-                    className="invert"
-                  />
+                <div className="bg-black/50 absolute right-0 top-0 cursor-pointer hover:bg-red-700 transition">
+                  <div className="invert">
+                    <img
+                      src="/assets/icons/cross.svg"
+                      alt="Remove"
+                      width={16}
+                      onClick={() => {
+                        handleRemoveFile(file.id);
+                      }}
+                    />
+                  </div>
                 </div>
               )}
               {IMAGE_SIZE_RESTRICTION_ENABLED && file.size > MAX_SIZE_BYTES && (
