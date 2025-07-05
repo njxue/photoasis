@@ -82,7 +82,7 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
               />
             )}
           </div>
-          <div className="flex items-center justify-center h-full py-2">
+          <div className="flex items-center justify-center h-full py-2 max-w-[80vw]">
             <OptimisedImage
               key={photo.url}
               src={photo.url}
@@ -91,7 +91,7 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
               priority
               showLoader
               objectFit="object-contain"
-              sizes="(max-width: 450px) 100px, (max-width: 640px) 128px, 250px"
+              sizes="100vw"
             />
           </div>
           <div

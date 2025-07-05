@@ -5,7 +5,6 @@ import LoadingSpinner from "../LoadingSpinner";
 import {
   CLOUDINARY_URL,
   IMAGE_TRANSFORM_ENABLED,
-  USE_CLIENT_HINTS,
   USE_NEXT_IMAGE,
 } from "@app/configs/imageConfigs";
 
@@ -29,10 +28,10 @@ const OptimisedImage = ({
   onLoad,
   isLocal = false,
 }) => {
-  const COMMON_TRANSFORMATIONS = "f_auto,dpr_auto";
+  const COMMON_TRANSFORMATIONS = "f_avif,dpr_auto";
   const hoverStyles =
     "hover:opacity-50 transition-opacity ease-in-out duration-50";
-  const dimensions = "h-full w-full max-w-[90vw] max-h-[90vh]";
+  const dimensions = "h-full w-full";
 
   const [imgSrc, setImgSrc] = useState(src);
   const [isLoading, setIsLoading] = useState(true);
