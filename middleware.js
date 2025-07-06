@@ -15,6 +15,7 @@ const PUBLIC_PATHS = [
   PAGE_ROUTE_REGISTER,
   PAGE_ROUTE_FORGOT_PASSWORD,
   PAGE_ROUTE_RESET_PASSWORD,
+  "/",
 ];
 
 export default async function middleware(req) {
@@ -27,18 +28,15 @@ export default async function middleware(req) {
   // Redirect to login page from protected pages if not authenticated
   if (!isAuthenticated && !isPublicPath) {
     const redirectUrl = new URL(PAGE_ROUTE_LOGIN, req.url);
-    if (pathname !== "/") {
-      redirectUrl.searchParams.set("redirectTo", pathname);
-    }
+    redirectUrl.searchParams.set("redirectTo", pathname);
     return NextResponse.redirect(redirectUrl);
   }
 
   // Redirect to dashboard from public pages (except landing) if authenticated
-  if (isAuthenticated && isPublicPath) {
+  if (isAuthenticated && isPublicPath && pathname !== "/") {
     return NextResponse.redirect(new URL(PAGE_ROUTE_DASHBOARD, req.url));
   }
 
-  // Landing page
   return NextResponse.next();
 }
 
