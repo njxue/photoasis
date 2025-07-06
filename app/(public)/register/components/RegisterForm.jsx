@@ -9,15 +9,19 @@ import Input from "@app/common/Input";
 import { toast } from "react-toastify";
 import Link from "next/link";
 import { PAGE_ROUTE_LOGIN } from "@utils/pageRoutes";
+import { useRouter } from "next/navigation";
 
 const RegisterForm = ({ providers }) => {
+  const router = useRouter();
+
   const thirdPartyProviders = Object.values(providers).filter(
     (provider) => provider.id !== "credentials"
   );
   const [state, formAction] = useFormState(async (_prevState, formData) => {
     const res = await signUp(_prevState, formData);
     if (res.success) {
-      toast.success("User created");
+      toast.success("Account created");
+      router.push(`${PAGE_ROUTE_LOGIN}?registrationFlow=true`);
     } else {
       toast.error(res.error);
     }

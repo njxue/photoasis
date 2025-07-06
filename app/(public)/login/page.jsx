@@ -7,7 +7,7 @@ const Login = async () => {
   const providers = await getProviders();
   return (
     <FormContainer>
-      <h1 className="font-bold text-3xl font-inter mb-10">Welcome back</h1>
+      <h1 className="font-bold text-3xl font-inter mb-5">Welcome back</h1>
       <LoginForm providers={providers} />
     </FormContainer>
   );

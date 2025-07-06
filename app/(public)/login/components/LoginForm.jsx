@@ -18,6 +18,9 @@ const LoginForm = ({ providers }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirectTo");
+  const registrationFlow = searchParams.get("registrationFlow");
+
+  const redirectedFromRegistration = registrationFlow === "true";
 
   const thirdPartyProviders = Object.values(providers).filter(
     (provider) => provider.id !== "credentials"
@@ -46,6 +49,16 @@ const LoginForm = ({ providers }) => {
 
   return (
     <div className="flex flex-col items-center gap-4">
+      {redirectedFromRegistration && (
+        <div
+          className={`bg-green-100 p-2 rounded-sm border border-green-300 text-green-800`}>
+          <p className="font-semibold">A link has been sent to your email</p>
+          <p className="text-sm">
+            Please click on the link in the email to verify and activate your
+            account
+          </p>
+        </div>
+      )}
       <form action={handleLogin} className="w-full">
         <Input
           type="email"
