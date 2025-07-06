@@ -69,13 +69,12 @@ function AlbumBody({ minimalisticView }) {
 
   return (
     <>
-      <div className="relative">
-        <div className="relative h-[450px] cursor-pointer group">
-          <div className="bg-black/30 absolute inset-0 z-50" />
+      <div className="relative h-[450px]">
+        <div className="h-full cursor-pointer group">
           {banner ? (
             <Photo
               src={banner.url}
-              className="max-w-full group-hover:opacity-80 transition-all"
+              className="max-w-full group-hover:opacity-80 transition-all h-full brightness-50"
               name={banner.name}
               lazy={false}
               blurhash={banner.blurhash}
