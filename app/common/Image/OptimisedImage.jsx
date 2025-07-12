@@ -26,7 +26,6 @@ const OptimisedImage = ({
   showLoader = false,
   objectFit = "object-cover",
   onLoad,
-  isLocal = false,
 }) => {
   const COMMON_TRANSFORMATIONS = "f_avif,dpr_auto";
   const hoverStyles =
@@ -71,6 +70,10 @@ const OptimisedImage = ({
       }
     }
   }, []);
+
+  useEffect(() => {
+    setImgSrc(src);
+  }, [src]);
 
   return (
     <>

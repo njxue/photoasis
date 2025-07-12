@@ -8,7 +8,6 @@ const Photo = ({
   objectFit = "object-cover",
   blurhash = "",
   lazy = true,
-  isLocal = false,
   sizes = "100vw",
   className = "",
 }) => {
@@ -35,9 +34,7 @@ const Photo = ({
             className="absolute blur-xs opacity-95"
             objectFit="object-cover"
             priority={!lazy}
-            isLocal={isLocal}
             sizes="(max-width: 450px) 20px, (max-width: 640px) 50px, 100px"
-            key={src}
           />
         )
       )}
@@ -49,9 +46,7 @@ const Photo = ({
         objectFit={objectFit}
         priority={!lazy}
         fill={true}
-        isLocal={isLocal}
         sizes={sizes}
-        key={src} // False re-render on error
       />
     </div>
   );
