@@ -1,6 +1,7 @@
 "use client";
 
-import Photo from "@app/(protected)/components/Cards/Photo";
+import { PLACEHOLDER_BLURHASH } from "@app/configs/imageConfigs";
+import { Blurhash } from "react-blurhash";
 
 const FitOption = ({
   objectFit = "object-cover",
@@ -17,10 +18,17 @@ const FitOption = ({
       }`}
       onClick={handleClick}>
       <div className="relative w-full h-full">
-        <Photo
+        <Blurhash
+          width="100%"
+          height="100%"
+          hash={PLACEHOLDER_BLURHASH}
+          punch={1}
+          resolutionX={32}
+          resolutionY={32}
+        />
+        <img
           src="/assets/images/placeholder.jpg"
-          objectFit={objectFit}
-          isLocal
+          className={`h-full w-full absolute top-0 ${objectFit}`}
         />
       </div>
       <p className="mt-2 font-semibold text-sm">

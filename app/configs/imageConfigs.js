@@ -12,3 +12,4 @@ export const USE_NEXT_IMAGE =
   process.env.NEXT_PUBLIC_ENABLE_NEXT_IMAGE_OPTIMIZATION === "true";
 export const USE_CLIENT_HINTS =
   process.env.NEXT_PUBLIC_ENABLE_CLOUDINARY_CLIENT_HINTS === "true";
+export const PLACEHOLDER_BLURHASH = "L~LovJazRkj[~AayaffkOEj[ocay";
