@@ -29,6 +29,7 @@ const FitOption = ({
         <img
           src="/assets/images/placeholder.jpg"
           className={`h-full w-full absolute top-0 ${objectFit}`}
+          alt={`${objectFit} option`}
         />
       </div>
       <p className="mt-2 font-semibold text-sm">
