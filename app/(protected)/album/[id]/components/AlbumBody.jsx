@@ -17,7 +17,8 @@ function AlbumBody({ minimalisticView }) {
   const [currentExpanded, setCurrentExpanded] = useState(null);
   const [sortedPhotos, setSortedPhotos] = useState(album?.photos);
   const [isEditing, setIsEditing] = useState(false);
-  const { selectedItems, mode } = useSelect();
+  const { selectedItems, mode, isSelecting } = useSelect();
+  console.log(selectedItems);
 
   const photoComparator = useCallback((i1, i2) => i1.pid === i2.pid, []);
 
@@ -61,7 +62,7 @@ function AlbumBody({ minimalisticView }) {
 
   let banner;
 
-  if (mode === "changeBanner" && selectedItems?.[0]) {
+  if (isSelecting && mode === "changeBanner" && selectedItems?.[0]) {
     banner = selectedItems[0];
   } else {
     banner = album.banner ?? sortedPhotos?.[0];

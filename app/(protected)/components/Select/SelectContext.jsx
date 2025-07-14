@@ -17,7 +17,9 @@ export const SelectProvider = ({ children }) => {
 
   const endSelect = () => {
     setIsSelecting(false);
+    setMode("");
     setSelectedItems([]);
+    console.log("HEY!");
   };
 
   const beginSelect = ({
