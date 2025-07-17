@@ -53,7 +53,7 @@ function DashboardBody({ albums }) {
           handleDrop={(e) => handleDrop(e, album.aid)}
           handleDrag={(e) => handleDrag(e, album.aid)}
           key={album.aid}>
-          <SelectableItem item={album.aid}>
+          <SelectableItem item={album.aid} itemId={album.aid}>
             <AlbumCard data={album} lazy={idx >= NUM_IMAGES_ABOVE_FOLD} />
           </SelectableItem>
         </DraggableAndDroppable>

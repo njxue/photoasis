@@ -18,9 +18,6 @@ function AlbumBody({ minimalisticView }) {
   const [sortedPhotos, setSortedPhotos] = useState(album?.photos);
   const [isEditing, setIsEditing] = useState(false);
   const { selectedItems, mode, isSelecting } = useSelect();
-  console.log(selectedItems);
-
-  const photoComparator = useCallback((i1, i2) => i1.pid === i2.pid, []);
 
   function handleDrop(e, pidFrom) {
     const pidTo = e.dataTransfer.getData("pid");
@@ -119,7 +116,7 @@ function AlbumBody({ minimalisticView }) {
             handleDrop={(e) => handleDrop(e, photo.pid)}
             handleDrag={(e) => handleDrag(e, photo.pid)}
             key={photo.pid}>
-            <SelectableItem item={photo} comparator={photoComparator}>
+            <SelectableItem item={photo} itemId={photo.pid}>
               <PhotoCard
                 photo={photo}
                 minimalisticView={minimalisticView}

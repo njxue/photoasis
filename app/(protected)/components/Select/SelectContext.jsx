@@ -10,16 +10,14 @@ export const useSelect = () => {
 export const SelectProvider = ({ children }) => {
   const DEFAULT_ALLOW_MULTI = true;
   const [isSelecting, setIsSelecting] = useState(false);
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [internalSelectedItems, setInternalSelectedItems] = useState([]);
   const [allowMulti, setAllowMulti] = useState(DEFAULT_ALLOW_MULTI);
   const [mode, setMode] = useState("");
-  const [comparator, setComparator] = useState(() => (a, b) => a === b);
 
   const endSelect = () => {
     setIsSelecting(false);
     setMode("");
-    setSelectedItems([]);
-    console.log("HEY!");
+    setInternalSelectedItems([]);
   };
 
   const beginSelect = ({
@@ -27,32 +25,32 @@ export const SelectProvider = ({ children }) => {
     mode = "",
   } = {}) => {
     setIsSelecting(true);
-    setSelectedItems([]);
+    setInternalSelectedItems([]);
     setAllowMulti(allowMultiple);
     setMode(mode);
   };
 
-  const selectItem = (item) => {
+  const selectItem = (item, itemId) => {
+    const selectedItem = { id: itemId, data: item };
     if (!allowMulti) {
-      setSelectedItems([item]);
+      setInternalSelectedItems([selectedItem]);
       return;
     }
-    if (
-      selectedItems.find((existingItem) => comparator?.(existingItem, item))
-    ) {
-      setSelectedItems(
-        selectedItems.filter(
-          (existingItem) => !comparator?.(existingItem, item)
-        )
+    if (internalSelectedItems.find((existingItem) => existingItem.id === itemId)) {
+      setInternalSelectedItems(
+        internalSelectedItems.filter((existingItem) => existingItem.id !== itemId)
       );
     } else {
-      setSelectedItems([...selectedItems, item]);
+      setInternalSelectedItems([...internalSelectedItems, selectedItem]);
     }
   };
-  const numSelected = selectedItems.length;
-  const isSelected = (item) =>
-    selectedItems.find((existingItem) => comparator?.(existingItem, item)) !=
-    null;
+
+  const numSelected = internalSelectedItems.length;
+
+  const isSelected = (itemId) =>
+    internalSelectedItems.some((existingItem) => existingItem.id === itemId);
+
+  const selectedItems = internalSelectedItems.map((item) => item.data); // Don't return id
 
   const value = {
     isSelecting,
@@ -63,7 +61,6 @@ export const SelectProvider = ({ children }) => {
     numSelected,
     isSelected,
     mode,
-    setComparator,
   };
   return (
     <SelectContext.Provider value={value}>{children}</SelectContext.Provider>
