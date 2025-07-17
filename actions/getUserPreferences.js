@@ -16,6 +16,7 @@ const getUserPreferences = async () => {
     return userPreferences;
   } catch (err) {
     console.log(err);
+    return null;
   }
 };
 
