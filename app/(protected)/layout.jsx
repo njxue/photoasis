@@ -6,11 +6,10 @@ const Layout = async ({ children }) => {
   let userPreferences = null;
   try {
     const res = await getUserPreferences();
-    if (!res) {
-      return;
+    if (res) {
+      const { uid, ...preferences } = res;
+      userPreferences = preferences;
     }
-    const { uid, ...preferences } = res;
-    userPreferences = preferences;
   } catch (err) {
     console.error("Unable to fetch user preferences");
   }
