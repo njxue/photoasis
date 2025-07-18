@@ -31,7 +31,7 @@ const authOptions = {
         const user = await prisma.user.findUnique({ where: { email } });
 
         // If password is empty, account was created using Google provider, not with credentials
-        if (!user || !user.password) {
+        if (!user || !user.password || !user.isVerified) {
           return null;
         }
 
