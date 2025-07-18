@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useState, useRef } from "react";
 import Modal from "@app/(protected)/components/Modal/Modal";
 import DownloadPhoto from "./DownloadPhoto";
 import ExpandedPhotoInfo from "./ExpandedPhotoInfo";
@@ -7,13 +7,14 @@ import { QUALITY_MID } from "@app/common/Image/constants";
 
 const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
   const [selectedIndex, setSelectedIndex] = useState(defaultIndex ?? 0);
+  const photoRef = useRef();
 
   const photo = photos[selectedIndex];
 
   const arrowStyles =
     "max-sm:hidden cursor-pointer transition-opacity w-[20px] sm:w-[30px] opacity-50 hover:opacity-100";
   const navigatorStyles =
-    "max-sm:grow sm:w-[42px] flex cursor-pointer h-full hover:bg-black hover:opacity-50 items-center transition-all duration-50";
+    "max-sm:grow sm:w-[42px] flex cursor-pointer h-full hover:bg-black hover:opacity-50 items-center transition-all duration-50 select-none";
   const topAndBottomBorderStyles =
     "flex flex-row justify-between items-center w-full bg-black opacity-90 px-2 h-[60px]";
 
@@ -52,6 +53,12 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [handleNextImage, handlePreviousImage, onClose]);
 
+  const handleClickPhotoContainer = (e) => {
+    if (!photoRef.current?.contains(e.target)) {
+      onClose();
+    }
+  };
+
   return (
     <Modal isOpen={true} className="bg-transparent">
       <div className="flex flex-col w-screen h-screen">
@@ -84,17 +91,23 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
               />
             )}
           </div>
-          <div className="flex items-center justify-center h-full py-2 max-h-[80vh] max-w-[80vw]">
-            <OptimisedImage
-              key={photo.url}
-              src={photo.url}
-              name={photo.name}
-              quality={QUALITY_MID}
-              priority
-              showLoader
-              objectFit="object-contain"
-              sizes="100vw"
-            />
+          <div
+            className="flex items-center justify-center h-full w-full"
+            onClick={handleClickPhotoContainer}>
+            <div
+              className="flex items-center justify-center h-full py-2 max-h-[80vh] max-w-[80vw] select-none"
+              ref={photoRef}>
+              <OptimisedImage
+                key={photo.url}
+                src={photo.url}
+                name={photo.name}
+                quality={QUALITY_MID}
+                priority
+                showLoader
+                objectFit="object-contain"
+                sizes="100vw"
+              />
+            </div>
           </div>
           <div
             className={`${navigatorStyles} justify-end ${
@@ -117,7 +130,7 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
             <ExpandedPhotoInfo photo={photo} />
           </div>
 
-          <div className="absolute left-1/2 -translate-x-1/2 text-xs text-gray-200 line-clamp-2 text-center">
+          <div className="absolute left-1/2 -translate-x-1/2 text-xs text-gray-200 line-clamp-2 text-center select-all">
             {photo.description}
           </div>
         </div>
