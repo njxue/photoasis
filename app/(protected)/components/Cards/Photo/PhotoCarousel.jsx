@@ -93,7 +93,7 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
           </div>
 
           <div
-            className="flex items-center justify-center h-full w-full"
+            className="flex items-center justify-center h-full sm:w-full"
             onClick={handleClickPhotoContainer}>
             <div
               className="flex items-center justify-center h-full py-2 max-h-[80vh] max-w-[80vw] select-none"
