@@ -7,6 +7,7 @@ import {
   IMAGE_TRANSFORM_ENABLED,
   USE_NEXT_IMAGE,
 } from "@app/configs/imageConfigs";
+import { Lens } from "../Lens";
 
 const OptimisedImage = ({
   src,
@@ -26,6 +27,7 @@ const OptimisedImage = ({
   showLoader = false,
   objectFit = "object-cover",
   onLoad,
+  withLens = false,
 }) => {
   const COMMON_TRANSFORMATIONS = "f_avif,dpr_auto";
   const hoverStyles =
@@ -75,32 +77,26 @@ const OptimisedImage = ({
     setImgSrc(src);
   }, [src]);
 
-  return (
-    <>
-      {isLoading && showLoader && (
-        <div className="absolute w-10 left-1/2 top-1/2">
-          <LoadingSpinner />
-        </div>
-      )}
-      {isError || !USE_NEXT_IMAGE ? (
-        <img
-          ref={imgRef}
-          src={imgSrc}
-          alt={name}
-          onClick={onClick}
-          className={className}
-          {...widthAndHeightProps}
-          fetchPriority={priority ? "high" : "auto"}
-          loading={priority ? "eager" : "lazy"}
-          decoding="async"
-          onError={handleError}
-          onLoad={handleLoad}
-          sizes={sizes ?? "100vw"}
-          srcSet={
-            isError
-              ? imgSrc
-              : (srcset ??
-                `${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS},w_100/${src} 100w,
+  const ImageElement =
+    isError || !USE_NEXT_IMAGE ? (
+      <img
+        ref={imgRef}
+        src={imgSrc}
+        alt={name}
+        onClick={onClick}
+        className={className}
+        {...widthAndHeightProps}
+        fetchPriority={priority ? "high" : "auto"}
+        loading={priority ? "eager" : "lazy"}
+        decoding="async"
+        onError={handleError}
+        onLoad={handleLoad}
+        sizes={sizes ?? "100vw"}
+        srcSet={
+          isError
+            ? imgSrc
+            : (srcset ??
+              `${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS},w_100/${src} 100w,
                 ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS},w_250/${src} 250w,
                 ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS},w_540/${src} 540w,
                 ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS},w_720/${src} 720w,
@@ -108,26 +104,35 @@ const OptimisedImage = ({
                 ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS},w_1200/${src} 1200w,
                 ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS},w_1440/${src} 1440w,
                 ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS},w_1920/${src} 1920w`)
-          }
-        />
-      ) : (
-        <Image
-          src={imgSrc}
-          alt={name}
-          id={id ?? name}
-          name={name}
-          className={className}
-          sizes={sizes ?? "100vw"}
-          quality={quality}
-          onClick={onClick}
-          priority={priority}
-          placeholder="empty"
-          fill={fill}
-          {...widthAndHeightProps}
-          onLoad={handleLoad}
-          onError={handleError}
-        />
+        }
+      />
+    ) : (
+      <Image
+        src={imgSrc}
+        alt={name}
+        id={id ?? name}
+        name={name}
+        className={className}
+        sizes={sizes ?? "100vw"}
+        quality={quality}
+        onClick={onClick}
+        priority={priority}
+        placeholder="empty"
+        fill={fill}
+        {...widthAndHeightProps}
+        onLoad={handleLoad}
+        onError={handleError}
+      />
+    );
+
+  return (
+    <>
+      {isLoading && showLoader && (
+        <div className="absolute w-10 left-1/2 top-1/2">
+          <LoadingSpinner />
+        </div>
       )}
+      {withLens ? <Lens>{ImageElement}</Lens> : ImageElement}
     </>
   );
 };

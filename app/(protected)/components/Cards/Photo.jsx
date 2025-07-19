@@ -12,7 +12,7 @@ const Photo = ({
   className = "",
 }) => {
   return (
-    <div className={`flex justify-center ${className}`}>
+    <div className={`flex justify-center w-full h-full ${className}`}>
       {blurhash ? (
         <div className="absolute w-full h-full">
           <Blurhash
@@ -27,15 +27,16 @@ const Photo = ({
       ) : (
         // Create blurhash effect for older photos without blurhash (before it was implemented)
         src && (
-          <OptimisedImage
-            src={src}
-            name={name}
-            quality={QUALITY_LOW}
-            className="absolute blur-xs opacity-95"
-            objectFit="object-cover"
-            priority={!lazy}
-            sizes="(max-width: 450px) 20px, (max-width: 640px) 50px, 100px"
-          />
+          <div className="absolute w-full h-full blur-xs opacity-50">
+            <OptimisedImage
+              src={src}
+              name={name}
+              quality={QUALITY_LOW}
+              objectFit="object-cover"
+              priority={!lazy}
+              sizes="(max-width: 450px) 20px, (max-width: 640px) 50px, 100px"
+            />
+          </div>
         )
       )}
       <OptimisedImage

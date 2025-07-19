@@ -4,7 +4,6 @@ import DownloadPhoto from "./DownloadPhoto";
 import ExpandedPhotoInfo from "./ExpandedPhotoInfo";
 import OptimisedImage from "@app/common/Image/OptimisedImage";
 import { QUALITY_MID } from "@app/common/Image/constants";
-import { Lens } from "@app/common/Lens";
 
 const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
   const [selectedIndex, setSelectedIndex] = useState(defaultIndex ?? 0);
@@ -99,18 +98,17 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
             <div
               className="flex items-center justify-center h-full py-2 max-h-[80vh] max-w-[80vw] select-none"
               ref={photoRef}>
-              <Lens>
-                <OptimisedImage
-                  key={photo.url}
-                  src={photo.url}
-                  name={photo.name}
-                  quality={QUALITY_MID}
-                  priority
-                  showLoader
-                  objectFit="object-contain"
-                  sizes="100vw"
-                />{" "}
-              </Lens>
+              <OptimisedImage
+                key={photo.url}
+                src={photo.url}
+                name={photo.name}
+                quality={QUALITY_MID}
+                priority
+                showLoader
+                objectFit="object-contain"
+                sizes="100vw"
+                withLens
+              />
             </div>
           </div>
 

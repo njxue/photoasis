@@ -46,7 +46,7 @@ export const Lens = ({
   return (
     <div
       ref={containerRef}
-      className="w-full h-full relative overflow-hidden z-20"
+      className="w-full h-full relative overflow-hidden"
       onMouseEnter={() => {
         setIsHovering(true);
       }}
