@@ -16,6 +16,13 @@ async function createAlbum(data) {
   const res = await prisma.$transaction(async (prisma) => {
     let albumData = { name: albumName, uid };
 
+    const album = await prisma.album.create(
+      {
+        data: albumData,
+      },
+      { timeout: 10000 }
+    );
+
     if (photos) {
       if (
         IMAGE_SIZE_RESTRICTION_ENABLED &&
@@ -30,7 +37,7 @@ async function createAlbum(data) {
         const formattedData = formatPhotoData(photo);
         // These additional fields are not visible to user
         return {
-          aid,
+          aid: album.aid,
           uid,
           pid: photo.fileId,
           blurhash: photo.blurhash,
@@ -44,13 +51,6 @@ async function createAlbum(data) {
         },
       };
     }
-
-    const album = await prisma.album.create(
-      {
-        data: albumData,
-      },
-      { timeout: 10000 }
-    );
 
     // If creation of album and photos is successful
     if (album && album.photos?.length > 0) {

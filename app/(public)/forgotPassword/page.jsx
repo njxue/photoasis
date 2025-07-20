@@ -23,7 +23,7 @@ const ForgotPassword = () => {
     <FormContainer>
       <h1 className="text-2xl font-semibold">Forgot your password?</h1>
       <p className="text-sm mt-1 text-neutral-500">
-        Enter your email and we'll send you a link to reset your password
+        Enter your email and we&apos;ll send you a link to reset your password
       </p>
       <form action={handleSubmit} className="mt-6">
         <Input

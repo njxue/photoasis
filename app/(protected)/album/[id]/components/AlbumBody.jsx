@@ -1,7 +1,7 @@
 "use client";
 import SelectableItem from "@app/(protected)/components/Select/SelectableItem";
 import PhotoCard from "@app/(protected)/components/Cards/Photo/PhotoCard";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import DraggableAndDroppable from "@app/(protected)/components/DragAndDrop/DraggableAndDroppable";
 import updateAlbum from "@actions/updateAlbum";
 import { toast } from "react-toastify";

@@ -44,6 +44,7 @@ const AddPhotosForm = ({ show, setShow }) => {
       resetFiles();
       setShow(false);
     } catch (err) {
+      console.error(err);
       toast.error(errorMessage);
     } finally {
       resetProgress();

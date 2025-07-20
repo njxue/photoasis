@@ -29,6 +29,7 @@ const TrialDroppableFileInput = () => {
       const url = URL.createObjectURL(file);
       setPhoto({ url, ...processedFile });
     } catch (err) {
+      console.error(err);
       toast.error("Photo not supported. Please try another photo");
     } finally {
       setIsLoading(false);

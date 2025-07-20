@@ -2,7 +2,6 @@ const Input = ({
   type,
   name,
   defaultValue,
-  value,
   error,
   placeholder,
   label,

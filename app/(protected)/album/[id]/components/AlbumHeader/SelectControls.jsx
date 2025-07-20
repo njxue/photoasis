@@ -157,6 +157,7 @@ function SelectControls({ selectModes }) {
         endSelect();
       }
     } catch (err) {
+      console.error(err);
       toast.error("Unable to change banner");
     } finally {
       setIsLoading(false);

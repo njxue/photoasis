@@ -1,6 +1,6 @@
 import { authOptions } from "@app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import prisma from "@prisma/prisma";
 import AlbumContainer from "./components/AlbumContainer";
 import { unstable_cache } from "next/cache";

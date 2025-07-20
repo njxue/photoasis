@@ -8,7 +8,7 @@ import {
   PAGE_ROUTE_NEW_ALBUM,
 } from "@utils/pageRoutes";
 
-const Nav = async ({}) => {
+const Nav = async () => {
   const session = await getServerSession(authOptions);
   return (
     <div className="flex flex-row justify-between items-center w-full h-full bg-white p-2 shadow-gray-300 shadow-md md:flex-col md:border-b-black">

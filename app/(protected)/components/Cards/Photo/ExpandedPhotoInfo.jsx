@@ -37,7 +37,7 @@ const ExpandedPhotoInfo = ({
         {isEditing && !readonly ? (
           <UpdatePhotoForm
             photo={photo}
-            onCancel={(e) => {
+            onCancel={() => {
               setIsEditing(false);
             }}
             onUpdate={() => setIsEditing(false)}
@@ -66,7 +66,7 @@ const ExpandedPhotoInfo = ({
                   <img
                     src="/assets/icons/pen-square.svg"
                     className="w-5 h-fit opacity-30 hover:opacity-100 hover:cursor-pointer transition-opacity"
-                    onClick={(e) => {
+                    onClick={() => {
                       setIsEditing(true);
                     }}
                   />

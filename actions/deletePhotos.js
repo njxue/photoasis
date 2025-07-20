@@ -109,6 +109,7 @@ const deletePhotos = async ({ aid, pids }) => {
     revalidatePath("/", "layout");
     return { status: 204, message: "Successfully deleted photos", ok: true };
   } catch (err) {
+    console.log(err);
     return { status: 204, message: "Photo(s) not found", ok: true };
   }
 };

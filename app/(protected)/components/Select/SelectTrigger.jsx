@@ -1,4 +1,3 @@
-import React from "react";
 import { useSelect } from "./SelectContext";
 export default function SelectTrigger({
   allowMultiple = true,

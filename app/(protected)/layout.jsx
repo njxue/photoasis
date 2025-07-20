@@ -7,11 +7,10 @@ const Layout = async ({ children }) => {
   try {
     const res = await getUserPreferences();
     if (res) {
-      const { uid, ...preferences } = res;
-      userPreferences = preferences;
+      userPreferences = res;
     }
   } catch (err) {
-    console.error("Unable to fetch user preferences");
+    console.error(err);
   }
 
   return (

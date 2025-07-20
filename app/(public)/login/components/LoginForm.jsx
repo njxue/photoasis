@@ -93,9 +93,9 @@ const LoginForm = ({ providers }) => {
         {thirdPartyProviders.map((provider) => (
           <ProviderSignInButton provider={provider} key={provider.id} />
         ))}
-      </div>{" "}
+      </div>
       <p className="text-sm text-neutral-500">
-        Don't have an account?&nbsp;
+        Don&apos;t have an account?&nbsp;
         <Link
           href={PAGE_ROUTE_REGISTER}
           className="font-semibold text-sky-600 hover:text-sky-800 hover:underline transition-all">

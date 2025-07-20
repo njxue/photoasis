@@ -28,6 +28,7 @@ function ExposureModeInput({ fileData }) {
         <div className="flex flex-row justify-around">
           {EXPOSURE_MODES.map((mode) => (
             <ExposureMode
+              key={mode.value}
               label={mode.label}
               icon={mode.icon}
               handleClick={() => handleClick(mode.value)}

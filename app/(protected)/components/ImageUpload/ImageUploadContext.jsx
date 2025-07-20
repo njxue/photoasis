@@ -31,6 +31,7 @@ const ImageUploadProvider = ({ children }) => {
         setSelectedFile(processedFiles[0]);
       }
     } catch (err) {
+      console.error(err);
       toast.error("Unable to process images");
     } finally {
       setIsLoading(false);

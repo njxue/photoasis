@@ -6,6 +6,7 @@ import { useState } from "react";
 import { notFound } from "next/navigation";
 import PhotoCarousel from "@app/(protected)/components/Cards/Photo/PhotoCarousel";
 import { NUM_IMAGES_ABOVE_FOLD } from "@app/configs/imageConfigs";
+import { toast } from "react-toastify";
 
 const GalleryContainer = ({ photos }) => {
   if (!photos) {

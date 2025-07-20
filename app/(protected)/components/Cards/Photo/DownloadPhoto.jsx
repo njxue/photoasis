@@ -24,6 +24,7 @@ function DownloadPhoto({ photo }) {
         isLoading: false,
       });
     } catch (err) {
+      console.error(err);
       toast.update(toastId, {
         render: `Failed to download ${photo.name}`,
         type: toast.TYPE.ERROR,

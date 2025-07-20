@@ -70,55 +70,26 @@ const b2DownloadFileById = async (fileId) => {
     };
   }
 };
-const b2DownloadFileById2 = async (fileId) => {
-  try {
-    await b2Authorize();
-
-    const res = await b2.downloadFileById({
-      fileId,
-      responseType: "arraybuffer",
-    });
-    const buf = Buffer.from(res.data);
-
-    return {
-      status: res.status,
-      message: "Successfully downloaded",
-      data: { buffer: buf },
-      ok: true,
-    };
-  } catch (err) {
-    console.log(err);
-    return {
-      status: err.response.status,
-      message: err.message,
-      ok: false,
-    };
-  }
-};
 
 // https://www.backblaze.com/apidocs/b2-download-file-by-name
 const b2GetDownloadUrl = async (uid, aid, fileName) => {
-  try {
-    const auth = await b2Authorize();
-    if (!auth) {
-      throw new Error("Not authorised");
-    }
-    const contentDisposition = "attachment";
-    const downloadAuth = await b2.getDownloadAuthorization({
-      bucketId: process.env.BACKBLAZE_BUCKET_ID,
-      fileNamePrefix: `${uid}/${aid}/`,
-      validDurationInSeconds: 60,
-      b2ContentDisposition: contentDisposition,
-    });
-    if (!downloadAuth?.data) {
-      throw new Error("Not authorised");
-    }
-    const baseDownloadUrl = auth.downloadUrl;
-    const fullDownloadUrl = `${baseDownloadUrl}/file/${process.env.NEXT_PUBLIC_BACKBLAZE_BUCKET_NAME}/${uid}/${aid}/${fileName}?Authorization=${downloadAuth.data.authorizationToken}&b2ContentDisposition=${contentDisposition}`;
-    return fullDownloadUrl;
-  } catch (err) {
-    throw err;
+  const auth = await b2Authorize();
+  if (!auth) {
+    throw new Error("Not authorised");
   }
+  const contentDisposition = "attachment";
+  const downloadAuth = await b2.getDownloadAuthorization({
+    bucketId: process.env.BACKBLAZE_BUCKET_ID,
+    fileNamePrefix: `${uid}/${aid}/`,
+    validDurationInSeconds: 60,
+    b2ContentDisposition: contentDisposition,
+  });
+  if (!downloadAuth?.data) {
+    throw new Error("Not authorised");
+  }
+  const baseDownloadUrl = auth.downloadUrl;
+  const fullDownloadUrl = `${baseDownloadUrl}/file/${process.env.NEXT_PUBLIC_BACKBLAZE_BUCKET_NAME}/${uid}/${aid}/${fileName}?Authorization=${downloadAuth.data.authorizationToken}&b2ContentDisposition=${contentDisposition}`;
+  return fullDownloadUrl;
 };
 
 export {

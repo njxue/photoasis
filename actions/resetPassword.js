@@ -41,6 +41,7 @@ export async function resetPassword(token, password) {
 
     return { success: true };
   } catch (err) {
+    console.log(err);
     return { success: false, error: "Invalid or expired token" };
   }
 }

@@ -29,6 +29,7 @@ function MeteringInput({ fileData }) {
         <div className="flex flex-row justify-around">
           {METERING_MODES.map((mode) => (
             <MeteringMode
+              key={mode.value}
               label={mode.label}
               value={mode.value}
               icon={`/assets/icons/${mode.icon}`}

@@ -2,7 +2,7 @@
 import CancelButton from "@app/(protected)/components/CancelButton";
 import ImageFit from "./ImageFit";
 import { useUserPreferences } from "@app/(protected)/UserPreferencesContext";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import updateUserPreferences from "@actions/updateUserPreferences";
 import { toast } from "react-toastify";
 import { isEqualDeep } from "@utils/helpers";

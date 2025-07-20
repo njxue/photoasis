@@ -6,7 +6,6 @@ import {
   MAX_SIZE_BYTES,
   IMAGE_SIZE_RESTRICTION_ENABLED,
 } from "@app/configs/imageConfigs";
-import Tooltip from "@app/common/Tooltip";
 
 const ImagePreviews = () => {
   const { pending } = useFormStatus();

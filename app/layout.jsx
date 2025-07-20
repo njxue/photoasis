@@ -17,7 +17,7 @@ const Layout = async ({ children }) => {
       <head>
         {USE_CLIENT_HINTS && (
           <meta
-            http-equiv="delegate-ch"
+            httpEquiv="delegate-ch"
             content="sec-ch-width https://res.cloudinary.com; sec-ch-dpr https://res.cloudinary.com; sec-ch-viewport-width https://res.cloudinary.com;"></meta>
         )}
       </head>

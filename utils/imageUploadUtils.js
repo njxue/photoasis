@@ -109,8 +109,10 @@ export const extractFileMetadata = async (file) => {
 
     // Camera Model
     cameraModel = metadata["Model"]?.description;
+    // eslint-disable-next-line no-unused-vars
   } catch (err) {
     // No EXIF metadata
+    console.log("Photo does not contain EXIF data");
   }
 
   return {
