@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import dynamic from "next/dynamic";
 
@@ -26,12 +26,6 @@ const Modal = ({
   useEffect(() => {
     // Use capture phase so we can detect clicks before React potentially removes the clicked element from the DOM
     const USE_CAPTURE = true;
-    const handleClick = (e) => {
-      // Clicked out
-      if (!modalRef.current?.contains(e.target)) {
-        setOpen(false);
-      }
-    };
 
     if (isOpen && closeOnClickOutside) {
       document.addEventListener("click", handleClick, USE_CAPTURE);
@@ -39,7 +33,17 @@ const Modal = ({
     return () => {
       document.removeEventListener("click", handleClick, USE_CAPTURE);
     };
-  }, [isOpen, modalRef]);
+  }, [isOpen, handleClick, closeOnClickOutside]);
+
+  const handleClick = useCallback(
+    (e) => {
+      // Clicked out
+      if (!modalRef.current?.contains(e.target)) {
+        setOpen(false);
+      }
+    },
+    [setOpen]
+  );
 
   return (
     isOpen &&

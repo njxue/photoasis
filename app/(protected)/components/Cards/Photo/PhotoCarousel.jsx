@@ -23,7 +23,7 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
       return;
     }
     setSelectedIndex((prev) => prev + 1);
-  }, [selectedIndex]);
+  }, [selectedIndex, photos.length]);
 
   const handlePreviousImage = useCallback(() => {
     if (selectedIndex === 0) {

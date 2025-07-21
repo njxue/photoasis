@@ -13,6 +13,7 @@ const useClickOutside = (ref) => {
       document.addEventListener("click", handleClick);
     }
     return () => document.removeEventListener("click", handleClick);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVisible]);
 
   return { isVisible, setIsVisible };

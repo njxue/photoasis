@@ -37,14 +37,14 @@ const SubmitButton = ({
       window.removeEventListener("beforeunload", showAlert);
       clearInterval(countdownIntervalRef.current);
     };
-  }, [pending]);
+  }, [pending, preventBrowserRefresh, disableDuration]);
 
   useEffect(() => {
     // Reset coundown
     if (countdown === 0 && disableDuration) {
       clearInterval(countdownIntervalRef.current);
     }
-  }, [countdown]);
+  }, [countdown, disableDuration]);
 
   return (
     <button

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { QUALITY_MID } from "./constants";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import LoadingSpinner from "../LoadingSpinner";
 import {
   CLOUDINARY_URL,
@@ -47,7 +47,7 @@ const OptimisedImage = ({
       ${dimensions} ${customClassName}
     `;
 
-  const handleError = () => {
+  const handleError = useCallback(() => {
     /**
      * Possible errors:
      * 1. 402: Exceeded the image optimisation limit for free tier
@@ -55,12 +55,12 @@ const OptimisedImage = ({
      */
     setIsError(true);
     setImgSrc(IMAGE_TRANSFORM_ENABLED && !fallback ? src : fallback);
-  };
+  }, [fallback, src]);
 
-  const handleLoad = () => {
+  const handleLoad = useCallback(() => {
     setIsLoading(false);
     onLoad?.();
-  };
+  }, [onLoad]);
 
   useEffect(() => {
     const img = imgRef.current;
@@ -71,7 +71,7 @@ const OptimisedImage = ({
         handleLoad();
       }
     }
-  }, []);
+  }, [handleError, handleLoad]);
 
   useEffect(() => {
     setImgSrc(src);
