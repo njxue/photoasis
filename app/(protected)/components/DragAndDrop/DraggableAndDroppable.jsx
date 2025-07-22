@@ -1,21 +1,25 @@
 "use client";
 import { useState } from "react";
-function DraggableAndDroppable({ children, handleDrag, handleDrop }) {
+function DraggableAndDroppable({ children, onDragStart, onDrop, onDragEnter }) {
   const [isDraggingOver, setIsDraggingOver] = useState(false);
+
   function handleDragOver(e) {
     e.preventDefault();
     setIsDraggingOver(true);
   }
 
+  function handleDrop() {
+    onDrop?.();
+    setIsDraggingOver(false);
+  }
+
   return (
     <div
       draggable
-      onDragStart={handleDrag}
-      onDrop={(e) => {
-        handleDrop(e);
-        setIsDraggingOver(false);
-      }}
+      onDragStart={onDragStart}
+      onDrop={handleDrop}
       onDragOver={handleDragOver}
+      onDragEnter={onDragEnter}
       onDragLeave={() => setIsDraggingOver(false)}
       className={`${isDraggingOver && "opacity-30"}`}>
       {children}

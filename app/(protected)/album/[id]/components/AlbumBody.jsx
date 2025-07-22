@@ -18,21 +18,22 @@ function AlbumBody({ minimalisticView }) {
   const [sortedPhotos, setSortedPhotos] = useState(album?.photos);
   const [isEditing, setIsEditing] = useState(false);
   const { selectedItems, mode, isSelecting } = useSelect();
+  const [draggedPid, setDraggedPid] = useState();
 
-  function handleDrop(e, pidTo) {
-    const pidFrom = e.dataTransfer.getData("pid");
-    const isDroppedAtLeftHalf =
-      e.nativeEvent.offsetX < e.target.offsetWidth / 2;
+  function handleDragEnter(pidTo) {
+    const pidFrom = draggedPid;
 
     if (pidFrom === pidTo) {
       return;
     }
 
+    console.log(pidTo, pidFrom);
     const fromIndex = sortedPhotos.findIndex((i) => i.pid === pidFrom);
     const toIndex = sortedPhotos.findIndex((i) => i.pid === pidTo);
 
     if (fromIndex < 0 || toIndex < 0) {
       // Error, shouldn't happen
+
       return;
     }
 
@@ -44,7 +45,7 @@ function AlbumBody({ minimalisticView }) {
     // Calculate new toIndex because we deleted the dragged photo
     const newToIndex = fromIndex < toIndex ? toIndex - 1 : toIndex;
 
-    if (isDroppedAtLeftHalf) {
+    if (fromIndex > toIndex) {
       // Drop before photo at dropzone
       newlySortedPhotos.splice(newToIndex, 0, sortedPhotos[fromIndex]);
     } else {
@@ -53,11 +54,11 @@ function AlbumBody({ minimalisticView }) {
     }
 
     setSortedPhotos(newlySortedPhotos);
-    updateSortOrder(newlySortedPhotos);
+    //updateSortOrder(newlySortedPhotos);
   }
 
-  function handleDrag(e, pid) {
-    e.dataTransfer.setData("pid", pid);
+  function handleDragStart(pid) {
+    setDraggedPid(pid);
   }
 
   async function updateSortOrder(sorted) {
@@ -126,8 +127,9 @@ function AlbumBody({ minimalisticView }) {
       <div className="photo-grid p-2">
         {sortedPhotos.map((photo, idx) => (
           <DraggableAndDroppable
-            handleDrop={(e) => handleDrop(e, photo.pid)}
-            handleDrag={(e) => handleDrag(e, photo.pid)}
+            onDrop={() => updateSortOrder(sortedPhotos)}
+            onDragStart={() => handleDragStart(photo.pid)}
+            onDragEnter={() => handleDragEnter(photo.pid)}
             key={photo.pid}>
             <SelectableItem item={photo} itemId={photo.pid}>
               <PhotoCard

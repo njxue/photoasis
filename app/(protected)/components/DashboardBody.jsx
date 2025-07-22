@@ -8,13 +8,13 @@ import { toast } from "react-toastify";
 import { NUM_IMAGES_ABOVE_FOLD } from "@app/configs/imageConfigs";
 function DashboardBody({ albums }) {
   const [sortedAlbums, setSortedAlbums] = useState(albums);
+  const [draggedAid, setDraggedAid] = useState();
 
-  function handleDrop(e, aidTo) {
-    const aidFrom = e.dataTransfer.getData("aid");
-    const isDroppedAtLeftHalf =
-      e.nativeEvent.offsetX < e.target.offsetWidth / 2;
-
-    console.log(isDroppedAtLeftHalf);
+  function handleDragEnter(aidTo) {
+    const aidFrom = draggedAid;
+    if (aidFrom === aidTo) {
+      return;
+    }
 
     const fromIndex = sortedAlbums.findIndex(
       (a) => a.aid.toString() === aidFrom.toString()
@@ -36,7 +36,7 @@ function DashboardBody({ albums }) {
     // Calculate new toIndex because we deleted the dragged photo
     const newToIndex = fromIndex < toIndex ? toIndex - 1 : toIndex;
 
-    if (isDroppedAtLeftHalf) {
+    if (fromIndex > toIndex) {
       // Drop before photo at dropzone
       newlySortedAlbums.splice(newToIndex, 0, sortedAlbums[fromIndex]);
     } else {
@@ -45,11 +45,10 @@ function DashboardBody({ albums }) {
     }
 
     setSortedAlbums(newlySortedAlbums);
-    updateSortOrder(newlySortedAlbums);
   }
 
-  function handleDrag(e, aid) {
-    e.dataTransfer.setData("aid", aid);
+  function handleDragStart(aid) {
+    setDraggedAid(aid);
   }
 
   async function updateSortOrder(sorted) {
@@ -65,8 +64,9 @@ function DashboardBody({ albums }) {
     <div className="photo-grid">
       {sortedAlbums?.map((album, idx) => (
         <DraggableAndDroppable
-          handleDrop={(e) => handleDrop(e, album.aid)}
-          handleDrag={(e) => handleDrag(e, album.aid)}
+          onDrop={() => updateSortOrder(sortedAlbums)}
+          onDragStart={() => handleDragStart(album.aid)}
+          onDragEnter={() => handleDragEnter(album.aid)}
           key={album.aid}>
           <SelectableItem item={album.aid} itemId={album.aid}>
             <AlbumCard data={album} lazy={idx >= NUM_IMAGES_ABOVE_FOLD} />
