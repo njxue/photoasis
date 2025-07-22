@@ -19,9 +19,12 @@ function AlbumBody({ minimalisticView }) {
   const [isEditing, setIsEditing] = useState(false);
   const { selectedItems, mode, isSelecting } = useSelect();
 
-  function handleDrop(e, pidFrom) {
-    const pidTo = e.dataTransfer.getData("pid");
-    if (pidTo === pidFrom) {
+  function handleDrop(e, pidTo) {
+    const pidFrom = e.dataTransfer.getData("pid");
+    const isDroppedAtLeftHalf =
+      e.nativeEvent.offsetX < e.target.offsetWidth / 2;
+
+    if (pidFrom === pidTo) {
       return;
     }
 
@@ -33,13 +36,23 @@ function AlbumBody({ minimalisticView }) {
       return;
     }
 
-    const tmp = sortedPhotos[fromIndex];
-    sortedPhotos[fromIndex] = sortedPhotos[toIndex];
-    sortedPhotos[toIndex] = tmp;
-
     const newlySortedPhotos = [...sortedPhotos];
-    setSortedPhotos(newlySortedPhotos);
 
+    // Delete the dragged photo
+    newlySortedPhotos.splice(fromIndex, 1);
+
+    // Calculate new toIndex because we deleted the dragged photo
+    const newToIndex = fromIndex < toIndex ? toIndex - 1 : toIndex;
+
+    if (isDroppedAtLeftHalf) {
+      // Drop before photo at dropzone
+      newlySortedPhotos.splice(newToIndex, 0, sortedPhotos[fromIndex]);
+    } else {
+      // Drop after photo at dropzone
+      newlySortedPhotos.splice(newToIndex + 1, 0, sortedPhotos[fromIndex]);
+    }
+
+    setSortedPhotos(newlySortedPhotos);
     updateSortOrder(newlySortedPhotos);
   }
 

@@ -9,8 +9,12 @@ import { NUM_IMAGES_ABOVE_FOLD } from "@app/configs/imageConfigs";
 function DashboardBody({ albums }) {
   const [sortedAlbums, setSortedAlbums] = useState(albums);
 
-  function handleDrop(e, aidFrom) {
-    const aidTo = e.dataTransfer.getData("aid");
+  function handleDrop(e, aidTo) {
+    const aidFrom = e.dataTransfer.getData("aid");
+    const isDroppedAtLeftHalf =
+      e.nativeEvent.offsetX < e.target.offsetWidth / 2;
+
+    console.log(isDroppedAtLeftHalf);
 
     const fromIndex = sortedAlbums.findIndex(
       (a) => a.aid.toString() === aidFrom.toString()
@@ -24,11 +28,22 @@ function DashboardBody({ albums }) {
       return;
     }
 
-    const tmp = sortedAlbums[fromIndex];
-    sortedAlbums[fromIndex] = sortedAlbums[toIndex];
-    sortedAlbums[toIndex] = tmp;
-
     const newlySortedAlbums = [...sortedAlbums];
+
+    // Delete the dragged album
+    newlySortedAlbums.splice(fromIndex, 1);
+
+    // Calculate new toIndex because we deleted the dragged photo
+    const newToIndex = fromIndex < toIndex ? toIndex - 1 : toIndex;
+
+    if (isDroppedAtLeftHalf) {
+      // Drop before photo at dropzone
+      newlySortedAlbums.splice(newToIndex, 0, sortedAlbums[fromIndex]);
+    } else {
+      // Drop after photo at dropzone
+      newlySortedAlbums.splice(newToIndex + 1, 0, sortedAlbums[fromIndex]);
+    }
+
     setSortedAlbums(newlySortedAlbums);
     updateSortOrder(newlySortedAlbums);
   }
