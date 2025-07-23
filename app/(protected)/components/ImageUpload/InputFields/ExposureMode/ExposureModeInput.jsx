@@ -17,7 +17,7 @@ function ExposureModeInput({ fileData }) {
     }
   }
   return (
-    <>
+    <fieldset name="exposureMode">
       <input
         type="text"
         name={FORM_FIELDS.EXPOSURE_MODE.name}
@@ -37,7 +37,7 @@ function ExposureModeInput({ fileData }) {
           ))}
         </div>
       </div>
-    </>
+    </fieldset>
   );
 }
 

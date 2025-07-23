@@ -5,17 +5,15 @@ export default function SelectTrigger({
   renderTrigger,
 }) {
   const { beginSelect } = useSelect();
-  return renderTrigger ? (
-    <div onClick={() => beginSelect({ allowMultiple, mode })}>
-      {renderTrigger}
-    </div>
-  ) : (
-    <img
-      src="/assets/icons/select.svg"
-      alt="select"
-      width={30}
-      className="cursor-pointer"
+  return (
+    <button
       onClick={() => beginSelect({ allowMultiple, mode })}
-    />
+      className="w-full">
+      {renderTrigger ? (
+        renderTrigger
+      ) : (
+        <img src="/assets/icons/select.svg" alt="select" width={30} />
+      )}
+    </button>
   );
 }

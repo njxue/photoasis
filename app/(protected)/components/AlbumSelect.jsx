@@ -21,7 +21,9 @@ function AlbumSelect() {
   }
 
   return !isSelecting ? (
-    <SelectTrigger />
+    <div className="flex items-center justify-center">
+      <SelectTrigger />
+    </div>
   ) : (
     <div className="flex flex-row justify-center items-center gap-1">
       <button

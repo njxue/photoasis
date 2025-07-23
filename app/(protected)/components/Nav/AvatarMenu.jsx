@@ -12,37 +12,42 @@ const AvatarMenu = ({ avatar }) => {
 
   return (
     <div className="relative flex-col items-center justify-center">
-      <img
-        src={avatar}
-        width={0}
-        height={0}
-        className="rounded-full w-7 h-7 cursor-pointer"
-        name="avatar"
-        alt="profile avatar"
-        onClick={() => setIsVisible(true)}
-      />
+      <button onClick={() => setIsVisible(true)}>
+        <img
+          src={avatar}
+          width={28}
+          height={28}
+          className="rounded-full w-7 h-7"
+          name="avatar"
+          alt="profile avatar"
+        />
+      </button>
       {isVisible && (
-        <div
+        <menu
           className="absolute shadow-lg bg-white border border-gray-400 rounded-sm w-[150px] p-1 top-full mt-3 right-0 md:top-auto md:mt-0 md:right-auto md:bottom-full md:mb-3"
           ref={menuRef}>
-          <div className="w-full hover:bg-gray-200 p-2 rounded-md">
-            <Link href={PAGE_ROUTE_SETTINGS}>
-              <button
-                onClick={() => setIsVisible(false)}
-                className="flex items-center gap-2 w-full">
-                <img
-                  width={22}
-                  src="/assets/icons/settings.svg"
-                  alt="settings"
-                />
-                <p className="font-semibold text-sm">Settings</p>
-              </button>
-            </Link>
-          </div>
-          <div className="w-full hover:bg-gray-200 p-2 rounded-md">
-            <Logout />
-          </div>
-        </div>
+          <li>
+            <div className="w-full hover:bg-gray-200 p-2 rounded-md">
+              <Link href={PAGE_ROUTE_SETTINGS}>
+                <div
+                  onClick={() => setIsVisible(false)}
+                  className="flex items-center gap-2 w-full">
+                  <img
+                    width={22}
+                    src="/assets/icons/settings.svg"
+                    alt="settings"
+                  />
+                  <p className="font-semibold text-sm">Settings</p>
+                </div>
+              </Link>
+            </div>
+          </li>
+          <li>
+            <div className="w-full hover:bg-gray-200 p-2 rounded-md">
+              <Logout />
+            </div>
+          </li>
+        </menu>
       )}
     </div>
   );

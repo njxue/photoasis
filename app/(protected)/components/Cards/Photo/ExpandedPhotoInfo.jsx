@@ -32,7 +32,7 @@ const ExpandedPhotoInfo = ({
   );
 
   return (
-    <div className="relative text-xs flex flex-col items-start w-full">
+    <div className="photo-info relative text-xs flex flex-col items-start w-full">
       <div className="mb-10 sm:mb-6">
         {isEditing && !readonly ? (
           <UpdatePhotoForm
@@ -49,34 +49,26 @@ const ExpandedPhotoInfo = ({
               "opacity-90 transition-opacity ease-in duration-200 pointer-events-auto"
             }`}>
             <div className="flex flex-row justify-between mb-2">
-              <div>
-                <div className="flex flex-row justify-between">
-                  {photo.date && (
-                    <div className="col-span-2 text-sm">
-                      {parseDate(photo.date)}
-                    </div>
-                  )}
-                </div>
-                {photo.description && (
-                  <p className="col-span-2 text-xs mt-1">{photo.description}</p>
-                )}
-              </div>
+              {photo.date && (
+                <time dateTime={photo.date} className="col-span-2 text-sm">
+                  {parseDate(photo.date)}
+                </time>
+              )}
+
               {!readonly && (
-                <div className="invert">
-                  <img
-                    src="/assets/icons/pen-square.svg"
-                    className="w-5 h-fit opacity-30 hover:opacity-100 hover:cursor-pointer transition-opacity"
-                    onClick={() => {
-                      setIsEditing(true);
-                    }}
-                  />
-                </div>
+                <button
+                  className="invert w-5 h-fit opacity-30 hover:opacity-100 transition-opacity"
+                  onClick={() => {
+                    setIsEditing(true);
+                  }}>
+                  <img src="/assets/icons/pen-square.svg" alt="edit photo" />
+                </button>
               )}
             </div>
 
             {DIVIDER}
 
-            <div className="mt-3 grid grid-cols-2 gap-2">
+            <dl className="mt-3 grid grid-cols-2 gap-2">
               <MetaDataItem
                 label="Aperture"
                 value={photo.aperture}
@@ -133,7 +125,7 @@ const ExpandedPhotoInfo = ({
                   icon="lightroom.svg"
                 />
               </div>
-            </div>
+            </dl>
           </div>
         )}
       </div>

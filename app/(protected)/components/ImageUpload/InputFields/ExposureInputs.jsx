@@ -5,11 +5,11 @@ import { FORM_FIELDS } from "@utils/imageUploadUtils";
 
 // fileData is mutable. It is only meant for form submission and should not be used as a state
 function ExposureInputs({ fileData }) {
-  const rowStyle = "flex flex-rows items-center justify-around gap-2";
+  const rowStyle = "flex items-center justify-around gap-2";
   const colStyle = "w-1/2 flex flex-col gap-2";
 
   return (
-    <div className="flex flex-row gap-3">
+    <div className="flex gap-3">
       <div className={colStyle}>
         <div className={rowStyle}>
           <label>

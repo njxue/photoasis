@@ -37,8 +37,8 @@ function DownloadPhoto({ photo }) {
   }
 
   return (
-    <div
-      className={`flex flex-row gap-2 opacity-70 hover:opacity-100 cursor-pointer transition ${
+    <button
+      className={`download flex flex-row gap-2 opacity-70 hover:opacity-100 transition ${
         isDownloading && "pointer-events-none"
       }`}
       onClick={handleDownload}>
@@ -52,7 +52,7 @@ function DownloadPhoto({ photo }) {
         )}
         <span className="text-gray-400 text-sm font-sans">Download</span>
       </div>
-    </div>
+    </button>
   );
 }
 export default DownloadPhoto;

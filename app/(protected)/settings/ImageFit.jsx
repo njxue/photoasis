@@ -12,7 +12,7 @@ const FitOption = ({
   const isSelected = newUserPreferences?.objectFit === objectFit;
 
   return (
-    <div
+    <figure
       className={`flex flex-col items-center cursor-pointer hover:opacity-50 transition-opacity w-1/2 max-w-[300px] h-[170px] sm:h-[220px] p-2 border-2 ${
         isSelected && selectedStyles
       }`}
@@ -32,16 +32,16 @@ const FitOption = ({
           alt={`${objectFit} option`}
         />
       </div>
-      <p className="mt-2 font-semibold text-sm">
+      <figcaption className="mt-2 font-semibold text-sm">
         {objectFit === "object-cover" ? "Cover" : "Contain"}
-      </p>
-    </div>
+      </figcaption>
+    </figure>
   );
 };
 const ImageFit = ({ newUserPreferences, setNewUserPreferences }) => {
   return (
-    <div className="flex flex-col items-start">
-      <p className="text-base sm:text-xl">Image fit</p>
+    <section className="image-fit flex flex-col items-start">
+      <h2 className="text-base sm:text-xl">Image fit</h2>
       <div className="flex flex-row items-center justify-start gap-1 mt-2 w-full">
         <FitOption
           objectFit="object-contain"
@@ -64,7 +64,7 @@ const ImageFit = ({ newUserPreferences, setNewUserPreferences }) => {
           newUserPreferences={newUserPreferences}
         />
       </div>
-    </div>
+    </section>
   );
 };
 

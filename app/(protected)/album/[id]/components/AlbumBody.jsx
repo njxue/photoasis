@@ -8,8 +8,8 @@ import { toast } from "react-toastify";
 import { useAlbum } from "../AlbumContext";
 import PhotoCarousel from "@app/(protected)/components/Cards/Photo/PhotoCarousel";
 import Photo from "@app/(protected)/components/Cards/Photo";
-import UpdateAlbumForm from "./AlbumHeader/Menu/UpdateAlbumForm";
-import AlbumMenu from "./AlbumHeader/Menu/AlbumMenu";
+import UpdateAlbumForm from "./AlbumHeader/Settings/UpdateAlbumForm";
+import AlbumSettings from "./AlbumHeader/Settings/AlbumSettings";
 import { useSelect } from "@app/(protected)/components/Select/SelectContext";
 function AlbumBody({ minimalisticView }) {
   const album = useAlbum();
@@ -27,13 +27,11 @@ function AlbumBody({ minimalisticView }) {
       return;
     }
 
-    console.log(pidTo, pidFrom);
     const fromIndex = sortedPhotos.findIndex((i) => i.pid === pidFrom);
     const toIndex = sortedPhotos.findIndex((i) => i.pid === pidTo);
 
     if (fromIndex < 0 || toIndex < 0) {
       // Error, shouldn't happen
-
       return;
     }
 
@@ -81,7 +79,7 @@ function AlbumBody({ minimalisticView }) {
 
   return (
     <>
-      <div className="relative h-[450px]">
+      <section className="banner-image relative h-[450px]">
         <div className="h-full cursor-pointer group">
           {banner ? (
             <Photo
@@ -119,10 +117,10 @@ function AlbumBody({ minimalisticView }) {
           </div>
         </div>
         {/** Shouldn't trigger hover effects */}
-        <div className="absolute flex top-3 right-3 sm:bottom-3 sm:top-auto">
-          <AlbumMenu />
+        <div className="album-settings absolute flex top-3 right-3 sm:bottom-3 sm:top-auto">
+          <AlbumSettings />
         </div>
-      </div>
+      </section>
 
       <div className="photo-grid p-2">
         {sortedPhotos.map((photo, idx) => (

@@ -61,19 +61,19 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
 
   return (
     <Modal isOpen={true} className="bg-transparent">
-      <div className="flex flex-col w-screen h-screen">
+      <section className="carousel flex flex-col w-screen h-screen">
         {/** Top bar */}
         <div className={topAndBottomBorderStyles}>
           <div className="flex flex-row gap-1 items-center">
             <DownloadPhoto photo={photo} />
           </div>
-          <div className="invert">
+          <button className="invert opacity-50 hover:opacity-100 transition-opacity w-6">
             <img
               src="/assets/icons/cross.svg"
-              className="cursor-pointer opacity-50 hover:opacity-100 transition-opacity w-6"
+              alt="close carousel"
               onClick={onClose}
             />
-          </div>
+          </button>
         </div>
 
         {/** Photo */}
@@ -134,10 +134,10 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
           </div>
 
           <div className="absolute left-1/2 -translate-x-1/2 text-xs text-gray-200 line-clamp-2 text-center select-all">
-            {photo.description}
+            <h1>{photo.description}</h1>
           </div>
         </div>
-      </div>
+      </section>
     </Modal>
   );
 };

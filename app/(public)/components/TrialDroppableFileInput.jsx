@@ -57,7 +57,7 @@ const TrialDroppableFileInput = () => {
   }
 
   return (
-    <div className="w-1/2 max-md:hidden h-[90%]">
+    <section className="w-1/2 max-md:hidden h-[90%]">
       {!photo ? (
         <div
           className="border border-dashed border-black h-full w-full rounded flex flex-col justify-center items-center opacity-50 text-center text-lg cursor-pointer hover:opacity-100 transition-all"
@@ -73,7 +73,7 @@ const TrialDroppableFileInput = () => {
             </div>
           ) : (
             <>
-              <p className="text-3xl font-bold m-3">Try Me!</p>
+              <h2 className="text-3xl font-bold m-3">Try Me!</h2>
               <p>Drag or click to upload a file (jpg or png only)</p>
               <img
                 src="/assets/icons/upload.svg"
@@ -105,7 +105,7 @@ const TrialDroppableFileInput = () => {
               className="max-h-[80vh] w-full"
               alt={photo.name}
             />
-            <div className="absolute -translate-y-[106%] left-1">
+            <div className="absolute bottom-4 left-1">
               <ExpandedPhotoInfo photo={photo} defaultShow readonly />
             </div>
           </div>
@@ -117,7 +117,7 @@ const TrialDroppableFileInput = () => {
           </button>
         </div>
       )}
-    </div>
+    </section>
   );
 };
 

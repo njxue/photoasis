@@ -11,7 +11,7 @@ const Nav = () => {
   const buttonText = pathname === PAGE_ROUTE_LOGIN ? "Sign up" : "Sign in";
 
   return (
-    <div className="flex items-center justify-between w-full h-[70px] px-4 z-50">
+    <header className="flex items-center justify-between w-full h-[70px] px-4 z-50">
       <Link href="/">
         <img
           src="/assets/images/logoNew.png"
@@ -20,12 +20,12 @@ const Nav = () => {
         />
       </Link>
 
-      <Link href={linkHref}>
-        <button className="text-white font-semibold bg-zinc-900 py-2 px-6 rounded-sm shadow hover:bg-zinc-700 transition-all">
-          {buttonText}
-        </button>
+      <Link
+        href={linkHref}
+        className="text-white font-semibold bg-zinc-900 py-2 px-6 rounded-sm shadow hover:bg-zinc-700 transition-all">
+        {buttonText}
       </Link>
-    </div>
+    </header>
   );
 };
 

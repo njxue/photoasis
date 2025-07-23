@@ -19,20 +19,18 @@ const PhotoSettingsInputs = ({ fileData }) => {
       </div>
       <div className="flex flex-row mt-2 items-center justify-between text-[10px]">
         <div className="flex flex-row gap-2">
-          <img
-            src="/assets/icons/sun.svg"
-            alt="exposure"
-            width={20}
+          <button
+            type="button"
             onClick={() => setTab(EXPOSURE_TAB)}
-            className={`${tab !== EXPOSURE_TAB && "opacity-20"} cursor-pointer`}
-          />
-          <img
-            src="/assets/icons/camera.svg"
-            width={20}
-            alt="build"
+            className={`${tab !== EXPOSURE_TAB ? "opacity-20" : "opacity-100"}`}>
+            <img src="/assets/icons/sun.svg" alt="exposure" width={20} />
+          </button>
+          <button
+            type="button"
             onClick={() => setTab(BUILD_TAB)}
-            className={`${tab !== BUILD_TAB && "opacity-20"} cursor-pointer`}
-          />
+            className={`${tab !== BUILD_TAB ? "opacity-20" : "opacity-100"}`}>
+            <img src="/assets/icons/camera.svg" width={20} alt="build" />
+          </button>
         </div>
         <div className="flex justify-end items-center basis-2/3 text-wrap">
           {<p>{fileData?.name}</p>}

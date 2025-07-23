@@ -18,7 +18,7 @@ function MeteringInput({ fileData }) {
     }
   }
   return (
-    <>
+    <fieldset name="meteringMode">
       <input
         type="text"
         name={FORM_FIELDS.METERING_MODE.name}
@@ -39,7 +39,7 @@ function MeteringInput({ fileData }) {
           ))}
         </div>
       </div>
-    </>
+    </fieldset>
   );
 }
 

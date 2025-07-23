@@ -8,15 +8,14 @@ function MetaDataItem({ icon, label, value }) {
     <div
       className="flex flex-row justify-start items-center gap-2 text-xs cursor-pointer"
       onClick={() => setTruncate((prev) => !prev)}>
-      {icon && (
-        <div className="invert">
-          <img src={`/assets/icons/${icon}`} width={16} alt={label} />
-        </div>
-      )}
-      <div
+      <dt className="invert">
+        <img src={`/assets/icons/${icon}`} width={16} alt={label} />
+      </dt>
+
+      <dd
         className={`${truncate && "line-clamp-2"} break-words overflow-hidden`}>
         {value ? value : "-"}
-      </div>
+      </dd>
     </div>
   );
 }

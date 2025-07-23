@@ -7,7 +7,9 @@ const Page = async () => {
 
   return (
     <div className="h-full flex flex-col p-3">
-      <div className="page-heading">Settings</div>
+      <header className="page-heading">
+        <h1>Settings</h1>
+      </header>
       <Settings user={user} />
     </div>
   );

@@ -27,19 +27,18 @@ const UpdateAlbumForm = ({ onClose = () => {} }) => {
         className="py-1 pl-2 pr-[80px] rounded w-full text-xl md:text-3xl bg-transparent focus:bg-black/70 focus:ring-2 focus:ring-white transition"
       />
       <div className="absolute right-2 flex flex-row justify-center items-center gap-2">
-        <button type="submit" className="h-full w-1/2">
+        <button type="submit" className="w-1/2">
           <img
             src="/assets/icons/tick-white.svg"
-            className="h-[30px] cursor-pointer"
+            className="h-[30px]"
             alt="tick"
           />
         </button>
-        <button className="h-full w-1/2">
+        <button className="w-1/2" onClick={onClose}>
           <img
             src="/assets/icons/cross-white.svg"
             alt="cross"
-            className="h-[25px] cursor-pointer"
-            onClick={onClose}
+            className="h-[25px]"
           />
         </button>
       </div>
