@@ -57,7 +57,7 @@ const Page = async ({ params }) => {
   }
   return (
     <AlbumProvider value={albumData}>
-      <AlbumContainer />;
+      <AlbumContainer />
     </AlbumProvider>
   );
 };

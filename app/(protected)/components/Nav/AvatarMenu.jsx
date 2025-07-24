@@ -12,12 +12,14 @@ const AvatarMenu = ({ avatar }) => {
 
   return (
     <div className="relative flex-col items-center justify-center">
-      <button onClick={() => setIsVisible(true)}>
+      <button
+        onClick={() => setIsVisible(true)}
+        className="flex justify-center">
         <img
           src={avatar}
           width={28}
           height={28}
-          className="rounded-full w-7 h-7"
+          className="rounded-full"
           name="avatar"
           alt="profile avatar"
         />
