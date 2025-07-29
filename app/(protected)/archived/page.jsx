@@ -1,16 +1,17 @@
 import { authOptions } from "@app/api/auth/[...nextauth]/route";
 import prisma from "@prisma/prisma";
 import { getServerSession } from "next-auth";
-import GalleryContainer from "./components/GalleryContainer";
 import { unstable_cache } from "next/cache";
+import { SelectProvider } from "../components/Select/SelectContext";
+import ArchivedContainer from "./components/ArchivedContainer";
 
-const fetchPhotos = unstable_cache(
+const fetchArchivedPhotos = unstable_cache(
   async (uid) => {
     try {
       let photos = await prisma.photo.findMany({
         where: {
           uid,
-          archived: false,
+          archived: true,
         },
         distinct: ["pid"],
       });
@@ -31,8 +32,12 @@ const fetchPhotos = unstable_cache(
 const Page = async () => {
   const session = await getServerSession(authOptions);
   const uid = session?.user.id;
-  const photos = await fetchPhotos(uid);
-  return <GalleryContainer photos={photos} />;
+  const photos = await fetchArchivedPhotos(uid);
+  return (
+    <SelectProvider>
+      <ArchivedContainer photos={photos} />
+    </SelectProvider>
+  );
 };
 
 export default Page;

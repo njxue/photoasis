@@ -18,11 +18,15 @@ export const fetchAlbumData = unstable_cache(
         },
       });
 
-      data.photos = data.photos.map((photo) => ({
-        ...photo,
-        url: `${process.env.NEXT_PUBLIC_CLOUDFLARE_URL}/${uid}/${aid}/${photo.name}`,
-      }));
+      // Filter archived photos and generate url
+      data.photos = data.photos
+        .filter((photo) => !photo.archived)
+        .map((photo) => ({
+          ...photo,
+          url: `${process.env.NEXT_PUBLIC_CLOUDFLARE_URL}/${uid}/${aid}/${photo.name}`,
+        }));
 
+      // Sort photos
       const sortedPids = data.photoOrder;
 
       if (sortedPids.length) {

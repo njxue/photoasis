@@ -9,6 +9,7 @@ import CancelSelectButton from "@app/(protected)/components/Select/CancelSelectB
 import ConfirmationModal from "@app/(protected)/components/Modal/ConfirmationModal";
 import { useAlbum } from "../../AlbumContext";
 import OptimisedImage from "@app/common/Image/OptimisedImage";
+import updateArchivedStatus from "@actions/updateArchiveStatus";
 
 function SelectControls({ selectModes }) {
   const { selectedItems, numSelected, mode, endSelect, isSelecting } =
@@ -34,6 +35,25 @@ function SelectControls({ selectModes }) {
     }
     setIsLoading(false);
   }
+
+  async function handleArchivePhotos() {
+    setIsLoading(true);
+    const res = await updateArchivedStatus(
+      selectedItems.map((i) => i.pid),
+      true
+    );
+
+    if (res.ok) {
+      toast.success("Photo(s) added to archive");
+      endSelect();
+    } else {
+      toast.error(
+        "Unable to archive selected photo(s). Please try again later"
+      );
+    }
+    setIsLoading(false);
+  }
+
   async function handleDownloadPhotosAsZip() {
     setIsLoading(true);
     const toastId = toast.loading(
@@ -202,24 +222,44 @@ function SelectControls({ selectModes }) {
         </>
       ) : (
         <>
+          <span className="font-bold text-white text-sm mr-2">
+            {numSelected}&nbsp;&nbsp;selected
+          </span>
           <button
             disabled={!numSelected || isLoading}
-            className={`${btnClassName} bg-black`}
+            className={`${btnClassName} bg-black border-none hover:bg-neutral-800 transition-all`}
             onClick={async () => {
               await handleDownloadPhotosAsZip();
               endSelect();
             }}>
             <img src="/assets/icons/download.svg" width={20} alt="download" />
-            <span>Download ({numSelected})</span>
+            <span>Download</span>
           </button>
+
           <button
             disabled={!numSelected || isLoading}
-            className={`${btnClassName} bg-red-900 hover:border-red-700`}
+            className={`${btnClassName} bg-amber-700 border-none hover:bg-amber-600 transition-all`}
+            onClick={handleArchivePhotos}>
+            <div className="invert">
+              <img
+                src="/assets/icons/archive-down.svg"
+                width={20}
+                alt="trash"
+              />
+            </div>
+            <span>Archive</span>
+          </button>
+
+          <button
+            disabled={!numSelected || isLoading}
+            className={`${btnClassName} bg-red-900 border-none hover:bg-red-700  transition-all`}
             onClick={() => setIsModalOpen(true)}>
             <img src="/assets/icons/trash.svg" width={20} alt="trash" />
-            <span>Delete ({numSelected})</span>
+            <span>Delete</span>
           </button>
+
           <CancelSelectButton disabled={isLoading} />
+
           <ConfirmationModal
             isOpen={isModalOpen}
             setIsOpen={setIsModalOpen}

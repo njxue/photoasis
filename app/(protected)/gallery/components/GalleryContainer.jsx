@@ -22,11 +22,12 @@ const GalleryContainer = ({ photos }) => {
     <>
       <div className="p-3">
         {!minimalisticView && (
-          <header className="page-heading">
-            <h1>Gallery</h1>
-
+          <>
+            <header className="page-heading">
+              <h1>Gallery</h1>
+            </header>
             <hr className="mb-3" />
-          </header>
+          </>
         )}
         <div className="photo-grid">
           {photos &&

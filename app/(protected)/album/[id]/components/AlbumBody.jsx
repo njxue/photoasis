@@ -117,7 +117,7 @@ function AlbumBody({ minimalisticView }) {
           </div>
         </div>
         {/** Shouldn't trigger hover effects */}
-        <div className="album-settings absolute flex top-3 right-3 sm:bottom-3 sm:top-auto">
+        <div className="album-settings absolute flex top-3 right-3 md:bottom-3 md:top-auto">
           <AlbumSettings />
         </div>
       </section>

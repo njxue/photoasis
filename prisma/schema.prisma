@@ -41,6 +41,7 @@ model Photo {
   description       String?
   date              DateTime?
   blurhash          String?
+  archived          Boolean?
 }
 
 model Album {
