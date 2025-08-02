@@ -88,6 +88,7 @@ function AlbumBody({ minimalisticView }) {
               name={banner.name}
               lazy={false}
               blurhash={banner.blurhash}
+              preload
             />
           ) : (
             <div className="flex justify-center h-full">
@@ -97,22 +98,24 @@ function AlbumBody({ minimalisticView }) {
               />
             </div>
           )}
-          <div className="flex items-center gap-4 absolute bottom-6 left-6 font-bold text-4xl md:text-5xl text-white z-50 animate-fadeInAndSlideDown">
+          <div
+            className={`flex items-center gap-4 absolute bottom-6 left-6 font-bold text-4xl md:text-5xl text-white z-50 animate-fadeInAndSlideDown max-w-[80%] ${isSelecting ? "sm:max-w-[40%]" : ""}`}>
             {isEditing ? (
               <UpdateAlbumForm onClose={() => setIsEditing(false)} />
             ) : (
-              <>
-                <h1>{album.name}</h1>
+              <div className="flex items-center">
+                <h1 className="line-clamp-1">{album.name}</h1>
                 <button
                   onClick={() => {
                     setIsEditing(true);
-                  }}>
+                  }}
+                  className="shrink-0">
                   <img
                     src="/assets/icons/pencil.svg"
                     className="w-6 opacity-50 hover:opacity-80 transition-all"
                   />
                 </button>
-              </>
+              </div>
             )}
           </div>
         </div>

@@ -10,6 +10,7 @@ const Photo = ({
   lazy = true,
   sizes = "100vw",
   className = "",
+  preload = false,
 }) => {
   return (
     <div className={`flex justify-center w-full h-full ${className}`}>
@@ -48,6 +49,7 @@ const Photo = ({
         priority={!lazy}
         fill={true}
         sizes={sizes}
+        prelaod={preload}
       />
     </div>
   );

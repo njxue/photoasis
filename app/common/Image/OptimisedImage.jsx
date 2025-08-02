@@ -8,6 +8,7 @@ import {
   USE_NEXT_IMAGE,
 } from "@app/configs/imageConfigs";
 import { Lens } from "../Lens";
+import { preload } from "react-dom";
 
 const OptimisedImage = ({
   src,
@@ -21,15 +22,28 @@ const OptimisedImage = ({
   priority = false,
   width = 10,
   height = 10,
-  sizes,
-  srcset,
+  sizes = "100vw",
+  srcset: customSrcSet,
   fill = false,
   showLoader = false,
   objectFit = "object-cover",
   onLoad,
   withLens = false,
+  preload: shouldPreload = false,
 }) => {
   const COMMON_TRANSFORMATIONS = "f_avif,dpr_auto";
+  const srcSetWidths = [100, 250, 540, 720, 960, 1200, 1440, 1920];
+  const srcset =
+    customSrcSet ?? generateSrcset(srcSetWidths, COMMON_TRANSFORMATIONS);
+
+  if (shouldPreload) {
+    preload(src, {
+      as: "image",
+      imageSizes: sizes,
+      imageSrcSet: srcset,
+    });
+  }
+
   const hoverStyles =
     "hover:opacity-50 transition-opacity ease-in-out duration-50";
   const dimensions = "h-full w-full";
@@ -92,19 +106,7 @@ const OptimisedImage = ({
         onError={handleError}
         onLoad={handleLoad}
         sizes={sizes ?? "100vw"}
-        srcSet={
-          isError
-            ? imgSrc
-            : (srcset ??
-              `${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS},w_100/${src} 100w,
-                ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS},w_250/${src} 250w,
-                ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS},w_540/${src} 540w,
-                ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS},w_720/${src} 720w,
-                ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS},w_960/${src} 960w,
-                ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS},w_1200/${src} 1200w,
-                ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS},w_1440/${src} 1440w,
-                ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS},w_1920/${src} 1920w`)
-        }
+        srcSet={isError ? imgSrc : srcset}
       />
     ) : (
       <Image
@@ -138,3 +140,11 @@ const OptimisedImage = ({
 };
 
 export default OptimisedImage;
+
+const generateSrcset = (widths, transformations) => {
+  const srcSetArr = widths.map(
+    (width) =>
+      `${CLOUDINARY_URL}/${transformations},w_${width}/${src} ${width}w`
+  );
+  return srcSetArr.join(",");
+};
