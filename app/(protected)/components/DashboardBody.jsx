@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SelectableItem from "@app/(protected)/components/Select/SelectableItem";
 import AlbumCard from "@app/(protected)/components/Cards/Album/AlbumCard";
 import DraggableAndDroppable from "@app/(protected)/components/DragAndDrop/DraggableAndDroppable";
@@ -8,8 +8,8 @@ import { toast } from "react-toastify";
 import { NUM_IMAGES_ABOVE_FOLD } from "@app/configs/imageConfigs";
 function DashboardBody({ albums }) {
   const [sortedAlbums, setSortedAlbums] = useState(albums);
-  const [draggedAid, setDraggedAid] = useState();
 
+  const [draggedAid, setDraggedAid] = useState();
   function handleDragEnter(aidTo) {
     const aidFrom = draggedAid;
     if (aidFrom === aidTo) {
@@ -60,6 +60,11 @@ function DashboardBody({ albums }) {
       });
     }
   }
+
+  useEffect(() => {
+    setSortedAlbums(albums);
+  }, [albums]);
+
   return (
     <div className="photo-grid">
       {sortedAlbums?.map((album, idx) => (
