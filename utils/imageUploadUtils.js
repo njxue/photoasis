@@ -74,9 +74,11 @@ export const extractFileMetadata = async (file) => {
     //const imageData = await getImageData(file);
 
     // Aperture
-    aperture = metadata["FNumber"]
-      ? metadata["FNumber"].value[0] / metadata["FNumber"].value[1]
-      : null;
+    const fNumberMeta = metadata["FNumber"];
+    const apertureValueMeta = metadata["ApertureValue"];
+    aperture =
+      fNumberMeta?.value[0] / fNumberMeta?.value[1] ||
+      parseInt(apertureValueMeta.description);
 
     // ISO
     iso = metadata["ISOSpeedRatings"]?.value;
