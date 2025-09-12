@@ -80,6 +80,9 @@ export const extractFileMetadata = async (file) => {
 
     // ISO
     iso = metadata["ISOSpeedRatings"]?.value;
+    if (Array.isArray(iso)) {
+      iso = iso[0].value;
+    }
 
     // Shutterspeed
     shutterspeed =
