@@ -1,3 +1,4 @@
+import { IMAGE_PLACEHOLDER } from "@app/configs/imageConfigs";
 import OptimisedImage from "../../../common/Image/OptimisedImage";
 import { QUALITY_LOW } from "../../../common/Image/constants";
 import { Blurhash } from "react-blurhash";
@@ -11,6 +12,7 @@ const Photo = ({
   sizes = "100vw",
   className = "",
 }) => {
+  if (!src) src = IMAGE_PLACEHOLDER;
   return (
     <div className={`flex justify-center w-full h-full ${className}`}>
       {blurhash ? (
@@ -26,18 +28,16 @@ const Photo = ({
         </div>
       ) : (
         // Create blurhash effect for older photos without blurhash (before it was implemented)
-        src && (
-          <div className="absolute w-full h-full blur-xs opacity-50">
-            <OptimisedImage
-              src={src}
-              name={name}
-              quality={QUALITY_LOW}
-              objectFit="object-cover"
-              priority={!lazy}
-              sizes="(max-width: 450px) 20px, (max-width: 640px) 50px, 100px"
-            />
-          </div>
-        )
+        <div className="absolute w-full h-full blur-xs opacity-50">
+          <OptimisedImage
+            src={src}
+            name={name}
+            quality={QUALITY_LOW}
+            objectFit="object-cover"
+            priority={!lazy}
+            sizes="(max-width: 450px) 20px, (max-width: 640px) 50px, 100px"
+          />
+        </div>
       )}
       <OptimisedImage
         src={src}
