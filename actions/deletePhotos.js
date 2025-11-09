@@ -75,7 +75,6 @@ const deletePhotos = async ({ aid, pids }) => {
       const updatedPhotoOrder = album.photoOrder.filter(
         (pid) => !pids.includes(pid)
       );
-
       newAlbumData = { ...newAlbumData, photoOrder: updatedPhotoOrder };
 
       const updatedAlbum = await prisma.album.update({
