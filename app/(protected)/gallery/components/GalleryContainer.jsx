@@ -20,15 +20,27 @@ const GalleryContainer = ({ photos }) => {
 
   return (
     <>
-      <div className="p-3">
+      <div className={minimalisticView ? "p-1" : "protected-page"}>
         {!minimalisticView && (
-          <header className="page-heading">
-            <h1>Gallery</h1>
-
-            <hr className="mb-3" />
+          <header className="mb-8 border-b border-black/15 pb-5">
+            <p className="eyebrow">All photographs</p>
+            <div className="mt-1 flex items-end justify-between gap-4">
+              <h1 className="page-title">Gallery</h1>
+              <p className="pb-1 text-xs font-semibold uppercase tracking-[0.16em] text-black/45">
+                {photos.length} {photos.length === 1 ? "image" : "images"}
+              </p>
+            </div>
           </header>
         )}
         <div className="photo-grid">
+          {photos.length === 0 && (
+            <div className="empty-state">
+              <p className="eyebrow">Nothing here yet</p>
+              <h2 className="mt-2 text-2xl font-semibold">
+                Your gallery is ready for a point of view.
+              </h2>
+            </div>
+          )}
           {photos &&
             photos.map((photo, idx) => (
               <PhotoCard

@@ -17,10 +17,10 @@ function FancyInput({
   const [isFocused, setIsFocused] = useState(defaultValue != null);
 
   const LABEL_STYLE_FOCUSED =
-    "h-fit -translate-y-2/4 translate-x-2 scale-75 origin-left bg-white rounded px-1 font-bold transition-all duration-300";
+    "h-fit -translate-y-2/4 translate-x-2 scale-75 origin-left bg-white px-1 font-bold uppercase tracking-wider transition-all duration-300";
   const LABEL_STYLE_UNFOCUSED =
     "bg-transparent text-gray-500 px-2 transition-all duration-300";
-  const INPUT_STYLE = "p-2 h-[33px] w-full border border-gray-300 rounded";
+  const INPUT_STYLE = "h-11 w-full border border-black/30 bg-white p-2 outline-none transition focus:border-black";
   useEffect(() => {
     const handleClick = (e) => {
       // Clicked on label or input field

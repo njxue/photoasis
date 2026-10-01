@@ -14,7 +14,7 @@ const SelectableItem = ({ children, item, itemId }) => {
         {children}
       </div>
       {isSelecting && isSelected(itemId) && (
-        <div className="absolute top-0 right-0 p-1 bg-green-500 opacity-90">
+        <div className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-white shadow-md">
           <img src="/assets/icons/bold-tick.svg" width={16} alt="tick" />
         </div>
       )}

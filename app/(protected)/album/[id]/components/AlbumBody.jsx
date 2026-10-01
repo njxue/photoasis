@@ -79,12 +79,12 @@ function AlbumBody({ minimalisticView }) {
 
   return (
     <>
-      <section className="banner-image relative h-[450px]">
+      <section className="banner-image relative h-[55vh] min-h-[380px] max-h-[620px] overflow-hidden bg-black">
         <div className="h-full cursor-pointer group">
           {banner ? (
             <Photo
               src={banner.url}
-              className="max-w-full group-hover:opacity-80 transition-all h-full brightness-50"
+              className="h-full max-w-full brightness-[0.58] transition-all duration-500 group-hover:scale-[1.01] group-hover:brightness-[0.48]"
               name={banner.name}
               lazy={false}
               blurhash={banner.blurhash}
@@ -97,7 +97,11 @@ function AlbumBody({ minimalisticView }) {
               />
             </div>
           )}
-          <div className="flex items-center gap-4 absolute bottom-6 left-6 font-bold text-4xl md:text-5xl text-white z-50 animate-fadeInAndSlideDown">
+          <div className="absolute bottom-8 left-5 z-40 max-w-[75%] text-white animate-fadeInAndSlideDown sm:bottom-10 sm:left-10">
+            <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.2em] text-white/65">
+              Collection · {sortedPhotos.length} {sortedPhotos.length === 1 ? "image" : "images"}
+            </p>
+            <div className="flex items-center gap-4 text-4xl font-semibold tracking-[-0.04em] md:text-6xl">
             {isEditing ? (
               <UpdateAlbumForm onClose={() => setIsEditing(false)} />
             ) : (
@@ -114,15 +118,22 @@ function AlbumBody({ minimalisticView }) {
                 </button>
               </>
             )}
+            </div>
           </div>
         </div>
         {/** Shouldn't trigger hover effects */}
-        <div className="album-settings absolute flex top-3 right-3 sm:bottom-3 sm:top-auto">
+        <div className="album-settings absolute right-5 top-5 z-40 flex sm:bottom-8 sm:right-8 sm:top-auto">
           <AlbumSettings />
         </div>
       </section>
 
-      <div className="photo-grid p-2">
+      <div className="photo-grid p-1 sm:p-4">
+        {sortedPhotos.length === 0 && (
+          <div className="empty-state my-8">
+            <p className="eyebrow">Empty collection</p>
+            <h2 className="mt-2 text-2xl font-semibold">Add photographs to begin the story.</h2>
+          </div>
+        )}
         {sortedPhotos.map((photo, idx) => (
           <DraggableAndDroppable
             onDrop={() => updateSortOrder(sortedPhotos)}

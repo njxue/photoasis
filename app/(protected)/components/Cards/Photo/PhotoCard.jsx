@@ -24,7 +24,7 @@ const PhotoCard = React.memo(
           onClick?.();
         }}>
         <div
-          className="card relative"
+          className="card photo-card relative overflow-hidden bg-[#e9e9e6]"
           onMouseEnter={handleShowPhotoInfo}
           onMouseLeave={handleHidePhotoInfo}>
           <Photo
@@ -37,7 +37,7 @@ const PhotoCard = React.memo(
           />
 
           {showPhotoInfo && (
-            <div className="absolute bottom-0 bg-black opacity-70 w-full h-full animate-slideUp">
+            <div className="absolute inset-0 w-full bg-black/65 animate-slideUp">
               <PhotoInfo photo={photo} />
             </div>
           )}

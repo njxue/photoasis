@@ -26,14 +26,14 @@ const AlbumSettings = () => {
     useClickOutside(menuRef);
 
   const menuOptionClassname =
-    "flex items-center w-full gap-2 cursor-pointer p-2 text-xs hover:bg-black";
+    "flex w-full cursor-pointer items-center gap-3 px-3 py-2.5 text-left text-xs font-semibold hover:bg-black/[0.05]";
 
   return (
     <>
       <div className="relative z-50 flex flex-col items-end">
         {showMenu && !isSelecting && (
           <menu
-            className="album-menu absolute top-8 flex flex-col z-50 bg-black/70 rounded text-white text-sm w-[180px] right-0 sm:bottom-8 sm:top-auto animate-slideUp"
+            className="album-menu absolute right-0 top-8 z-50 flex w-[210px] flex-col border border-black bg-white p-1 text-sm text-black shadow-[6px_6px_0_rgba(0,0,0,0.15)] animate-slideUp sm:bottom-8 sm:top-auto"
             ref={menuRef}>
             <li>
               <button
@@ -42,7 +42,7 @@ const AlbumSettings = () => {
                 <img
                   src="/assets/icons/plus-white.svg"
                   alt="add photos"
-                  className="w-4"
+                  className="w-4 invert"
                 />
                 <span>Add Photos</span>
               </button>
@@ -54,7 +54,7 @@ const AlbumSettings = () => {
                     <img
                       src="/assets/icons/thumbnail-white.svg"
                       alt="add photos"
-                      className="w-4 px-[2px]"
+                      className="w-4 px-[2px] invert"
                     />
                     <span>Change Thumbnail</span>
                   </div>
@@ -70,7 +70,7 @@ const AlbumSettings = () => {
                     <img
                       src="/assets/icons/image-white.svg"
                       alt="add photos"
-                      className="w-4"
+                      className="w-4 invert"
                     />
                     <span>Change Banner</span>
                   </div>
@@ -85,8 +85,8 @@ const AlbumSettings = () => {
                 onClick={() => setIsDeletingAlbum(true)}>
                 <img
                   src="/assets/icons/trash.svg"
-                  alt="add photos"
-                  className="w-4"
+                  alt=""
+                  className="w-4 invert"
                 />
                 Delete Album
               </button>

@@ -4,9 +4,9 @@ const Logout = () => {
   return (
     <button
       onClick={() => signOut({ callbackUrl: "/" })}
-      className="flex items-center gap-2 w-full">
+      className="flex w-full items-center gap-2">
       <img width={22} src="/assets/icons/logout.svg" alt="logout" />
-      <span className="font-semibold text-red-500 text-sm">Logout</span>
+      <span className="text-xs font-semibold text-red-700">Log out</span>
     </button>
   );
 };

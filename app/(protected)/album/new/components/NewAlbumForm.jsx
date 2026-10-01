@@ -70,9 +70,9 @@ const NewAlbumForm = () => {
 
   return (
     <form
-      className="flex flex-col gap-3 p-2 w-full h-full justify-between"
+      className="flex h-full w-full flex-col justify-between gap-6 bg-white p-5 sm:p-8"
       onSubmit={handleCreateAlbum}>
-      <div className="flex flex-col h-full gap-2">
+      <div className="flex h-full flex-col gap-5">
         <FancyInput
           name="albumName"
           label="Album Name"
@@ -80,7 +80,7 @@ const NewAlbumForm = () => {
           required
         />
 
-        <div className="grow max-h-full">
+        <div className="min-h-[360px] grow max-h-full">
           <DroppableFileInput
             customDropzone={
               isLoading &&
@@ -90,7 +90,7 @@ const NewAlbumForm = () => {
         </div>
       </div>
       <SubmitButton
-        text="Create"
+        text="Create album"
         preventBrowserRefresh
         disabled={isLoading || hasFileError}
       />

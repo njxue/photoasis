@@ -24,7 +24,7 @@ const Layout = async ({ children }) => {
       <body className={`${inter.className} antialiased`}>
         <SpeedInsights />
         <Provider>
-          <div className="app w-screen h-screen">{children}</div>
+          <div className="app min-h-screen w-full overflow-x-clip">{children}</div>
           <ToastContainerWrapper />
         </Provider>
       </body>

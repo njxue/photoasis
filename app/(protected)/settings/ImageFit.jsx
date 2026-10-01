@@ -8,12 +8,12 @@ const FitOption = ({
   newUserPreferences,
   handleClick,
 }) => {
-  const selectedStyles = "border-black";
+  const selectedStyles = "border-black bg-black text-white";
   const isSelected = newUserPreferences?.objectFit === objectFit;
 
   return (
     <figure
-      className={`flex flex-col items-center cursor-pointer hover:opacity-50 transition-opacity w-1/2 max-w-[300px] h-[170px] sm:h-[220px] p-2 border-2 ${
+      className={`flex h-[190px] w-1/2 max-w-[320px] cursor-pointer flex-col items-center border border-black/15 p-2 transition hover:border-black sm:h-[250px] ${
         isSelected && selectedStyles
       }`}
       onClick={handleClick}>
@@ -32,7 +32,7 @@ const FitOption = ({
           alt={`${objectFit} option`}
         />
       </div>
-      <figcaption className="mt-2 font-semibold text-sm">
+      <figcaption className="py-2 text-[10px] font-bold uppercase tracking-[0.16em]">
         {objectFit === "object-cover" ? "Cover" : "Contain"}
       </figcaption>
     </figure>
@@ -41,8 +41,12 @@ const FitOption = ({
 const ImageFit = ({ newUserPreferences, setNewUserPreferences }) => {
   return (
     <section className="image-fit flex flex-col items-start">
-      <h2 className="text-base sm:text-xl">Image fit</h2>
-      <div className="flex flex-row items-center justify-start gap-1 mt-2 w-full">
+      <p className="eyebrow">Display</p>
+      <h2 className="mt-1 text-xl font-semibold sm:text-2xl">Image fit</h2>
+      <p className="mt-2 max-w-lg text-sm leading-6 text-black/50">
+        Choose how photographs sit inside album and gallery tiles.
+      </p>
+      <div className="mt-5 flex w-full flex-row items-center justify-start gap-3">
         <FitOption
           objectFit="object-contain"
           handleClick={() =>

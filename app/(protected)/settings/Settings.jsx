@@ -54,12 +54,17 @@ const Settings = ({ user }) => {
 
   return (
     <>
-      <div className="flex flex-col gap-6 p-3 flex-1">
-        <div className="flex items-center justify-start gap-5 mt-5">
-          <img src={user?.image} className="rounded-full" />
+      <div className="flex flex-1 flex-col gap-10 bg-white p-5 sm:p-8">
+        <div className="flex items-center justify-start gap-5 border-b border-black/10 pb-8">
+          <img
+            src={user?.image}
+            className="h-16 w-16 rounded-full object-cover ring-1 ring-black/10"
+            alt="Profile avatar"
+          />
           <div>
-            <p className="text-lg sm:text-2xl font-semibold">{user?.name}</p>
-            <p className="text-xs xs:text-base">{user?.email}</p>
+            <p className="eyebrow mb-1">Signed in as</p>
+            <p className="text-lg font-semibold sm:text-2xl">{user?.name}</p>
+            <p className="mt-1 text-xs text-black/45 xs:text-sm">{user?.email}</p>
           </div>
         </div>
         <ImageFit
@@ -68,7 +73,7 @@ const Settings = ({ user }) => {
         />
       </div>
       {!isSettingsChanged && (
-        <div className="flex items-center gap-2 px-3">
+        <div className="sticky bottom-20 flex items-center gap-2 border-t border-black/10 bg-[#f7f7f5]/95 py-4 backdrop-blur md:bottom-0">
           <CancelButton disabled={isSaving} onCancel={handleCancel} />
           <button
             className="btn-gray w-full h-9 text-white font-bold"

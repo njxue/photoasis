@@ -19,7 +19,7 @@ const AlbumContainer = () => {
   const [minimalisticView, setMinimalisticView] = useState(false);
 
   return (
-    <div className="h-full">
+    <div className="min-h-screen bg-[#f7f7f5]">
       <MinimalisticViewToggle
         minimalisticView={minimalisticView}
         setMinimalisticView={setMinimalisticView}

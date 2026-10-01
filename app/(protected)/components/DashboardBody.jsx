@@ -66,7 +66,18 @@ function DashboardBody({ albums }) {
   }, [albums]);
 
   return (
-    <div className="photo-grid">
+    <div className="album-grid">
+      {sortedAlbums?.length === 0 && (
+        <div className="empty-state">
+          <p className="eyebrow">A blank canvas</p>
+          <h2 className="mt-2 text-2xl font-semibold">
+            Build your first collection.
+          </h2>
+          <p className="mt-2 max-w-sm text-sm leading-6 text-black/50">
+            Create an album and add the images you want to keep close.
+          </p>
+        </div>
+      )}
       {sortedAlbums?.map((album, idx) => (
         <DraggableAndDroppable
           onDrop={() => updateSortOrder(sortedAlbums)}

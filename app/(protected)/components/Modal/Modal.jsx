@@ -12,9 +12,9 @@ const DynamicModalProvider = dynamic(
 );
 
 const DEFAULT_MODAL_STYLES =
-  "min-w-[300px]  rounded fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-50 flex flex-col items-center justify-center bg-gray-50";
+  "min-w-[300px] fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-50 flex flex-col items-center justify-center border border-black bg-white shadow-[10px_10px_0_rgba(0,0,0,0.18)]";
 
-const OVERLAY_STYLES = "fixed inset-0 bg-gray-300 bg-opacity-70 z-50";
+const OVERLAY_STYLES = "fixed inset-0 bg-black/55 backdrop-blur-sm z-50";
 const Modal = ({
   isOpen,
   setOpen,

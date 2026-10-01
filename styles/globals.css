@@ -2,12 +2,248 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
 .card {
   @apply border border-solid border-gray-200 shadow-lg rounded h-[100px] xs:h-[160px] cursor-pointer;
 }
 
 .photo-grid {
   @apply grid gap-1 grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7;
+}
+
+.protected-shell {
+  --ink: #111111;
+  --paper: #f7f7f5;
+  --line: rgba(17, 17, 17, 0.14);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.protected-page {
+  width: 100%;
+  max-width: 1600px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 2rem 1rem 3rem;
+}
+
+.page-title {
+  margin-top: 0.2rem;
+  font-size: clamp(2.4rem, 7vw, 5.5rem);
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: -0.055em;
+}
+
+.eyebrow {
+  font-size: 0.625rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(17, 17, 17, 0.48);
+}
+
+.primary-action,
+.secondary-action {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid var(--ink);
+  padding: 0.65rem 1rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.primary-action {
+  background: var(--ink);
+  color: white;
+}
+
+.primary-action:hover {
+  background: white;
+  color: var(--ink);
+}
+
+.secondary-action {
+  background: transparent;
+  color: var(--ink);
+}
+
+.secondary-action:hover {
+  background: var(--ink);
+  color: white;
+}
+
+.minimal-input {
+  height: 2.75rem;
+  border: 0;
+  border-bottom: 1px solid var(--ink);
+  border-radius: 0;
+  background: transparent;
+  padding: 0.5rem 0;
+  font-size: 0.8125rem;
+  outline: none;
+}
+
+.minimal-input::placeholder {
+  color: rgba(17, 17, 17, 0.4);
+}
+
+.minimal-input:focus {
+  box-shadow: 0 1px 0 var(--ink);
+}
+
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem 0.75rem;
+}
+
+.protected-shell .album-card .card {
+  height: auto;
+  aspect-ratio: 4 / 5;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.protected-shell .album-card .card img {
+  transition: transform 500ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.protected-shell .album-card:hover .card img {
+  transform: scale(1.025);
+}
+
+.protected-shell .photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2px;
+}
+
+.protected-shell .photo-grid .card {
+  height: auto;
+  aspect-ratio: 1 / 1;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  display: flex;
+  min-height: 20rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.protected-shell .page-heading {
+  margin: 0;
+  padding: 0;
+  font-size: clamp(2.25rem, 6vw, 4.5rem);
+  font-weight: 600;
+  letter-spacing: -0.05em;
+}
+
+.protected-shell .btn {
+  min-height: 2.5rem;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  box-shadow: none;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.protected-shell .btn:hover {
+  opacity: 1;
+}
+
+.protected-shell .btn-gray {
+  background: var(--ink);
+  color: white;
+}
+
+.protected-shell .btn-white {
+  background: white;
+  color: var(--ink);
+}
+
+.protected-shell .btn-red {
+  border-color: #991b1b;
+  background: #991b1b;
+}
+
+.protected-shell .input,
+.protected-shell input:not([type="file"]),
+.protected-shell textarea,
+.protected-shell select {
+  border-radius: 0;
+}
+
+.protected-shell :focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+@media (min-width: 640px) {
+  .protected-page {
+    padding: 3rem 2rem 4rem;
+  }
+
+  .album-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2.5rem 1rem;
+  }
+
+  .protected-shell .photo-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 3px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .protected-page {
+    padding: 4rem clamp(2.5rem, 5vw, 5rem) 5rem;
+  }
+
+  .album-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 3rem 1.25rem;
+  }
+
+  .protected-shell .photo-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .album-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .protected-shell .photo-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
 }
 
 .text-border {

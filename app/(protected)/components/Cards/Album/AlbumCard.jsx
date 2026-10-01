@@ -11,9 +11,9 @@ const AlbumCard = ({ data, lazy = true }) => {
   }
   const { userPreferences } = useUserPreferences();
   return (
-    <div>
+    <article className="album-card group">
       <Link href={`/album/${aid}`} className="cursor-pointer">
-        <div className="card relative hover:opacity-50 transition-opacity ease-in-out duration-50">
+        <div className="card relative overflow-hidden bg-[#e9e9e6]">
           <Photo
             src={thumbnail}
             name={name}
@@ -22,12 +22,22 @@ const AlbumCard = ({ data, lazy = true }) => {
             lazy={lazy}
             sizes="(max-width: 450px) 50px, (max-width: 640px) 64px, 125px"
           />
-          <div className="absolute bottom-2 px-[0.5em] text-white text-border font-bold text-start line-clamp-2 text-sm xs:text-lg sm:text-xl  sm:px-5">
-            {name}
+        </div>
+        <div className="flex items-start justify-between gap-3 pt-3">
+          <div>
+            <p className="line-clamp-2 text-sm font-semibold leading-5">
+              {name}
+            </p>
+            <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.16em] text-black/40">
+              Album
+            </p>
           </div>
+          <span className="translate-x-0 text-lg font-light text-black/35 transition-transform group-hover:translate-x-1">
+            →
+          </span>
         </div>
       </Link>
-    </div>
+    </article>
   );
 };
 

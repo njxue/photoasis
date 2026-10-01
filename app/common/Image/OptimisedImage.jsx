@@ -128,8 +128,10 @@ const OptimisedImage = ({
   return (
     <>
       {isLoading && showLoader && (
-        <div className="absolute w-10 left-1/2 top-1/2">
-          <LoadingSpinner />
+        <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
+          <div className="w-10">
+            <LoadingSpinner />
+          </div>
         </div>
       )}
       {withLens ? <Lens>{ImageElement}</Lens> : ImageElement}

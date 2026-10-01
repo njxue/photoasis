@@ -1,11 +1,11 @@
 const MinimalisticViewToggle = ({ minimalisticView, setMinimalisticView }) => {
   return (
     <button
-      className="fixed right-5 bottom-5 w-[30px] z-50 opacity-20 hover:opacity-70 hover:scale-110 transition-opacity ease-in-out duration-200"
+      className="fixed bottom-20 right-4 z-40 flex h-10 w-10 items-center justify-center rounded-full border border-black/15 bg-white p-2.5 shadow-sm transition hover:border-black md:bottom-5 md:right-5"
       onClick={() => setMinimalisticView((prev) => !prev)}>
       <img
         src={`/assets/icons/${minimalisticView ? "unhide" : "hide"}.svg`}
-        alt="toggleMinimalisticView"
+        alt={minimalisticView ? "Show page controls" : "Hide page controls"}
       />
     </button>
   );

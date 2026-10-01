@@ -6,9 +6,10 @@ const Page = async () => {
   const user = session?.user;
 
   return (
-    <div className="h-full flex flex-col p-3">
-      <header className="page-heading">
-        <h1>Settings</h1>
+    <div className="protected-page flex min-h-screen flex-col">
+      <header className="mb-8 border-b border-black/15 pb-5">
+        <p className="eyebrow">Preferences</p>
+        <h1 className="page-title">Settings</h1>
       </header>
       <Settings user={user} />
     </div>

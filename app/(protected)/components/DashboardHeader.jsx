@@ -2,34 +2,31 @@ import AlbumSelect from "./AlbumSelect";
 import Link from "next/link";
 function DashboardHeader({ handleSearchTermChange }) {
   return (
-    <>
-      <div className="mb-3 flex flex-row items-center justify-between  flex-wrap gap-2">
-        <div className="flex flex-row flex-wrap items-center justify-between gap-3 grow">
-          <div className="flex flex-row items-center gap-3 page-heading">
-            <header>
-              <h1>Albums</h1>
-            </header>
-            <Link href="/album/new">
-              <img
-                src="/assets/icons/add-album.svg"
-                width={30}
-                alt="addAlbum"
-              />
-            </Link>
-          </div>
-          <AlbumSelect />
+    <header className="mb-8 border-b border-black/15 pb-5">
+      <div className="flex flex-wrap items-end justify-between gap-5">
+        <div>
+          <p className="eyebrow">Your archive</p>
+          <h1 className="page-title">Library</h1>
         </div>
-        <search className="grow basis-[150px]">
+        <div className="flex items-center gap-2">
+          <AlbumSelect />
+          <Link href="/album/new" className="primary-action">
+            <span className="text-lg font-light leading-none">+</span>
+            New album
+          </Link>
+        </div>
+      </div>
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
+        <search className="w-full sm:w-72">
           <input
             type="search"
             onChange={handleSearchTermChange}
-            placeholder="Find an album..."
-            className="py-1 px-2 rounded w-full"
+            placeholder="Search albums"
+            className="minimal-input w-full"
           />
         </search>
       </div>
-      <hr className="mb-3" />
-    </>
+    </header>
   );
 }
 

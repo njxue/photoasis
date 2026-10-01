@@ -1,7 +1,6 @@
 "use client";
 import { useRef } from "react";
 import ImagePreviews from "./ImagePreviews";
-import LoadingSpinner from "../../../common/LoadingSpinner";
 import { useFormStatus } from "react-dom";
 import { useImageUploadContext } from "./ImageUploadContext";
 import { bytesToMegabytes } from "@utils/helpers";
@@ -38,25 +37,28 @@ const DroppableFileInput = ({ required, customDropzone }) => {
   }
 
   return (
-    <div className="flex flex-col h-full md:flex-row md:gap-3">
+    <div className="flex h-full flex-col md:flex-row md:gap-5">
       {customDropzone ? (
         customDropzone
       ) : (
         <div
-          className="border border-dashed border-black h-full w-full rounded flex flex-col justify-center items-center opacity-50 text-center text-lg cursor-pointer hover:opacity-100 transition-all"
+          className="flex h-full min-h-[300px] w-full cursor-pointer flex-col items-center justify-center border border-dashed border-black/35 bg-[#f7f7f5] p-8 text-center transition-all hover:border-black hover:bg-white"
           onClick={handleClick}
           onDrop={handleDrop}
           onDragOver={handleDragOver}>
-          <p>Drag or click to upload files</p>
+          <p className="text-lg font-semibold">Add photographs</p>
+          <p className="mt-2 text-xs uppercase tracking-[0.15em] text-black/45">
+            Drag files here or browse
+          </p>
           {IMAGE_SIZE_RESTRICTION_ENABLED && (
-            <p className="mt-2">{`(max ${bytesToMegabytes(
+            <p className="mt-2 text-xs text-black/45">{`Maximum ${bytesToMegabytes(
               MAX_SIZE_BYTES
-            )}MB per file)`}</p>
+            )}MB per file`}</p>
           )}
 
           <img
             src="/assets/icons/upload.svg"
-            className="w-[35px] mt-5"
+            className="mt-6 w-8 opacity-70"
             alt="uploadIcon"
           />
           <input
@@ -78,11 +80,23 @@ const DroppableFileInput = ({ required, customDropzone }) => {
       {(files.length > 0 || isLoading) && (
         <div className="w-full h-full">
           {isLoading ? (
-            <div className="h-full flex flex-col justify-center items-center gap-5 text-gray-500 text-wrap text-center">
-              <div className="w-8">
-                <LoadingSpinner />
+            <div
+              className="flex h-full min-h-[260px] flex-col items-center justify-center px-8 text-center"
+              role="status"
+              aria-live="polite">
+              <div className="relative mb-7 h-14 w-14">
+                <div className="absolute inset-0 rounded-full border border-black/15" />
+                <div className="absolute inset-0 animate-spin rounded-full border-2 border-transparent border-t-black" />
+                <div className="absolute inset-[18px] bg-black" />
               </div>
-              <p>Preparing your photos...</p>
+              <p className="eyebrow">Preparing upload</p>
+              <h3 className="mt-2 text-xl font-semibold tracking-tight">
+                Preparing {files.length} {files.length === 1 ? "photo" : "photos"}
+              </h3>
+              <p className="mt-2 max-w-xs text-sm leading-6 text-black/45">
+                Reading image details and creating previews. This should only
+                take a moment.
+              </p>
             </div>
           ) : (
             <ImagePreviews />
