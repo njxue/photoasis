@@ -38,19 +38,20 @@ function DownloadPhoto({ photo }) {
 
   return (
     <button
-      className={`download flex flex-row gap-2 opacity-70 hover:opacity-100 transition ${
+      type="button"
+      className={`download flex min-h-11 items-center rounded-md bg-white/5 px-3 py-2 opacity-85 transition hover:bg-white/10 hover:opacity-100 active:scale-[0.98] sm:min-h-10 ${
         isDownloading && "pointer-events-none"
       }`}
       onClick={handleDownload}>
-      <div className="bg-black rounded flex flex-row items-center gap-2 p-1">
-        <img src="/assets/icons/download.svg" className="w-4" />
+      <div className="flex flex-row items-center gap-2">
+        <img src="/assets/icons/download.svg" alt="" className="h-4 w-4" />
 
         {isDownloading && (
-          <div className="w-4 text-center">
+          <div className="h-4 w-4 text-center">
             <LoadingSpinner />
           </div>
         )}
-        <span className="text-gray-400 text-sm font-sans">Download</span>
+        <span className="font-sans text-sm text-gray-300">Download</span>
       </div>
     </button>
   );

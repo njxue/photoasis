@@ -12,11 +12,11 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
   const photo = photos[selectedIndex];
 
   const arrowStyles =
-    "max-sm:hidden cursor-pointer transition-opacity w-[20px] sm:w-[30px] opacity-50 hover:opacity-100";
+    "h-5 w-5 invert sm:h-6 sm:w-6";
   const navigatorStyles =
-    "max-sm:grow sm:w-[42px] flex cursor-pointer h-full hover:bg-black hover:opacity-50 items-center transition-all duration-50 select-none";
+    "mx-2 flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full bg-black/55 shadow-lg transition hover:bg-black/75 active:scale-95 disabled:invisible sm:mx-4 sm:h-12 sm:w-12";
   const topAndBottomBorderStyles =
-    "flex flex-row justify-between items-center w-full bg-black opacity-90 px-2 h-[60px]";
+    "flex h-14 w-full shrink-0 flex-row items-center justify-between bg-black px-3 sm:h-16 sm:px-4";
 
   const handleNextImage = useCallback(() => {
     if (selectedIndex === photos.length - 1) {
@@ -60,43 +60,49 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
   };
 
   return (
-    <Modal isOpen={true} className="bg-transparent">
-      <section className="carousel flex flex-col w-screen h-screen">
+    <Modal
+      isOpen={true}
+      className="!bg-transparent backdrop:!bg-transparent">
+      <section className="carousel flex h-[100dvh] w-screen flex-col">
         {/** Top bar */}
         <div className={topAndBottomBorderStyles}>
           <div className="flex flex-row gap-1 items-center">
             <DownloadPhoto photo={photo} />
           </div>
-          <button className="invert opacity-50 hover:opacity-100 transition-opacity w-6">
+          <button
+            type="button"
+            aria-label="Close carousel"
+            className="flex h-11 w-11 items-center justify-center rounded-full bg-white/5 p-3 opacity-80 transition hover:bg-white/10 hover:opacity-100 active:scale-95 sm:h-10 sm:w-10 sm:p-2.5"
+            onClick={onClose}>
             <img
               src="/assets/icons/cross.svg"
-              alt="close carousel"
-              onClick={onClose}
+              alt=""
+              className="h-full w-full invert"
             />
           </button>
         </div>
 
         {/** Photo */}
-        <div className="flex items-center justify-between bg-black bg-opacity-75 grow">
-          <div
-            className={`${navigatorStyles} justify-start ${
-              !selectedIndex && "pointer-events-none"
-            }`}
+        <div className="flex min-h-0 grow items-center bg-black/80 backdrop-blur-[1px]">
+          <button
+            type="button"
+            aria-label="Previous photo"
+            disabled={selectedIndex === 0}
+            className={navigatorStyles}
             onClick={handlePreviousImage}>
-            {selectedIndex > 0 && (
-              <img
-                src="/assets/icons/arrow-left.svg"
-                className={`${arrowStyles} ml-2`}
-                onContextMenu={(e) => e.preventDefault()}
-              />
-            )}
-          </div>
+            <img
+              src="/assets/icons/arrow-left.svg"
+              alt=""
+              className={arrowStyles}
+              onContextMenu={(e) => e.preventDefault()}
+            />
+          </button>
 
           <div
-            className="flex items-center justify-center h-full sm:w-full"
+            className="flex h-full min-w-0 flex-1 items-center justify-center"
             onClick={handleClickPhotoContainer}>
             <div
-              className="flex items-center justify-center h-full py-2 max-h-[80vh] max-w-[80vw] select-none"
+              className="flex h-full w-full min-w-0 select-none items-center justify-center py-2 sm:py-3"
               ref={photoRef}>
               <OptimisedImage
                 key={photo.url}
@@ -112,28 +118,28 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
             </div>
           </div>
 
-          <div
-            className={`${navigatorStyles} justify-end ${
-              selectedIndex === photos.length - 1 && "pointer-events-none"
-            }`}
+          <button
+            type="button"
+            aria-label="Next photo"
+            disabled={selectedIndex === photos.length - 1}
+            className={navigatorStyles}
             onClick={handleNextImage}>
-            {selectedIndex < photos.length - 1 && (
-              <img
-                src="/assets/icons/arrow-right.svg"
-                className={`${arrowStyles} mr-2`}
-                onContextMenu={(e) => e.preventDefault()}
-              />
-            )}
-          </div>
+            <img
+              src="/assets/icons/arrow-right.svg"
+              alt=""
+              className={arrowStyles}
+              onContextMenu={(e) => e.preventDefault()}
+            />
+          </button>
         </div>
 
         {/** Bottom bar */}
         <div className={`${topAndBottomBorderStyles} relative`}>
-          <div className="absolute top-1/2 -translate-y-full left-2">
+          <div className="absolute left-3 top-1/2 -translate-y-full sm:left-4">
             <ExpandedPhotoInfo photo={photo} />
           </div>
 
-          <div className="absolute left-1/2 -translate-x-1/2 text-xs text-gray-200 line-clamp-2 text-center select-all">
+          <div className="absolute left-1/2 max-w-[52vw] -translate-x-1/2 select-all text-center text-[11px] text-gray-200 line-clamp-2 sm:max-w-[60vw] sm:text-xs">
             <h1>{photo.description}</h1>
           </div>
         </div>
