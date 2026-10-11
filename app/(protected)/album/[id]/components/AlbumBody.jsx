@@ -101,25 +101,26 @@ function AlbumBody({ minimalisticView }) {
           )}
           <div className="absolute bottom-8 left-5 z-40 max-w-[75%] text-white animate-fadeInAndSlideDown sm:bottom-10 sm:left-10">
             <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.2em] text-white/65">
-              Collection · {sortedPhotos.length} {sortedPhotos.length === 1 ? "image" : "images"}
+              Album · {sortedPhotos.length}{" "}
+              {sortedPhotos.length === 1 ? "image" : "images"}
             </p>
             <div className="flex items-center gap-4 text-4xl font-semibold tracking-[-0.04em] md:text-6xl">
-            {isEditing ? (
-              <UpdateAlbumForm onClose={() => setIsEditing(false)} />
-            ) : (
-              <>
-                <h1>{album.name}</h1>
-                <button
-                  onClick={() => {
-                    setIsEditing(true);
-                  }}>
-                  <img
-                    src="/assets/icons/pencil.svg"
-                    className="w-6 opacity-50 hover:opacity-80 transition-all"
-                  />
-                </button>
-              </>
-            )}
+              {isEditing ? (
+                <UpdateAlbumForm onClose={() => setIsEditing(false)} />
+              ) : (
+                <>
+                  <h1>{album.name}</h1>
+                  <button
+                    onClick={() => {
+                      setIsEditing(true);
+                    }}>
+                    <img
+                      src="/assets/icons/pencil.svg"
+                      className="w-6 opacity-50 hover:opacity-80 transition-all"
+                    />
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -132,8 +133,8 @@ function AlbumBody({ minimalisticView }) {
       <div className="photo-grid p-1 sm:p-4">
         {sortedPhotos.length === 0 && (
           <div className="empty-state my-8">
-            <p className="eyebrow">Empty collection</p>
-            <h2 className="mt-2 text-2xl font-semibold">Add photographs to begin the story.</h2>
+            <p className="eyebrow">Empty album</p>
+            <h2 className="mt-2 text-2xl font-semibold">Add photographs</h2>
           </div>
         )}
         {sortedPhotos.map((photo, idx) => (

@@ -50,14 +50,16 @@ const ProgressRing = ({ progress }) => {
         </div>
       </div>
 
-      <p className="eyebrow mt-7">{isComplete ? "Upload complete" : "Uploading"}</p>
+      <p className="eyebrow mt-7">
+        {isComplete ? "Upload complete" : "Uploading"}
+      </p>
       <h3 className="mt-2 text-xl font-semibold tracking-tight">
         {isComplete ? "Finishing your album" : "Uploading your photos"}
       </h3>
       <p className="mt-2 max-w-sm text-sm leading-6 text-black/45">
         {isComplete
           ? "Your photographs are uploaded. We’re preparing the final view."
-          : "Keep this window open while your photographs are added to the collection."}
+          : "Keep this window open while your photographs are added to the album."}
       </p>
 
       <div className="mt-7 h-px w-full max-w-xs overflow-hidden bg-black/10">

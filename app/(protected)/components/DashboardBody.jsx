@@ -17,10 +17,10 @@ function DashboardBody({ albums }) {
     }
 
     const fromIndex = sortedAlbums.findIndex(
-      (a) => a.aid.toString() === aidFrom.toString()
+      (a) => a.aid.toString() === aidFrom.toString(),
     );
     const toIndex = sortedAlbums.findIndex(
-      (a) => a.aid.toString() === aidTo.toString()
+      (a) => a.aid.toString() === aidTo.toString(),
     );
 
     if (fromIndex < 0 || toIndex < 0) {
@@ -71,10 +71,10 @@ function DashboardBody({ albums }) {
         <div className="empty-state">
           <p className="eyebrow">A blank canvas</p>
           <h2 className="mt-2 text-2xl font-semibold">
-            Build your first collection.
+            Build your first album.
           </h2>
           <p className="mt-2 max-w-sm text-sm leading-6 text-black/50">
-            Create an album and add the images you want to keep close.
+            Create an album and add images.
           </p>
         </div>
       )}
