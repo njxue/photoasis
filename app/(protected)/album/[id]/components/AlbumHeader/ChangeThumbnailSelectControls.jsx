@@ -1,7 +1,7 @@
 import CancelSelectButton from "@app/(protected)/components/Select/CancelSelectButton";
 import { useSelect } from "@app/(protected)/components/Select/SelectContext";
 import updateAlbum from "@actions/updateAlbum";
-import OptimisedImage from "@app/common/Image/OptimisedImage";
+import CustomImage from "@app/common/Image/CustomImage";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import { useAlbum } from "../../AlbumContext";
@@ -39,7 +39,7 @@ export default function ChangeThumbnailSelectControls() {
               <div>
                 <div className="flex justify-center w-full">
                   <div className="w-32 h-32 xs:w-60 xs:h-60">
-                    <OptimisedImage src={photoUrl} showLoader />
+                    <CustomImage src={photoUrl} showLoader />
                   </div>
                 </div>
                 <p className="mt-2">Thumbnail updated 😎</p>

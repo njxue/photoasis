@@ -1,10 +1,14 @@
-import Image from "next/image";
-import { QUALITY_MID } from "./constants";
+"use client";
+
+import NextImage from "next/image";
+import { QUALITY_LOW, QUALITY_MID } from "./constants";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Blurhash } from "react-blurhash";
 import LoadingSpinner from "../LoadingSpinner";
 import {
   CLOUDINARY_URL,
   IMAGE_TRANSFORM_ENABLED,
+  IMAGE_PLACEHOLDER,
   USE_NEXT_IMAGE,
 } from "@app/configs/imageConfigs";
 import { Lens } from "../Lens";
@@ -21,16 +25,19 @@ const generateCloudinarySrcSet = (src, maxSourceWidth) =>
     (width) => `${generateCloudinaryUrl(src, width)} ${width}w`
   ).join(", ");
 
-const OptimisedImage = ({
-  src,
+const CustomImage = ({
+  src: source,
   fallback,
   name,
   id,
   onClick,
   className: customClassName,
   hover,
-  quality = QUALITY_MID,
+  preview = false,
+  blurhash = "",
+  quality = preview ? QUALITY_LOW : QUALITY_MID,
   priority = false,
+  lazy = true,
   width = 10,
   height = 10,
   sizes,
@@ -41,8 +48,13 @@ const OptimisedImage = ({
   objectFit = "object-cover",
   onLoad,
   withLens = false,
+  unoptimized = false,
 }) => {
+  const src = source || IMAGE_PLACEHOLDER;
+  const isLazy = lazy && !priority;
+  const imageSizes = isLazy ? `auto, ${sizes ?? "100vw"}` : sizes ?? "100vw";
   const canTransform =
+    !unoptimized &&
     !USE_NEXT_IMAGE &&
     IMAGE_TRANSFORM_ENABLED &&
     Boolean(CLOUDINARY_URL) &&
@@ -64,7 +76,7 @@ const OptimisedImage = ({
   const className = `
       ${objectFit} cursor-pointer 
       ${hover ? hoverStyles : ""}
-      ${dimensions} ${customClassName ?? ""}
+      ${dimensions} ${preview ? "absolute inset-0" : ""}
     `;
 
   const handleError = useCallback(() => {
@@ -83,6 +95,12 @@ const OptimisedImage = ({
   }, [onLoad]);
 
   useEffect(() => {
+    setImgSrc(initialSrc);
+    setIsError(false);
+    setIsLoading(true);
+  }, [initialSrc]);
+
+  useEffect(() => {
     const img = imgRef.current;
     if (img && img.complete) {
       if (img.naturalWidth === 0) {
@@ -91,19 +109,15 @@ const OptimisedImage = ({
         handleLoad();
       }
     }
-  }, [handleError, handleLoad]);
-
-  useEffect(() => {
-    setImgSrc(initialSrc);
-    setIsError(false);
-    setIsLoading(true);
-  }, [initialSrc]);
+  }, [imgSrc, handleError, handleLoad]);
 
   const responsiveSrcSet =
-    srcset ?? (canTransform ? generateCloudinarySrcSet(src, maxSourceWidth) : undefined);
+    unoptimized
+      ? undefined
+      : srcset ?? (canTransform ? generateCloudinarySrcSet(src, maxSourceWidth) : undefined);
 
   const ImageElement =
-    isError || !USE_NEXT_IMAGE ? (
+    unoptimized || isError || !USE_NEXT_IMAGE ? (
       <img
         ref={imgRef}
         alt={name}
@@ -111,25 +125,27 @@ const OptimisedImage = ({
         className={className}
         {...widthAndHeightProps}
         fetchPriority={priority ? "high" : "auto"}
-        loading={priority ? "eager" : "lazy"}
+        loading={isLazy ? "lazy" : "eager"}
         decoding="async"
         onError={handleError}
         onLoad={handleLoad}
-        sizes={sizes ?? "100vw"}
+        sizes={unoptimized ? undefined : imageSizes}
         srcSet={isError ? undefined : responsiveSrcSet}
         src={imgSrc}
       />
     ) : (
-      <Image
+      <NextImage
+        ref={imgRef}
         src={imgSrc}
         alt={name}
         id={id ?? name}
         name={name}
         className={className}
-        sizes={sizes ?? "100vw"}
+        sizes={imageSizes}
         quality={quality}
         onClick={onClick}
         priority={priority}
+        loading={isLazy ? "lazy" : "eager"}
         placeholder="empty"
         fill={fill}
         {...widthAndHeightProps}
@@ -139,7 +155,40 @@ const OptimisedImage = ({
     );
 
   return (
-    <>
+    <div className={`relative flex h-full w-full items-center justify-center ${customClassName ?? ""}`}>
+      {preview && (
+        <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+          {blurhash ? (
+            <Blurhash
+              width="100%"
+              height="100%"
+              hash={blurhash}
+              punch={1}
+              resolutionX={32}
+              resolutionY={32}
+            />
+          ) : USE_NEXT_IMAGE && !unoptimized ? (
+            <NextImage
+              src={src}
+              alt=""
+              width={100}
+              height={100}
+              quality={QUALITY_LOW}
+              sizes="100px"
+              loading={isLazy ? "lazy" : "eager"}
+              className="h-full w-full object-cover blur-xs opacity-50"
+            />
+          ) : (
+            <img
+              src={canTransform ? generateCloudinaryUrl(src, 100) : src}
+              alt=""
+              loading={isLazy ? "lazy" : "eager"}
+              decoding="async"
+              className="h-full w-full object-cover blur-xs opacity-50"
+            />
+          )}
+        </div>
+      )}
       {isLoading && showLoader && (
         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
           <div className="w-10">
@@ -148,8 +197,8 @@ const OptimisedImage = ({
         </div>
       )}
       {withLens ? <Lens>{ImageElement}</Lens> : ImageElement}
-    </>
+    </div>
   );
 };
 
-export default OptimisedImage;
+export default CustomImage;

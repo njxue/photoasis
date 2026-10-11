@@ -7,7 +7,7 @@ import updateAlbum from "@actions/updateAlbum";
 import { toast } from "react-toastify";
 import { useAlbum } from "../AlbumContext";
 import PhotoCarousel from "@app/(protected)/components/Cards/Photo/PhotoCarousel";
-import Photo from "@app/(protected)/components/Cards/Photo";
+import CustomImage from "@app/common/Image/CustomImage";
 import UpdateAlbumForm from "./AlbumHeader/Settings/UpdateAlbumForm";
 import AlbumSettings from "./AlbumHeader/Settings/AlbumSettings";
 import { useSelect } from "@app/(protected)/components/Select/SelectContext";
@@ -83,7 +83,10 @@ function AlbumBody({ minimalisticView }) {
       <section className="banner-image relative h-[55vh] min-h-[380px] max-h-[620px] overflow-hidden bg-black">
         <div className="h-full cursor-pointer group">
           {banner ? (
-            <Photo
+            <CustomImage
+              preview
+              fill
+              priority
               src={banner.url}
               className="h-full max-w-full brightness-[0.58] transition-all duration-500 group-hover:scale-[1.01] group-hover:brightness-[0.48]"
               name={banner.name}

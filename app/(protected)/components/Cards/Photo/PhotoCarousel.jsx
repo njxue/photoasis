@@ -2,8 +2,7 @@ import { useEffect, useCallback, useState, useRef } from "react";
 import Modal from "@app/(protected)/components/Modal/Modal";
 import DownloadPhoto from "./DownloadPhoto";
 import ExpandedPhotoInfo from "./ExpandedPhotoInfo";
-import OptimisedImage from "@app/common/Image/OptimisedImage";
-import { QUALITY_MID } from "@app/common/Image/constants";
+import CustomImage from "@app/common/Image/CustomImage";
 
 const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
   const [selectedIndex, setSelectedIndex] = useState(defaultIndex ?? 0);
@@ -104,15 +103,14 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
             <div
               className="flex h-full w-full min-w-0 select-none items-center justify-center py-2 sm:py-3"
               ref={photoRef}>
-              <OptimisedImage
+              <CustomImage
                 key={photo.url}
                 src={photo.url}
                 name={photo.name}
-                quality={QUALITY_MID}
+                unoptimized
                 priority
                 showLoader
                 objectFit="object-contain"
-                sizes="100vw"
                 withLens
               />
             </div>

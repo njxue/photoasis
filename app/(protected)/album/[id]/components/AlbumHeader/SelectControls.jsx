@@ -8,7 +8,7 @@ import { useState } from "react";
 import CancelSelectButton from "@app/(protected)/components/Select/CancelSelectButton";
 import ConfirmationModal from "@app/(protected)/components/Modal/ConfirmationModal";
 import { useAlbum } from "../../AlbumContext";
-import OptimisedImage from "@app/common/Image/OptimisedImage";
+import CustomImage from "@app/common/Image/CustomImage";
 
 function SelectControls({ selectModes }) {
   const { selectedItems, numSelected, mode, endSelect, isSelecting } =
@@ -112,7 +112,7 @@ function SelectControls({ selectModes }) {
               <div>
                 <div className="flex justify-center w-full">
                   <div className="w-32 h-32 xs:w-60 xs:h-60">
-                    <OptimisedImage src={photoUrl} showLoader />
+                    <CustomImage src={photoUrl} showLoader />
                   </div>
                 </div>
                 <p className="mt-2">Thumbnail updated 😎</p>

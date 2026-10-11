@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import PhotoInfo from "./PhotoInfo";
-import Photo from "../Photo";
+import CustomImage from "@app/common/Image/CustomImage";
 import { useUserPreferences } from "@app/(protected)/UserPreferencesContext";
 
 const PHOTO_GRID_FALLBACK_SIZES =
@@ -36,7 +36,9 @@ const PhotoCard = React.memo(
           className="card photo-card relative overflow-hidden bg-[#e9e9e6]"
           onMouseEnter={handleShowPhotoInfo}
           onMouseLeave={handleHidePhotoInfo}>
-          <Photo
+          <CustomImage
+            preview
+            fill
             src={photo.url}
             name={photo.name}
             blurhash={photo.blurhash}

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Photo from "../Photo";
+import CustomImage from "@app/common/Image/CustomImage";
 import { useUserPreferences } from "@app/(protected)/UserPreferencesContext";
 import { buildPhotoUrl } from "@utils/imageUrls";
 
@@ -18,7 +18,9 @@ const AlbumCard = ({ data, lazy = true }) => {
     <article className="album-card group">
       <Link href={`/album/${aid}`} className="cursor-pointer">
         <div className="card relative overflow-hidden bg-[#e9e9e6]">
-          <Photo
+          <CustomImage
+            preview
+            fill
             src={thumbnail}
             name={name}
             objectFit={userPreferences.objectFit}
