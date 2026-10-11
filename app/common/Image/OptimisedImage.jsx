@@ -9,6 +9,18 @@ import {
 } from "@app/configs/imageConfigs";
 import { Lens } from "../Lens";
 
+const COMMON_TRANSFORMATIONS = "f_avif,dpr_auto";
+const DEFAULT_TRANSFORM_WIDTH = 960;
+const SRCSET_WIDTHS = [100, 250, 540, 720, 960, 1200, 1440, 1920];
+
+const generateCloudinaryUrl = (src, width) =>
+  `${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS},w_${width}/${src}`;
+
+const generateCloudinarySrcSet = (src, maxSourceWidth) =>
+  SRCSET_WIDTHS.filter((width) => width <= maxSourceWidth).map(
+    (width) => `${generateCloudinaryUrl(src, width)} ${width}w`
+  ).join(", ");
+
 const OptimisedImage = ({
   src,
   fallback,
@@ -23,18 +35,26 @@ const OptimisedImage = ({
   height = 10,
   sizes,
   srcset,
+  maxSourceWidth = 1920,
   fill = false,
   showLoader = false,
   objectFit = "object-cover",
   onLoad,
   withLens = false,
 }) => {
-  const COMMON_TRANSFORMATIONS = "f_avif,dpr_auto";
+  const canTransform =
+    !USE_NEXT_IMAGE &&
+    IMAGE_TRANSFORM_ENABLED &&
+    Boolean(CLOUDINARY_URL) &&
+    /^https?:\/\//.test(src);
+  const initialSrc = canTransform
+    ? generateCloudinaryUrl(src, Math.min(DEFAULT_TRANSFORM_WIDTH, maxSourceWidth))
+    : src;
   const hoverStyles =
     "hover:opacity-50 transition-opacity ease-in-out duration-50";
   const dimensions = "h-full w-full";
 
-  const [imgSrc, setImgSrc] = useState(src);
+  const [imgSrc, setImgSrc] = useState(initialSrc);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
@@ -43,8 +63,8 @@ const OptimisedImage = ({
   const widthAndHeightProps = fill ? {} : { width, height };
   const className = `
       ${objectFit} cursor-pointer 
-      ${hover && hoverStyles} 
-      ${dimensions} ${customClassName}
+      ${hover ? hoverStyles : ""}
+      ${dimensions} ${customClassName ?? ""}
     `;
 
   const handleError = useCallback(() => {
@@ -54,7 +74,7 @@ const OptimisedImage = ({
      * 2. 400: Exceeded the image size limit of 10MB for image transformation with Cloudinary
      */
     setIsError(true);
-    setImgSrc(IMAGE_TRANSFORM_ENABLED && !fallback ? src : fallback);
+    setImgSrc(fallback ?? src);
   }, [fallback, src]);
 
   const handleLoad = useCallback(() => {
@@ -74,14 +94,18 @@ const OptimisedImage = ({
   }, [handleError, handleLoad]);
 
   useEffect(() => {
-    setImgSrc(src);
-  }, [src]);
+    setImgSrc(initialSrc);
+    setIsError(false);
+    setIsLoading(true);
+  }, [initialSrc]);
+
+  const responsiveSrcSet =
+    srcset ?? (canTransform ? generateCloudinarySrcSet(src, maxSourceWidth) : undefined);
 
   const ImageElement =
     isError || !USE_NEXT_IMAGE ? (
       <img
         ref={imgRef}
-        src={imgSrc}
         alt={name}
         onClick={onClick}
         className={className}
@@ -92,19 +116,8 @@ const OptimisedImage = ({
         onError={handleError}
         onLoad={handleLoad}
         sizes={sizes ?? "100vw"}
-        srcSet={
-          isError
-            ? imgSrc
-            : (srcset ??
-              `${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS},w_100/${src} 100w,
-                ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS},w_250/${src} 250w,
-                ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS},w_540/${src} 540w,
-                ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS},w_720/${src} 720w,
-                ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS},w_960/${src} 960w,
-                ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS},w_1200/${src} 1200w,
-                ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS},w_1440/${src} 1440w,
-                ${CLOUDINARY_URL}/${COMMON_TRANSFORMATIONS},w_1920/${src} 1920w`)
-        }
+        srcSet={isError ? undefined : responsiveSrcSet}
+        src={imgSrc}
       />
     ) : (
       <Image

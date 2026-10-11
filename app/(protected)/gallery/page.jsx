@@ -3,6 +3,7 @@ import prisma from "@prisma/prisma";
 import { getServerSession } from "next-auth";
 import GalleryContainer from "./components/GalleryContainer";
 import { unstable_cache } from "next/cache";
+import { buildPhotoUrl } from "@utils/imageUrls";
 
 const fetchPhotos = unstable_cache(
   async (uid) => {
@@ -15,7 +16,7 @@ const fetchPhotos = unstable_cache(
       });
       photos = photos.map((photo) => ({
         ...photo,
-        url: `${process.env.NEXT_PUBLIC_CLOUDFLARE_URL}/${uid}/${photo.aid}/${photo.name}`,
+        url: buildPhotoUrl({ uid, aid: photo.aid, name: photo.name }),
       }));
       return photos;
     } catch (err) {

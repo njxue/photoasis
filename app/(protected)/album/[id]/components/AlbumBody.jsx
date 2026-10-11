@@ -11,6 +11,7 @@ import Photo from "@app/(protected)/components/Cards/Photo";
 import UpdateAlbumForm from "./AlbumHeader/Settings/UpdateAlbumForm";
 import AlbumSettings from "./AlbumHeader/Settings/AlbumSettings";
 import { useSelect } from "@app/(protected)/components/Select/SelectContext";
+
 function AlbumBody({ minimalisticView }) {
   const album = useAlbum();
 
@@ -87,6 +88,7 @@ function AlbumBody({ minimalisticView }) {
               className="h-full max-w-full brightness-[0.58] transition-all duration-500 group-hover:scale-[1.01] group-hover:brightness-[0.48]"
               name={banner.name}
               lazy={false}
+              sizes="(min-width: 768px) calc(100vw - 240px), 100vw"
               blurhash={banner.blurhash}
             />
           ) : (

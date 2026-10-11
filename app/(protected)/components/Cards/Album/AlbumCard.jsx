@@ -3,11 +3,15 @@
 import Link from "next/link";
 import Photo from "../Photo";
 import { useUserPreferences } from "@app/(protected)/UserPreferencesContext";
+import { buildPhotoUrl } from "@utils/imageUrls";
+
+const ALBUM_GRID_SIZES =
+  "(min-width: 1536px) 20vw, (min-width: 1024px) 25vw, (min-width: 640px) 33.333vw, 50vw";
 
 const AlbumCard = ({ data, lazy = true }) => {
   let { uid, name, aid, thumbnail } = data;
   if (thumbnail) {
-    thumbnail = `${process.env.NEXT_PUBLIC_CLOUDFLARE_URL}/${uid}/${aid}/${thumbnail?.name}`;
+    thumbnail = buildPhotoUrl({ uid, aid, name: thumbnail.name });
   }
   const { userPreferences } = useUserPreferences();
   return (
@@ -20,7 +24,7 @@ const AlbumCard = ({ data, lazy = true }) => {
             objectFit={userPreferences.objectFit}
             blurhash={data.thumbnail?.blurhash}
             lazy={lazy}
-            sizes="(max-width: 450px) 50px, (max-width: 640px) 64px, 125px"
+            sizes={ALBUM_GRID_SIZES}
           />
         </div>
         <div className="flex items-start justify-between gap-3 pt-3">

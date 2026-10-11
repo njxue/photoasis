@@ -5,6 +5,7 @@ import prisma from "@prisma/prisma";
 import AlbumContainer from "./components/AlbumContainer";
 import { unstable_cache } from "next/cache";
 import { AlbumProvider } from "./AlbumContext";
+import { buildPhotoUrl } from "@utils/imageUrls";
 export const fetchAlbumData = unstable_cache(
   async (aid, uid) => {
     try {
@@ -20,7 +21,7 @@ export const fetchAlbumData = unstable_cache(
 
       data.photos = data.photos.map((photo) => ({
         ...photo,
-        url: `${process.env.NEXT_PUBLIC_CLOUDFLARE_URL}/${uid}/${aid}/${photo.name}`,
+        url: buildPhotoUrl({ uid, aid, name: photo.name }),
       }));
 
       const sortedPids = data.photoOrder;
@@ -36,7 +37,7 @@ export const fetchAlbumData = unstable_cache(
       if (data.banner) {
         data.banner = {
           ...data.banner,
-          url: `${process.env.NEXT_PUBLIC_CLOUDFLARE_URL}/${uid}/${aid}/${data.banner.name}`,
+          url: buildPhotoUrl({ uid, aid, name: data.banner.name }),
         };
       }
       return data;

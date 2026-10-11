@@ -10,6 +10,7 @@ const Photo = ({
   blurhash = "",
   lazy = true,
   sizes = "100vw",
+  maxSourceWidth,
   className = "",
 }) => {
   if (!src) src = IMAGE_PLACEHOLDER;
@@ -36,6 +37,7 @@ const Photo = ({
             objectFit="object-cover"
             priority={!lazy}
             sizes="(max-width: 450px) 20px, (max-width: 640px) 50px, 100px"
+            maxSourceWidth={100}
           />
         </div>
       )}
@@ -47,7 +49,8 @@ const Photo = ({
         objectFit={objectFit}
         priority={!lazy}
         fill={true}
-        sizes={sizes}
+        sizes={lazy ? `auto, ${sizes}` : sizes}
+        maxSourceWidth={maxSourceWidth}
       />
     </div>
   );

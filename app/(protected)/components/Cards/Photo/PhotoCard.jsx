@@ -4,8 +4,17 @@ import PhotoInfo from "./PhotoInfo";
 import Photo from "../Photo";
 import { useUserPreferences } from "@app/(protected)/UserPreferencesContext";
 
+const PHOTO_GRID_FALLBACK_SIZES =
+  "(min-width: 1536px) 20vw, (min-width: 1024px) 25vw, (min-width: 640px) 33.333vw, 50vw";
+
 const PhotoCard = React.memo(
-  ({ photo, minimalisticView, onClick, lazy = true }) => {
+  ({
+    photo,
+    minimalisticView,
+    onClick,
+    lazy = true,
+    sizes = PHOTO_GRID_FALLBACK_SIZES,
+  }) => {
     const [showPhotoInfo, setShowPhotoInfo] = useState(false);
 
     const { userPreferences } = useUserPreferences();
@@ -33,7 +42,8 @@ const PhotoCard = React.memo(
             blurhash={photo.blurhash}
             objectFit={userPreferences.objectFit}
             lazy={lazy}
-            sizes="(max-width: 450px) 50px, (max-width: 640px) 64px, 125px"
+            sizes={sizes}
+            maxSourceWidth={960}
           />
 
           {showPhotoInfo && (
@@ -48,9 +58,11 @@ const PhotoCard = React.memo(
   (prevProps, nextProps) => {
     return (
       prevProps.photo.pid === nextProps.photo.pid &&
-      prevProps.minimalisticView === nextProps.minimalisticView
+      prevProps.minimalisticView === nextProps.minimalisticView &&
+      prevProps.sizes === nextProps.sizes &&
+      prevProps.lazy === nextProps.lazy
     );
-  }
+  },
 );
 
 PhotoCard.displayName = "PhotoCard";
