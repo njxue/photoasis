@@ -1,4 +1,3 @@
-export const NUM_IMAGES_ABOVE_FOLD = 35;
 export const CLOUDINARY_URL = process.env.NEXT_PUBLIC_CLOUDINARY_URL;
 export const CLOUDINARY_PROXY_URL =
   process.env.NEXT_PUBLIC_CLOUDINARY_PROXY_URL;

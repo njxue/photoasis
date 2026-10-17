@@ -5,7 +5,9 @@ import AlbumCard from "@app/(protected)/components/Cards/Album/AlbumCard";
 import DraggableAndDroppable from "@app/(protected)/components/DragAndDrop/DraggableAndDroppable";
 import updateUser from "@actions/updateUser";
 import { toast } from "react-toastify";
-import { NUM_IMAGES_ABOVE_FOLD } from "@app/configs/imageConfigs";
+import InfiniteList from "./InfiniteLIst/InfiniteList";
+
+const EAGER_LOAD_COUNT = 20;
 function DashboardBody({ albums }) {
   const [sortedAlbums, setSortedAlbums] = useState(albums);
 
@@ -66,30 +68,37 @@ function DashboardBody({ albums }) {
   }, [albums]);
 
   return (
-    <div className="album-grid">
+    <>
       {sortedAlbums?.length === 0 && (
         <div className="empty-state">
           <p className="eyebrow">A blank canvas</p>
           <h2 className="mt-2 text-2xl font-semibold">
-            Build your first album.
+            Create your first album.
           </h2>
           <p className="mt-2 max-w-sm text-sm leading-6 text-black/50">
-            Create an album and add images.
+            Create an album and add images
           </p>
         </div>
       )}
-      {sortedAlbums?.map((album, idx) => (
-        <DraggableAndDroppable
-          onDrop={() => updateSortOrder(sortedAlbums)}
-          onDragStart={() => handleDragStart(album.aid)}
-          onDragEnter={() => handleDragEnter(album.aid)}
-          key={album.aid}>
-          <SelectableItem item={album.aid} itemId={album.aid}>
-            <AlbumCard data={album} lazy={idx >= NUM_IMAGES_ABOVE_FOLD} />
-          </SelectableItem>
-        </DraggableAndDroppable>
-      ))}
-    </div>
+
+      <InfiniteList
+        initialSize={10}
+        className="album-grid"
+        items={sortedAlbums}
+        keyExtractor={(album) => album.aid}
+        renderItem={(album, i) => (
+          <DraggableAndDroppable
+            onDrop={() => updateSortOrder(sortedAlbums)}
+            onDragStart={() => handleDragStart(album.aid)}
+            onDragEnter={() => handleDragEnter(album.aid)}
+            key={album.aid}>
+            <SelectableItem item={album.aid} itemId={album.aid}>
+              <AlbumCard data={album} lazy={i >= EAGER_LOAD_COUNT} />
+            </SelectableItem>
+          </DraggableAndDroppable>
+        )}
+      />
+    </>
   );
 }
 

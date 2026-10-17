@@ -11,6 +11,7 @@ import CustomImage from "@app/common/Image/CustomImage";
 import UpdateAlbumForm from "./AlbumHeader/Settings/UpdateAlbumForm";
 import AlbumSettings from "./AlbumHeader/Settings/AlbumSettings";
 import { useSelect } from "@app/(protected)/components/Select/SelectContext";
+import InfiniteList from "@app/(protected)/components/InfiniteLIst/InfiniteList";
 
 function AlbumBody({ minimalisticView }) {
   const album = useAlbum();
@@ -133,29 +134,37 @@ function AlbumBody({ minimalisticView }) {
         </div>
       </section>
 
-      <div className="photo-grid p-1 sm:p-4">
+      <div className="p-1 sm:p-4">
         {sortedPhotos.length === 0 && (
           <div className="empty-state my-8">
             <p className="eyebrow">Empty album</p>
             <h2 className="mt-2 text-2xl font-semibold">Add photographs</h2>
           </div>
         )}
-        {sortedPhotos.map((photo, idx) => (
-          <DraggableAndDroppable
-            onDrop={() => updateSortOrder(sortedPhotos)}
-            onDragStart={() => handleDragStart(photo.pid)}
-            onDragEnter={() => handleDragEnter(photo.pid)}
-            key={photo.pid}>
-            <SelectableItem item={photo} itemId={photo.pid}>
-              <PhotoCard
-                photo={photo}
-                minimalisticView={minimalisticView}
-                onClick={() => setCurrentExpanded(idx)}
-                lazy={true}
-              />
-            </SelectableItem>
-          </DraggableAndDroppable>
-        ))}
+
+        <InfiniteList
+          className="photo-grid"
+          initialSize={10}
+          items={sortedPhotos}
+          keyExtractor={(photo) => photo.pid}
+          renderItem={(photo, i) => (
+            <DraggableAndDroppable
+              onDrop={() => updateSortOrder(sortedPhotos)}
+              onDragStart={() => handleDragStart(photo.pid)}
+              onDragEnter={() => handleDragEnter(photo.pid)}
+              key={photo.pid}>
+              <SelectableItem item={photo} itemId={photo.pid}>
+                <PhotoCard
+                  photo={photo}
+                  minimalisticView={minimalisticView}
+                  onClick={() => setCurrentExpanded(i)}
+                  lazy={true}
+                />
+              </SelectableItem>
+            </DraggableAndDroppable>
+          )}
+        />
+
         {currentExpanded != null && (
           <PhotoCarousel
             photos={album.photos}
