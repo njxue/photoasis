@@ -6,10 +6,16 @@ import DraggableAndDroppable from "@app/(protected)/components/DragAndDrop/Dragg
 import updateUser from "@actions/updateUser";
 import { toast } from "react-toastify";
 import InfiniteList from "./InfiniteLIst/InfiniteList";
+import { useSelect } from "./Select/SelectContext";
 
 const EAGER_LOAD_COUNT = 20;
-function DashboardBody({ albums }) {
+function DashboardBody({ albums, searchTerm = "" }) {
   const [sortedAlbums, setSortedAlbums] = useState(albums);
+  const { isSelecting } = useSelect();
+
+  const filteredAndSortedAlbums = sortedAlbums.filter((album) =>
+    album.name.toUpperCase().trim().includes(searchTerm.toUpperCase().trim()),
+  );
 
   const [draggedAid, setDraggedAid] = useState();
   function handleDragEnter(aidTo) {
@@ -84,14 +90,15 @@ function DashboardBody({ albums }) {
       <InfiniteList
         initialSize={10}
         className="album-grid"
-        items={sortedAlbums}
+        items={filteredAndSortedAlbums}
         keyExtractor={(album) => album.aid}
         renderItem={(album, i) => (
           <DraggableAndDroppable
-            onDrop={() => updateSortOrder(sortedAlbums)}
+            onDrop={() => updateSortOrder(filteredAndSortedAlbums)}
             onDragStart={() => handleDragStart(album.aid)}
             onDragEnter={() => handleDragEnter(album.aid)}
-            key={album.aid}>
+            key={album.aid}
+            disabled={searchTerm.length > 0 || isSelecting}>
             <SelectableItem item={album.aid} itemId={album.aid}>
               <AlbumCard data={album} lazy={i >= EAGER_LOAD_COUNT} />
             </SelectableItem>

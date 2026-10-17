@@ -1,6 +1,12 @@
 "use client";
 import { useState } from "react";
-function DraggableAndDroppable({ children, onDragStart, onDrop, onDragEnter }) {
+function DraggableAndDroppable({
+  children,
+  onDragStart,
+  onDrop,
+  onDragEnter,
+  disabled,
+}) {
   const [isDraggingOver, setIsDraggingOver] = useState(false);
 
   function handleDragOver(e) {
@@ -13,7 +19,9 @@ function DraggableAndDroppable({ children, onDragStart, onDrop, onDragEnter }) {
     setIsDraggingOver(false);
   }
 
-  return (
+  return disabled ? (
+    <>{children}</>
+  ) : (
     <div
       draggable
       onDragStart={onDragStart}

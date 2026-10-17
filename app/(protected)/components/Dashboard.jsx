@@ -18,10 +18,6 @@ const Dashboard = ({ albums }) => {
     notFound();
   }
 
-  const filteredAlbums = albums.filter((album) =>
-    album.name.toUpperCase().trim().includes(debouncedSearchTerm)
-  );
-
   function handleSearchTermChange(e) {
     setSearchTerm(e.target.value.toUpperCase().trim());
   }
@@ -30,7 +26,7 @@ const Dashboard = ({ albums }) => {
     <>
       <SelectProvider>
         <DashboardHeader handleSearchTermChange={handleSearchTermChange} />
-        <DashboardBody albums={filteredAlbums} />
+        <DashboardBody albums={albums} searchTerm={debouncedSearchTerm} />
       </SelectProvider>
     </>
   );

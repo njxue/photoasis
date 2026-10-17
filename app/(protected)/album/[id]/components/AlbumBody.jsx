@@ -152,7 +152,8 @@ function AlbumBody({ minimalisticView }) {
               onDrop={() => updateSortOrder(sortedPhotos)}
               onDragStart={() => handleDragStart(photo.pid)}
               onDragEnter={() => handleDragEnter(photo.pid)}
-              key={photo.pid}>
+              key={photo.pid}
+              disabled={isSelecting}>
               <SelectableItem item={photo} itemId={photo.pid}>
                 <PhotoCard
                   photo={photo}
