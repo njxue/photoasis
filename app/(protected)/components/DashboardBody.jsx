@@ -75,15 +75,24 @@ function DashboardBody({ albums, searchTerm = "" }) {
 
   return (
     <>
-      {sortedAlbums?.length === 0 && (
+      {albums?.length === 0 && (
         <div className="empty-state">
           <p className="eyebrow">A blank canvas</p>
           <h2 className="mt-2 text-2xl font-semibold">
-            Create your first album.
+            Create your first album
           </h2>
           <p className="mt-2 max-w-sm text-sm leading-6 text-black/50">
             Create an album and add images
           </p>
+        </div>
+      )}
+
+      {filteredAndSortedAlbums?.length === 0 && (
+        <div className="empty-state">
+          <p className="eyebrow">Search album</p>
+          <h2 className="mt-2 text-2xl font-semibold">
+            No albums match your search term
+          </h2>
         </div>
       )}
 

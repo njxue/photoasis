@@ -138,7 +138,7 @@ function AlbumBody({ minimalisticView }) {
         {sortedPhotos.length === 0 && (
           <div className="empty-state my-8">
             <p className="eyebrow">Empty album</p>
-            <h2 className="mt-2 text-2xl font-semibold">Add photographs</h2>
+            <h2 className="mt-2 text-2xl font-semibold">Add photo</h2>
           </div>
         )}
 
