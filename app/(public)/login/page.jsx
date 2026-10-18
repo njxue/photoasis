@@ -2,9 +2,13 @@ import { getProviders } from "next-auth/react";
 
 import LoginForm from "./components/LoginForm";
 import FormContainer from "../components/FormContainer";
+import { PAGE_ROUTE_LOGIN } from "@utils/pageRoutes";
 
 export const metadata = {
   title: "Login",
+  alternates: {
+    canonical: PAGE_ROUTE_LOGIN,
+  },
 };
 
 const Login = async () => {

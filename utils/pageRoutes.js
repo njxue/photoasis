@@ -1,4 +1,5 @@
 // Public routes
+export const PAGE_ROUTE_LANDING = "/";
 export const PAGE_ROUTE_LOGIN = "/login";
 export const PAGE_ROUTE_REGISTER = "/register";
 export const PAGE_ROUTE_FORGOT_PASSWORD = "/forgot-password";

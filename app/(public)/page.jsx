@@ -1,7 +1,13 @@
 import Link from "next/link";
 import TrialDroppableFileInput from "./components/TrialDroppableFileInput";
 import Tooltip from "@app/common/Tooltip";
-import { PAGE_ROUTE_REGISTER } from "@utils/pageRoutes";
+import { PAGE_ROUTE_LANDING, PAGE_ROUTE_REGISTER } from "@utils/pageRoutes";
+
+export const metadata = {
+  alternates: {
+    canonical: PAGE_ROUTE_LANDING,
+  },
+};
 
 const Landing = async () => {
   return (
