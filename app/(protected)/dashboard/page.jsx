@@ -4,6 +4,10 @@ import { getServerSession } from "next-auth";
 import Dashboard from "../components/Dashboard";
 import { unstable_cache } from "next/cache";
 
+export const metadata = {
+  title: "Dashboard",
+};
+
 const fetchAlbums = unstable_cache(
   async (uid) => {
     try {
@@ -24,7 +28,7 @@ const fetchAlbums = unstable_cache(
 
       if (albumOrder) {
         albums.sort(
-          (a1, a2) => albumOrder.indexOf(a1.aid) - albumOrder.indexOf(a2.aid)
+          (a1, a2) => albumOrder.indexOf(a1.aid) - albumOrder.indexOf(a2.aid),
         );
       }
 
@@ -35,7 +39,7 @@ const fetchAlbums = unstable_cache(
     }
   },
   ["albums"],
-  { revalidate: 3600 }
+  { revalidate: 3600 },
 );
 
 const Home = async () => {

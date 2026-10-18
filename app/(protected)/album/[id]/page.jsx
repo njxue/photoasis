@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { authOptions } from "@app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
@@ -6,7 +7,22 @@ import AlbumContainer from "./components/AlbumContainer";
 import { unstable_cache } from "next/cache";
 import { AlbumProvider } from "./AlbumContext";
 import { buildPhotoUrl } from "@utils/imageUrls";
-export const fetchAlbumData = unstable_cache(
+export async function generateMetadata({ params }) {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) {
+    return { title: "Album" };
+  }
+
+  const { id } = await params;
+  const albumData = await fetchAlbumData(parseInt(id, 10), session.user.id);
+
+  return {
+    title: albumData?.name ?? "Album",
+  };
+}
+
+const getAlbumData = unstable_cache(
   async (aid, uid) => {
     try {
       const data = await prisma.album.findUniqueOrThrow({
@@ -28,7 +44,7 @@ export const fetchAlbumData = unstable_cache(
 
       if (sortedPids.length) {
         data.photos.sort(
-          (p1, p2) => sortedPids.indexOf(p1.pid) - sortedPids.indexOf(p2.pid)
+          (p1, p2) => sortedPids.indexOf(p1.pid) - sortedPids.indexOf(p2.pid),
         );
       } else {
         data.photos.sort((p1, p2) => p1.pid.localeCompare(p2.pid));
@@ -47,8 +63,9 @@ export const fetchAlbumData = unstable_cache(
     }
   },
   ["album"],
-  { revalidate: 3600 }
+  { revalidate: 3600 },
 );
+
 const Page = async ({ params }) => {
   const session = await getServerSession(authOptions);
 
@@ -63,4 +80,5 @@ const Page = async ({ params }) => {
   );
 };
 
+export const fetchAlbumData = cache(getAlbumData);
 export default Page;

@@ -5,27 +5,30 @@ import ToastContainerWrapper from "./ToastContainerWrapper";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { USE_CLIENT_HINTS } from "./configs/imageConfigs";
 
-const META_TITLE = "Photoasis";
+const META_TITLE_DEFAULT = "Photoasis";
 const META_DESCRIPTION =
   "An online photo gallery to store your photos along with your photo settings";
 const META_URL = "https://photoasis.vercel.app";
 
 export const metadata = {
-  title: META_TITLE,
+  title: {
+    default: META_TITLE_DEFAULT,
+    template: `%s | ${META_TITLE_DEFAULT}`,
+  },
   description: META_DESCRIPTION,
   metadataBase: new URL(META_URL),
   openGraph: {
     type: "website",
     url: META_URL,
-    title: META_TITLE,
-    siteName: META_TITLE,
+    title: META_TITLE_DEFAULT,
+    siteName: META_TITLE_DEFAULT,
     description: META_DESCRIPTION,
     locale: "en_US",
     images: ["/og-image.jpg"],
   },
   twitter: {
     card: "summary_large_image",
-    title: META_TITLE,
+    title: META_TITLE_DEFAULT,
     description: META_DESCRIPTION,
     images: ["/og-image.jpg"],
   },

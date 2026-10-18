@@ -1,6 +1,10 @@
 import ImageUploadProvider from "@app/(protected)/components/ImageUpload/ImageUploadContext";
 import NewAlbumForm from "./components/NewAlbumForm";
 
+export const metadata = {
+  title: "New Album",
+};
+
 const Page = () => {
   return (
     <div className="protected-page flex min-h-screen flex-col">

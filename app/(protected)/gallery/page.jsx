@@ -5,6 +5,10 @@ import GalleryContainer from "./components/GalleryContainer";
 import { unstable_cache } from "next/cache";
 import { buildPhotoUrl } from "@utils/imageUrls";
 
+export const metadata = {
+  title: "Gallery",
+};
+
 const fetchPhotos = unstable_cache(
   async (uid) => {
     try {
@@ -25,7 +29,7 @@ const fetchPhotos = unstable_cache(
     }
   },
   ["gallery"],
-  { revalidate: 3600 }
+  { revalidate: 3600 },
 );
 
 const Page = async () => {

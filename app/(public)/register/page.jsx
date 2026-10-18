@@ -2,6 +2,10 @@ import { getProviders } from "next-auth/react";
 import RegisterForm from "./components/RegisterForm";
 import FormContainer from "../components/FormContainer";
 
+export const metadata = {
+  title: "Register",
+};
+
 const Register = async () => {
   const providers = await getProviders();
   return (

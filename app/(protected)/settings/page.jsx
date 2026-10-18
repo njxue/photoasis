@@ -1,6 +1,11 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@app/api/auth/[...nextauth]/route";
 import Settings from "./Settings";
+
+export const metadata = {
+  title: "Settings",
+};
+
 const Page = async () => {
   const session = await getServerSession(authOptions);
   const user = session?.user;

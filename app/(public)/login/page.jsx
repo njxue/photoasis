@@ -3,6 +3,10 @@ import { getProviders } from "next-auth/react";
 import LoginForm from "./components/LoginForm";
 import FormContainer from "../components/FormContainer";
 
+export const metadata = {
+  title: "Login",
+};
+
 const Login = async () => {
   const providers = await getProviders();
   return (

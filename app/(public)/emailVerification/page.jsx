@@ -4,6 +4,14 @@ import Link from "next/link";
 import ResendEmailVerificationForm from "./components/ResendEmailVerificationForm";
 import { PAGE_ROUTE_LOGIN } from "@utils/pageRoutes";
 
+export const metadata = {
+  title: "Verify Email",
+  robots: {
+    index: false,
+    follow: true,
+  },
+};
+
 const EmailVerification = async ({ searchParams }) => {
   const { token } = searchParams;
 
