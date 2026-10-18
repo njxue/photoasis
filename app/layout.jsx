@@ -5,10 +5,30 @@ import ToastContainerWrapper from "./ToastContainerWrapper";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { USE_CLIENT_HINTS } from "./configs/imageConfigs";
 
+const META_TITLE = "Photoasis";
+const META_DESCRIPTION =
+  "An online photo gallery to store your photos along with your photo settings";
+const META_URL = "https://photoasis.vercel.app";
+
 export const metadata = {
-  title: "Photoasis",
-  description:
-    "An online photo gallery to store your photos along with your photo settings",
+  title: META_TITLE,
+  description: META_DESCRIPTION,
+  metadataBase: new URL(META_URL),
+  openGraph: {
+    type: "website",
+    url: META_URL,
+    title: META_TITLE,
+    siteName: META_TITLE,
+    description: META_DESCRIPTION,
+    locale: "en_US",
+    images: ["/og-image.jpg"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: META_TITLE,
+    description: META_DESCRIPTION,
+    images: ["/og-image.jpg"],
+  },
 };
 
 const Layout = async ({ children }) => {
@@ -24,7 +44,9 @@ const Layout = async ({ children }) => {
       <body className={`${inter.className} antialiased`}>
         <SpeedInsights />
         <Provider>
-          <div className="app min-h-screen w-full overflow-x-clip">{children}</div>
+          <div className="app min-h-screen w-full overflow-x-clip">
+            {children}
+          </div>
           <ToastContainerWrapper />
         </Provider>
       </body>
