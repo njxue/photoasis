@@ -3,13 +3,11 @@ import prisma from "@prisma/prisma";
 import Link from "next/link";
 import ResendEmailVerificationForm from "./components/ResendEmailVerificationForm";
 import { PAGE_ROUTE_LOGIN } from "@utils/pageRoutes";
+import { SEO_NO_INDEX_META } from "@app/configs/seoConfigs";
 
 export const metadata = {
+  ...SEO_NO_INDEX_META,
   title: "Verify Email",
-  robots: {
-    index: false,
-    follow: true,
-  },
 };
 
 const EmailVerification = async ({ searchParams }) => {
