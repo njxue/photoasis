@@ -46,6 +46,7 @@ model Photo {
 model Album {
   aid          Int      @default(autoincrement())
   name         String
+  slug         String
   uid          Int
   thumbnailPid String?  @unique
   thumbnail    Photo?   @relation("thumbnail", fields: [thumbnailPid], references: [pid])
@@ -56,6 +57,7 @@ model Album {
   photoOrder   String[]
 
   @@id([aid, uid])
+  @@unique([uid, slug])
 }
 
 model UserPreferences {
