@@ -41,6 +41,8 @@ model Photo {
   description       String?
   date              DateTime?
   blurhash          String?
+
+  @@index([uid, aid])
 }
 
 model Album {
@@ -59,6 +61,7 @@ model Album {
 
   @@id([aid, uid])
   @@unique([uid, slug])
+  @@index([uid, archived])
 }
 
 model UserPreferences {
