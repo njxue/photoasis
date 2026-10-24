@@ -6,23 +6,27 @@ import CancelButton from "../CancelButton";
 
 const ConfirmationModal = ({
   isOpen,
-  setIsOpen,
+  onClose,
   onCancel,
   onConfirm,
   prompt,
 }) => {
   function handleConfirm() {
-    setIsOpen(false);
+    onClose();
     onConfirm && onConfirm();
   }
 
   function handleCancel() {
-    setIsOpen(false);
+    onClose();
     onCancel && onCancel();
   }
 
   return (
-    <Modal isOpen={isOpen} setOpen={setIsOpen}>
+    <Modal
+      isOpen={isOpen}
+      setOpen={(isOpen) => {
+        if (!isOpen) onClose();
+      }}>
       <ModalBody>
         <div className="text-xl mb-2">{prompt}</div>
         <form className="w-full" action={handleConfirm}>

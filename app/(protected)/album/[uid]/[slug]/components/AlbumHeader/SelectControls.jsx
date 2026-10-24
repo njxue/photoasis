@@ -222,7 +222,7 @@ function SelectControls({ selectModes }) {
           <CancelSelectButton disabled={isLoading} />
           <ConfirmationModal
             isOpen={isModalOpen}
-            setIsOpen={setIsModalOpen}
+            onClose={() => setIsModalOpen(false)}
             onConfirm={async () => {
               await handleDeletePhotos();
               endSelect();

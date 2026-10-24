@@ -12,7 +12,7 @@ export default function SelectTrigger({
       {renderTrigger ? (
         renderTrigger
       ) : (
-        <span className="secondary-action">
+        <span className="secondary-action w-full">
           <img src="/assets/icons/select.svg" alt="" className="h-4 w-4" />
           Select
         </span>

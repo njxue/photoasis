@@ -11,7 +11,7 @@ const Tab = ({ path, icon, label }) => {
     <Link
       href={path}
       aria-current={isActive ? "page" : undefined}
-      className={`group flex min-w-[64px] flex-col items-center gap-1 px-3 py-2 text-[9px] font-bold uppercase tracking-[0.14em] transition-colors md:min-w-0 md:flex-row md:gap-3 md:px-3 md:py-3 md:text-xs md:normal-case md:tracking-normal ${
+      className={`group flex min-w-[64px] basis-1/3 shrink-0 flex-col items-center gap-1 px-3 py-2 text-[9px] font-bold uppercase tracking-[0.14em] transition-colors md:min-w-0 md:basis-auto md:flex-row md:gap-3 md:px-3 md:py-3 md:text-xs md:normal-case md:tracking-normal ${
         isActive
           ? "bg-black text-white"
           : "text-black/55 hover:bg-black/[0.04] hover:text-black"
@@ -23,7 +23,7 @@ const Tab = ({ path, icon, label }) => {
           isActive ? "invert" : "opacity-65 group-hover:opacity-100"
         }`}
       />
-      <span>{label}</span>
+      <span className="whitespace-nowrap">{label}</span>
     </Link>
   );
 };

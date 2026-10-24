@@ -14,6 +14,7 @@ const fetchAlbums = unstable_cache(
       let albums = await prisma.album.findMany({
         where: {
           uid: uid,
+          archived: false,
         },
         include: {
           thumbnail: true,

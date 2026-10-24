@@ -55,6 +55,7 @@ model Album {
   user         User     @relation(fields: [uid], references: [id])
   photos       Photo[]
   photoOrder   String[]
+  archived     Boolean  @default(false)
 
   @@id([aid, uid])
   @@unique([uid, slug])

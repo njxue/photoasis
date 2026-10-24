@@ -26,7 +26,7 @@ const DeleteAlbumForm = ({ isDeletingAlbum, setIsDeletingAlbum }) => {
     <ConfirmationModal
       prompt="Are you sure you want to delete this album?"
       isOpen={isDeletingAlbum}
-      setIsOpen={setIsDeletingAlbum}
+      onClose={() => setIsDeletingAlbum(false)}
       onConfirm={handleDeleteAlbum}
     />
   );

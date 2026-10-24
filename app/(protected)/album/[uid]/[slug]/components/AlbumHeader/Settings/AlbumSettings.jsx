@@ -8,10 +8,18 @@ import SelectTrigger from "@app/(protected)/components/Select/SelectTrigger";
 import useClickOutside from "@app/common/hooks/useClickOutside";
 import { useSelect } from "@app/(protected)/components/Select/SelectContext";
 import SelectControls from "../SelectControls";
+import archiveAlbums from "@actions/archiveAlbums";
+import { useAlbum } from "../../../AlbumContext";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { PAGE_ROUTE_ARCHIVE } from "@utils/pageRoutes";
 
 const AlbumSettings = () => {
   const [isDeletingAlbum, setIsDeletingAlbum] = useState(false);
   const [isAddingPhotos, setIsAddingPhotos] = useState(false);
+  const [isArchivingAlbum, setIsArchivingAlbum] = useState(false);
+  const album = useAlbum();
+  const router = useRouter();
 
   const { isSelecting } = useSelect();
   const selectModes = {
@@ -27,6 +35,21 @@ const AlbumSettings = () => {
 
   const menuOptionClassname =
     "flex w-full cursor-pointer items-center gap-3 px-3 py-2.5 text-left text-xs font-semibold hover:bg-black/[0.05]";
+
+  async function handleArchiveAlbum() {
+    setIsArchivingAlbum(true);
+    const res = await archiveAlbums([album.aid]);
+
+    if (res.ok) {
+      setShowMenu(false);
+      router.push(PAGE_ROUTE_ARCHIVE);
+      toast.success(`Album "${album.name}" archived`);
+      return;
+    }
+
+    setIsArchivingAlbum(false);
+    toast.error(res.message || "Unable to archive album. Please try again later");
+  }
 
   return (
     <>
@@ -79,6 +102,20 @@ const AlbumSettings = () => {
                 mode={selectModes.changeBanner}
               />
             </li>
+            {!album.archived && (
+              <li>
+                <button
+                  type="button"
+                  disabled={isArchivingAlbum}
+                  className={`${menuOptionClassname} disabled:cursor-not-allowed disabled:opacity-50`}
+                  onClick={handleArchiveAlbum}>
+                  <img src="/assets/icons/box.svg" alt="" className="w-4" />
+                  <span>
+                    {isArchivingAlbum ? "Archiving Album" : "Archive Album"}
+                  </span>
+                </button>
+              </li>
+            )}
             <li>
               <button
                 className={menuOptionClassname}

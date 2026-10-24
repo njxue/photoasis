@@ -1,6 +1,12 @@
+"use client";
+
 import AlbumSelect from "./AlbumSelect";
 import Link from "next/link";
+import { useSelect } from "./Select/SelectContext";
+
 function DashboardHeader({ handleSearchTermChange }) {
+  const { isSelecting } = useSelect();
+
   return (
     <header className="mb-8 border-b border-black/15 pb-5">
       <div className="flex flex-wrap items-end justify-between gap-5">
@@ -8,12 +14,16 @@ function DashboardHeader({ handleSearchTermChange }) {
           <p className="eyebrow">Your archive</p>
           <h1 className="page-title">Library</h1>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex w-full items-center gap-2 sm:w-auto">
           <AlbumSelect />
-          <Link href="/album/new" className="primary-action">
-            <span className="text-lg font-light leading-none">+</span>
-            New album
-          </Link>
+          {!isSelecting && (
+            <Link
+              href="/album/new"
+              className="primary-action min-w-0 flex-1 whitespace-nowrap sm:flex-none">
+              <span className="text-lg font-light leading-none">+</span>
+              New album
+            </Link>
+          )}
         </div>
       </div>
       <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
