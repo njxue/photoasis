@@ -2,18 +2,24 @@ import updateAlbum from "@actions/updateAlbum";
 import { useAlbum } from "../../../AlbumContext";
 import { FORM_FIELDS } from "@utils/imageUploadUtils";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { getAlbumRoute } from "@utils/pageRoutes";
 
 const UpdateAlbumForm = ({ onClose = () => {} }) => {
   const album = useAlbum();
+  const router = useRouter();
 
   async function handleUpdateAlbum(formdata) {
     const albumName = formdata.get(FORM_FIELDS.ALBUM_NAME.name);
     const res = await updateAlbum({ aid: album.aid, albumName });
     if (res.ok) {
       onClose();
+      router.replace(getAlbumRoute(album.uid, res.data.slug));
       // toast.success("Album successfully updated");
     } else {
-      toast.error("Unable to update album. Please try again later");
+      toast.error(
+        res.message || "Unable to update album. Please try again later",
+      );
     }
   }
   return (

@@ -4,7 +4,6 @@ import createAlbum from "@actions/createAlbum";
 import deleteAlbum from "@actions/deleteAlbum";
 import DroppableFileInput from "@app/(protected)/components/ImageUpload/DroppableFileInput";
 import SubmitButton from "@app/common/SubmitButton";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import FancyInput from "@app/(protected)/components/FancyInput";
@@ -13,12 +12,11 @@ import { useImageUploadContext } from "@app/(protected)/components/ImageUpload/I
 import useProgress from "@app/(protected)/components/Progress/useProgress";
 import ProgressRing from "@app/(protected)/components/Progress/ProgressRing";
 import { useState } from "react";
+import { getAlbumRoute } from "@utils/pageRoutes";
 const NewAlbumForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [albumName, setAlbumName] = useState("");
 
-  const { data: session } = useSession();
-  const uid = session?.user.id;
   const router = useRouter();
 
   const { files, hasFileError } = useImageUploadContext();
@@ -37,14 +35,15 @@ const NewAlbumForm = () => {
       });
 
       if (!albumRes.ok) {
-        toast.error(res.message);
+        toast.error(albumRes.message);
         return;
       }
-      const aid = albumRes.data.aid;
+      const { aid, uid, slug } = albumRes.data;
+      const albumRoute = getAlbumRoute(uid, slug);
 
       // No photos
       if (files.length === 0) {
-        router.push(`/album/${aid}`);
+        router.push(albumRoute);
         toast.success(`Album "${albumName}" successfully created!`);
         return;
       }
@@ -57,7 +56,7 @@ const NewAlbumForm = () => {
         return;
       }
 
-      router.push(`/album/${aid}`);
+      router.push(albumRoute);
       toast.success(`Album "${albumName}" successfully created!`);
     } catch (err) {
       console.log(err);

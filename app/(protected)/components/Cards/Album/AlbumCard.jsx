@@ -4,19 +4,20 @@ import Link from "next/link";
 import CustomImage from "@app/common/Image/CustomImage";
 import { useUserPreferences } from "@app/(protected)/UserPreferencesContext";
 import { buildPhotoUrl } from "@utils/imageUrls";
+import { getAlbumRoute } from "@utils/pageRoutes";
 
 const ALBUM_GRID_SIZES =
   "(min-width: 1536px) 20vw, (min-width: 1024px) 25vw, (min-width: 640px) 33.333vw, 50vw";
 
 const AlbumCard = ({ data, lazy = true }) => {
-  let { uid, name, aid, thumbnail } = data;
+  let { uid, name, slug, aid, thumbnail } = data;
   if (thumbnail) {
     thumbnail = buildPhotoUrl({ uid, aid, name: thumbnail.name });
   }
   const { userPreferences } = useUserPreferences();
   return (
     <article className="album-card group">
-      <Link href={`/album/${aid}`} className="cursor-pointer">
+      <Link href={getAlbumRoute(uid, slug)} className="cursor-pointer">
         <div className="card relative overflow-hidden bg-[#e9e9e6]">
           <CustomImage
             preview

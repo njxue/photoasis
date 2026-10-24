@@ -14,8 +14,15 @@ export async function generateMetadata({ params }) {
     return { title: "Album" };
   }
 
-  const { id } = await params;
-  const albumData = await fetchAlbumData(parseInt(id, 10), session.user.id);
+  const { uid, slug } = await params;
+  const routeUid = Number(uid);
+  const sessionUid = Number(session.user.id);
+
+  if (routeUid !== sessionUid) {
+    return { title: "Album" };
+  }
+
+  const albumData = await fetchAlbumData(slug, routeUid);
 
   return {
     title: albumData?.name ?? "Album",
@@ -23,11 +30,11 @@ export async function generateMetadata({ params }) {
 }
 
 const getAlbumData = unstable_cache(
-  async (aid, uid) => {
+  async (slug, uid) => {
     try {
       const data = await prisma.album.findUniqueOrThrow({
         where: {
-          aid_uid: { aid, uid },
+          uid_slug: { uid, slug },
         },
         include: {
           photos: true,
@@ -37,7 +44,7 @@ const getAlbumData = unstable_cache(
 
       data.photos = data.photos.map((photo) => ({
         ...photo,
-        url: buildPhotoUrl({ uid, aid, name: photo.name }),
+        url: buildPhotoUrl({ uid, aid: data.aid, name: photo.name }),
       }));
 
       const sortedPids = data.photoOrder;
@@ -53,7 +60,11 @@ const getAlbumData = unstable_cache(
       if (data.banner) {
         data.banner = {
           ...data.banner,
-          url: buildPhotoUrl({ uid, aid, name: data.banner.name }),
+          url: buildPhotoUrl({
+            uid,
+            aid: data.aid,
+            name: data.banner.name,
+          }),
         };
       }
       return data;
@@ -68,8 +79,15 @@ const getAlbumData = unstable_cache(
 
 const Page = async ({ params }) => {
   const session = await getServerSession(authOptions);
+  const { uid, slug } = await params;
+  const routeUid = Number(uid);
+  const sessionUid = Number(session?.user?.id);
 
-  const albumData = await fetchAlbumData(parseInt(params.id), session.user.id);
+  if (!session?.user || routeUid !== sessionUid) {
+    return notFound();
+  }
+
+  const albumData = await fetchAlbumData(slug, routeUid);
   if (!albumData) {
     return notFound();
   }
