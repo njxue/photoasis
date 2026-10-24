@@ -46,6 +46,7 @@ async function setAlbumsArchived(albumIds, archived) {
 
     revalidatePath("/dashboard");
     revalidatePath("/archive");
+    revalidatePath("/gallery");
 
     return {
       status: 200,

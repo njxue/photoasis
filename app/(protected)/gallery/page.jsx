@@ -15,6 +15,9 @@ const fetchPhotos = unstable_cache(
       let photos = await prisma.photo.findMany({
         where: {
           uid,
+          album: {
+            archived: false,
+          },
         },
         distinct: ["pid"],
       });
