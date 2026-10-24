@@ -26,7 +26,8 @@ async function updateAlbum(data, revalidate = true) {
       albumData = { ...albumData, photoOrder };
     }
 
-    if (photos) {
+    // If adding photos
+    if (photos?.length) {
       if (
         IMAGE_SIZE_RESTRICTION_ENABLED &&
         photos.some((photo) => photo.size > MAX_SIZE_BYTES)
@@ -36,6 +37,7 @@ async function updateAlbum(data, revalidate = true) {
           message: `Contains file(s) that exceed ${MAX_SIZE_BYTES} bytes`,
         };
       }
+
       // Insert photos
       const formattedPhotoData = photos.map((photo) => {
         const formattedData = formatPhotoData(photo);
@@ -53,11 +55,32 @@ async function updateAlbum(data, revalidate = true) {
           data: formattedPhotoData,
         },
 
-        { timeout: 10000 }
+        { timeout: 10000 },
       );
 
       if (!newPhotos || newPhotos.count === 0) {
         return { status: 400, message: "Unable to create photos", ok: false };
+      }
+
+      // If no thumbnail, set first photo as thumbnail
+      const existingThumbnail = await prisma.album.findUnique({
+        where: {
+          aid_uid: { aid, uid },
+        },
+        select: {
+          thumbnailPid: true,
+        },
+      });
+
+      if (!existingThumbnail?.thumbnailPid) {
+        albumData = {
+          ...albumData,
+          thumbnail: {
+            connect: {
+              pid: photos[0].fileId,
+            },
+          },
+        };
       }
     }
 
@@ -79,32 +102,6 @@ async function updateAlbum(data, revalidate = true) {
           },
         },
       };
-    } else {
-      const existingThumbnail = await prisma.album.findUnique({
-        where: {
-          aid_uid: { aid, uid },
-        },
-        select: {
-          thumbnailPid: true,
-        },
-      });
-
-      if (!existingThumbnail.thumbnailPid) {
-        const thumbnail = await prisma.photo.findFirst({
-          where: {
-            aid,
-            uid,
-          },
-        });
-        albumData = albumData = {
-          ...albumData,
-          thumbnail: {
-            connect: {
-              pid: thumbnail.pid,
-            },
-          },
-        };
-      }
     }
 
     const updatedAlbum = await prisma.album.update({
