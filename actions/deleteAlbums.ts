@@ -1,6 +1,6 @@
 "use server";
 import BackBlazeB2 from "backblaze-b2";
-import type { Photo } from "@prisma/client";
+import type { Photo } from "@/generated/prisma/client";
 import prisma from "@prisma/prisma";
 import { revalidatePath } from "next/cache";
 import { requireUserId } from "@auth/requireUser";

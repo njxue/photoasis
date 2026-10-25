@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import BackBlazeB2 from "backblaze-b2";
-import type { Photo, Prisma } from "@prisma/client";
+import type { Photo, Prisma } from "@/generated/prisma/client";
 import prisma from "@prisma/prisma";
 import { requireUserId } from "@auth/requireUser";
 import type { MutationResult } from "@actions/types";

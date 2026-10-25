@@ -5,7 +5,7 @@ import reactHooks from "eslint-plugin-react-hooks";
 import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig([
-  globalIgnores([".next", "node_modules", "my-worker"]),
+  globalIgnores([".next", "generated", "node_modules", "my-worker"]),
   {
     files: ["**/*.{js,mjs,cjs,jsx}"],
     plugins: { js },

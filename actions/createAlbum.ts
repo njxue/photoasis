@@ -1,6 +1,6 @@
 "use server";
 
-import type { Album } from "@prisma/client";
+import type { Album } from "@/generated/prisma/client";
 import { revalidatePath } from "next/cache";
 import prisma from "@prisma/prisma";
 import { requireUserId } from "@auth/requireUser";

@@ -1,6 +1,6 @@
 "use server";
 
-import type { Photo } from "@prisma/client";
+import type { Photo } from "@/generated/prisma/client";
 import { revalidatePath } from "next/cache";
 import { formatPhotoData } from "@utils/helpers";
 import prisma from "@prisma/prisma";

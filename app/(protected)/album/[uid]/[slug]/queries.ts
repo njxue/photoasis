@@ -1,5 +1,5 @@
 import { unstable_cache } from "next/cache";
-import type { Album, Photo } from "@prisma/client";
+import type { Album, Photo } from "@/generated/prisma/client";
 import prisma from "@prisma/prisma";
 import { buildPhotoUrl } from "@utils/imageUrls";
 

@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@prisma/prisma";
-import type { UserPreferences } from "@prisma/client";
+import type { UserPreferences } from "@/generated/prisma/client";
 import { requireUserId } from "@auth/requireUser";
 
 type UserPreferencesUpdate = Pick<UserPreferences, "objectFit">;

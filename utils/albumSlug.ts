@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@/generated/prisma/client";
 
 export const DUPLICATE_ALBUM_NAME_MESSAGE =
   "You already have an album with this name.";
