@@ -1,22 +1,10 @@
 import {
   PAGE_ROUTE_DASHBOARD,
-  PAGE_ROUTE_EMAIL_VERIFICATION,
-  PAGE_ROUTE_FORGOT_PASSWORD,
   PAGE_ROUTE_LOGIN,
-  PAGE_ROUTE_REGISTER,
-  PAGE_ROUTE_RESET_PASSWORD,
+  PUBLIC_PATHS,
 } from "@utils/pageRoutes";
 import { getToken } from "next-auth/jwt";
 import { NextResponse, type NextRequest } from "next/server";
-
-const PUBLIC_PATHS = [
-  PAGE_ROUTE_LOGIN,
-  PAGE_ROUTE_EMAIL_VERIFICATION,
-  PAGE_ROUTE_REGISTER,
-  PAGE_ROUTE_FORGOT_PASSWORD,
-  PAGE_ROUTE_RESET_PASSWORD,
-  "/",
-];
 
 export default async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
