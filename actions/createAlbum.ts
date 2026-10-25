@@ -8,8 +8,8 @@ import type { MutationResult } from "@actions/types";
 import {
   createAlbumSlug,
   DUPLICATE_ALBUM_NAME_MESSAGE,
-  isAlbumSlugConflict,
 } from "@utils/albumSlug";
+import { hasAlbumWithSlug } from "@actions/utils/hasAlbumWithSlug";
 
 interface CreateAlbumInput {
   albumName: string;
@@ -25,11 +25,21 @@ async function createAlbum({
     return { status: 400, message: "Album name is required", ok: false };
   }
 
+  const slug = createAlbumSlug(normalizedAlbumName);
+
+  if (await hasAlbumWithSlug({ uid, slug })) {
+    return {
+      status: 409,
+      message: DUPLICATE_ALBUM_NAME_MESSAGE,
+      ok: false,
+    };
+  }
+
   try {
     const album = await prisma.album.create({
       data: {
         name: normalizedAlbumName,
-        slug: createAlbumSlug(normalizedAlbumName),
+        slug,
         uid,
       },
     });
@@ -42,12 +52,18 @@ async function createAlbum({
       ok: true,
     };
   } catch (error) {
-    if (isAlbumSlugConflict(error)) {
-      return {
-        status: 409,
-        message: DUPLICATE_ALBUM_NAME_MESSAGE,
-        ok: false,
-      };
+    try {
+      // Still required to check here in case of race condition
+      const hasSlugExists = await hasAlbumWithSlug({ uid, slug });
+      if (hasSlugExists) {
+        return {
+          status: 409,
+          message: DUPLICATE_ALBUM_NAME_MESSAGE,
+          ok: false,
+        };
+      }
+    } catch {
+      // Preserve the original database error
     }
 
     throw error;

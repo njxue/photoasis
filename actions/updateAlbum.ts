@@ -12,8 +12,8 @@ import { DATABASE_TRANSACTION_TIMEOUT_MS } from "@app/configs/databaseConfigs";
 import {
   createAlbumSlug,
   DUPLICATE_ALBUM_NAME_MESSAGE,
-  isAlbumSlugConflict,
 } from "@utils/albumSlug";
+import { hasAlbumWithSlug } from "@actions/utils/hasAlbumWithSlug";
 import { requireUserId } from "@auth/requireUser";
 import type { MutationResult } from "@actions/types";
 import type { UpdateAlbumInput } from "@/types/photos";
@@ -30,9 +30,27 @@ async function updateAlbum(
   const { aid, photos, albumName, photoOrder, thumbnailPid, bannerPid } = data;
   const normalizedAlbumName =
     typeof albumName === "string" ? albumName.trim() : undefined;
+  const normalizedAlbumSlug = normalizedAlbumName
+    ? createAlbumSlug(normalizedAlbumName)
+    : undefined;
 
   if (albumName !== undefined && !normalizedAlbumName) {
     return { status: 400, message: "Album name is required", ok: false };
+  }
+
+  if (
+    normalizedAlbumSlug &&
+    (await hasAlbumWithSlug({
+      uid,
+      slug: normalizedAlbumSlug,
+      excludeAid: aid,
+    }))
+  ) {
+    return {
+      status: 409,
+      message: DUPLICATE_ALBUM_NAME_MESSAGE,
+      ok: false,
+    };
   }
 
   let res;
@@ -44,7 +62,7 @@ async function updateAlbum(
         let albumData: Prisma.AlbumUpdateInput = normalizedAlbumName
           ? {
               name: normalizedAlbumName,
-              slug: createAlbumSlug(normalizedAlbumName),
+              slug: normalizedAlbumSlug,
             }
           : {};
 
@@ -67,18 +85,20 @@ async function updateAlbum(
           }
 
           // Insert photos
-          const formattedPhotoData: Prisma.PhotoCreateManyInput[] = photos.map((photo) => {
-            const formattedData = formatPhotoData(photo);
-            // These additional fields are not visible to user
-            return {
-              aid,
-              uid,
-              pid: photo.fileId,
-              blurhash: photo.blurhash,
-              ...formattedData,
-              name: photo.name,
-            };
-          });
+          const formattedPhotoData: Prisma.PhotoCreateManyInput[] = photos.map(
+            (photo) => {
+              const formattedData = formatPhotoData(photo);
+              // These additional fields are not visible to user
+              return {
+                aid,
+                uid,
+                pid: photo.fileId,
+                blurhash: photo.blurhash,
+                ...formattedData,
+                name: photo.name,
+              };
+            },
+          );
           const newPhotos = await prisma.photo.createMany({
             data: formattedPhotoData,
           });
@@ -153,12 +173,24 @@ async function updateAlbum(
       { timeout: DATABASE_TRANSACTION_TIMEOUT_MS },
     );
   } catch (error) {
-    if (isAlbumSlugConflict(error)) {
-      return {
-        status: 409,
-        message: DUPLICATE_ALBUM_NAME_MESSAGE,
-        ok: false,
-      };
+    try {
+      // Still required to check here in case of race condition
+      if (
+        normalizedAlbumSlug &&
+        (await hasAlbumWithSlug({
+          uid,
+          slug: normalizedAlbumSlug,
+          excludeAid: aid,
+        }))
+      ) {
+        return {
+          status: 409,
+          message: DUPLICATE_ALBUM_NAME_MESSAGE,
+          ok: false,
+        };
+      }
+    } catch {
+      // Preserve the original database error
     }
 
     throw error;
