@@ -6,7 +6,8 @@
     "dev": "npx prisma generate && next dev",
     "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
@@ -41,6 +42,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.31.0",
+    "@types/archiver": "^7.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
     "autoprefixer": "^10.0.1",
     "eslint": "^9.31.0",
     "eslint-plugin-react": "^7.37.5",

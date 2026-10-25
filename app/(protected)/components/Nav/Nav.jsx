@@ -1,6 +1,6 @@
 import Tab from "./Tab";
 import AvatarMenu from "./AvatarMenu";
-import { authOptions } from "@app/api/auth/[...nextauth]/route";
+import { authOptions } from "@auth/options";
 import { getServerSession } from "next-auth";
 import {
   PAGE_ROUTE_ARCHIVE,

@@ -2,7 +2,7 @@ import Archive from "./components/Archive";
 import prisma from "@prisma/prisma";
 import { unstable_cache } from "next/cache";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@app/api/auth/[...nextauth]/route";
+import { authOptions } from "@auth/options";
 
 export const metadata = {
   title: "Archive",
