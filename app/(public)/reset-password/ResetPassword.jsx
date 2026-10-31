@@ -10,10 +10,15 @@ import { toast } from "react-toastify";
 import FormContainer from "../components/FormContainer";
 import Link from "next/link";
 import { PAGE_ROUTE_LOGIN } from "@utils/pageRoutes";
+import usePersistentCountdown from "@app/common/hooks/usePersistentCountdown";
+
+const RETRY_DURATION_MS = 60_000;
 
 const ResetPassword = () => {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
+
+  const { startTimer, remainingMs } = usePersistentCountdown("reset-password");
 
   const [state, formAction] = useFormState(async (_prevState, formData) => {
     const password = formData.get("password");
@@ -38,6 +43,7 @@ const ResetPassword = () => {
       e.preventDefault();
       setErrors(result.error.flatten().fieldErrors);
     } else {
+      startTimer(RETRY_DURATION_MS);
       setErrors({});
     }
   };
@@ -66,6 +72,7 @@ const ResetPassword = () => {
         <SubmitButton
           text={state?.success ? "Password has been reset" : "Reset password"}
           disabled={state?.success}
+          countdownMs={remainingMs}
         />
       </form>
       <Link

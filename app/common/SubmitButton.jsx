@@ -1,59 +1,38 @@
 "use client";
 
 import { useFormStatus } from "react-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 
 const SubmitButton = ({
   text,
   preventBrowserRefresh,
   disabled = false,
-  disableDuration,
+  countdownMs = 0,
 }) => {
   const { pending } = useFormStatus();
-  const [countdown, setCountdown] = useState(0);
-  const countdownIntervalRef = useRef();
+  const countdownSeconds = Math.ceil(countdownMs / 1000);
 
   useEffect(() => {
-    // Countdown
-    if (pending && disableDuration) {
-      setCountdown(disableDuration);
+    if (!preventBrowserRefresh) return;
 
-      countdownIntervalRef.current = setInterval(() => {
-        setCountdown((prev) => (prev === 0 ? 0 : prev - 1));
-      }, 1000);
-    }
-
-    // Prevent browser refresh
-    if (!preventBrowserRefresh) {
-      return;
-    }
     const showAlert = (e) => {
       if (pending) {
         e.preventDefault();
       }
     };
-    window.addEventListener("beforeunload", showAlert);
-    return () => {
-      window.removeEventListener("beforeunload", showAlert);
-      clearInterval(countdownIntervalRef.current);
-    };
-  }, [pending, preventBrowserRefresh, disableDuration]);
 
-  useEffect(() => {
-    // Reset coundown
-    if (countdown === 0 && disableDuration) {
-      clearInterval(countdownIntervalRef.current);
-    }
-  }, [countdown, disableDuration]);
+    window.addEventListener("beforeunload", showAlert);
+    return () => window.removeEventListener("beforeunload", showAlert);
+  }, [pending, preventBrowserRefresh]);
 
   return (
     <button
       className="btn-gray w-full h-9 text-white font-bold"
       type="submit"
-      disabled={pending || disabled || countdown > 0}>
+      disabled={pending || disabled || countdownMs == null || countdownMs > 0}>
       {pending ? "Loading..." : (text ?? "Submit")}
-      {countdown > 0 && (
-        <span className="text-sm font-light ml-1">{`(${countdown}s)`}</span>
+      {countdownMs > 0 && (
+        <span className="text-sm font-light ml-1">({countdownSeconds}s)</span>
       )}
     </button>
   );

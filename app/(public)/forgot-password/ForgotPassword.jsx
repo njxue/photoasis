@@ -6,13 +6,18 @@ import { toast } from "react-toastify";
 import FormContainer from "../components/FormContainer";
 import Link from "next/link";
 import { PAGE_ROUTE_LOGIN } from "@utils/pageRoutes";
+import usePersistentCountdown from "@app/common/hooks/usePersistentCountdown";
 
+const RETRY_DURATION_MS = 60_000;
 const ForgotPassword = () => {
+  const { startTimer, remainingMs } = usePersistentCountdown("forgot-password");
+
   const handleSubmit = async (formData) => {
     const email = formData.get("email");
 
     const res = await sendPasswordResetEmail(email);
     if (res.success) {
+      startTimer(RETRY_DURATION_MS);
       toast.success("A password reset link has been sent to your email");
     } else {
       toast.error(res.error);
@@ -33,7 +38,7 @@ const ForgotPassword = () => {
           label="Email"
           required
         />
-        <SubmitButton text="Reset my password" disableDuration={30} />
+        <SubmitButton text="Reset my password" countdownMs={remainingMs} />
       </form>
       <Link
         href={PAGE_ROUTE_LOGIN}
