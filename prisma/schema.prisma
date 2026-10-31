@@ -46,6 +46,7 @@ model Photo {
   blurhash          String?
 
   @@index([uid, aid])
+  @@index([uid, date, pid])
 }
 
 model Album {
