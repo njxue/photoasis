@@ -4,7 +4,13 @@ import DownloadPhoto from "./DownloadPhoto";
 import ExpandedPhotoInfo from "./ExpandedPhotoInfo";
 import CustomImage from "@app/common/Image/CustomImage";
 
-const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
+const PhotoCarousel = ({
+  photos,
+  defaultIndex,
+  onClose,
+  hasMore = false,
+  loadNextPage,
+}) => {
   const [selectedIndex, setSelectedIndex] = useState(defaultIndex ?? 0);
   const photoRef = useRef();
 
@@ -17,12 +23,19 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
   const topAndBottomBorderStyles =
     "flex h-14 w-full shrink-0 flex-row items-center justify-between bg-black px-3 sm:h-16 sm:px-4";
 
-  const handleNextImage = useCallback(() => {
-    if (selectedIndex === photos.length - 1) {
+  const handleNextImage = useCallback(async () => {
+    if (selectedIndex < photos.length - 1) {
+      setSelectedIndex((prev) => prev + 1);
       return;
     }
-    setSelectedIndex((prev) => prev + 1);
-  }, [selectedIndex, photos.length]);
+
+    if (!hasMore || !loadNextPage) return;
+
+    const loaded = await loadNextPage();
+    if (loaded) {
+      setSelectedIndex((prev) => prev + 1);
+    }
+  }, [hasMore, loadNextPage, photos.length, selectedIndex]);
 
   const handlePreviousImage = useCallback(() => {
     if (selectedIndex === 0) {
@@ -38,7 +51,7 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
           onClose();
           break;
         case "ArrowRight":
-          handleNextImage();
+          void handleNextImage();
           break;
         case "ArrowLeft":
           handlePreviousImage();
@@ -119,7 +132,10 @@ const PhotoCarousel = ({ photos, defaultIndex, onClose }) => {
           <button
             type="button"
             aria-label="Next photo"
-            disabled={selectedIndex === photos.length - 1}
+            disabled={
+              selectedIndex === photos.length - 1 &&
+              (!hasMore || !loadNextPage)
+            }
             className={navigatorStyles}
             onClick={handleNextImage}>
             <img

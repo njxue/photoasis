@@ -1,4 +1,5 @@
-import { useEffect, useState, useRef, Fragment } from "react";
+import { useCallback, useState, Fragment } from "react";
+import useInfiniteScroll from "./useInfiniteScroll";
 
 const DEFAULT_BATCH_SIZE = 5;
 const DEFAULT_INITIAL_SIZE = 10;
@@ -13,27 +14,16 @@ export default function InfiniteList({
   renderItem,
 }) {
   const [visibleCount, setVisibleCount] = useState(initialSize);
-  const sentinelRef = useRef(null);
-
-  useEffect(() => {
-    const overscanPx = `${overscan}px`;
-    const sentinel = sentinelRef.current;
-
-    if (!sentinel || visibleCount >= items.length) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisibleCount((prev) => prev + batchSize);
-        }
-      },
-      { rootMargin: overscanPx },
-    );
-
-    observer.observe(sentinel);
-
-    return () => observer.disconnect();
-  }, [overscan, batchSize, visibleCount, items]);
+  const hasMore = visibleCount < items.length;
+  const loadMore = useCallback(
+    () => setVisibleCount((prev) => prev + batchSize),
+    [batchSize],
+  );
+  const sentinelRef = useInfiniteScroll({
+    enabled: hasMore,
+    onLoadMore: loadMore,
+    overscan,
+  });
 
   return (
     <>
@@ -42,9 +32,7 @@ export default function InfiniteList({
           <Fragment key={keyExtractor(item, i)}>{renderItem(item, i)}</Fragment>
         ))}
       </div>
-      {visibleCount < items.length && (
-        <div ref={sentinelRef} aria-hidden="true" />
-      )}
+      {hasMore && <div ref={sentinelRef} aria-hidden="true" />}
     </>
   );
 }

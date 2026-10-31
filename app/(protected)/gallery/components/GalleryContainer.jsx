@@ -2,22 +2,54 @@
 
 import MinimalisticViewToggle from "@app/(protected)/components/MinimalisticViewToggle";
 import PhotoCard from "@app/(protected)/components/Cards/Photo/PhotoCard";
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { notFound } from "next/navigation";
 import PhotoCarousel from "@app/(protected)/components/Cards/Photo/PhotoCarousel";
 import { toast } from "react-toastify";
-import InfiniteList from "@app/(protected)/components/InfiniteLIst/InfiniteList";
+import PaginatedInfiniteList from "@app/(protected)/components/InfiniteLIst/PaginatedInfiniteList";
+import { fetchPhotos } from "../api/fetchPhotos";
 
 const EAGER_LOAD_IMAGES_COUNT = 20;
-const GalleryContainer = ({ photos }) => {
-  if (!photos) {
+const GalleryContainer = ({
+  photos: initialPhotos,
+  nextCursor: initialCursor,
+  totalPhotosCount,
+}) => {
+  if (!initialPhotos) {
     toast.error("Unable to fetch photos. Please try again later", {
       toastId: "Error: Fetch gallery",
     });
     notFound();
   }
+
   const [minimalisticView, setMinimalisticView] = useState(false);
   const [currentExpanded, setCurrentExpanded] = useState(null);
+  const [photos, setPhotos] = useState(initialPhotos);
+  const [nextCursor, setNextCursor] = useState(initialCursor);
+  const requestInFlightRef = useRef(false);
+
+  const loadNextPage = useCallback(async () => {
+    if (requestInFlightRef.current || nextCursor == null) return false;
+
+    requestInFlightRef.current = true;
+
+    try {
+      const page = await fetchPhotos(nextCursor);
+
+      setPhotos((current) => [...current, ...page.photos]);
+      setNextCursor(page.nextCursor);
+      return page.photos.length > 0;
+    } catch {
+      toast.error("Unable to fetch more photos. Please try again later", {
+        toastId: "Error: Fetch more gallery photos",
+      });
+      return false;
+    } finally {
+      requestInFlightRef.current = false;
+    }
+  }, [nextCursor]);
+
+  const hasMore = nextCursor != null;
 
   return (
     <>
@@ -28,7 +60,8 @@ const GalleryContainer = ({ photos }) => {
             <div className="mt-1 flex items-end justify-between gap-4">
               <h1 className="page-title">Gallery</h1>
               <p className="pb-1 text-xs font-semibold uppercase tracking-[0.16em] text-black/45">
-                {photos.length} {photos.length === 1 ? "image" : "images"}
+                {totalPhotosCount}{" "}
+                {totalPhotosCount === 1 ? "image" : "images"}
               </p>
             </div>
           </header>
@@ -42,28 +75,29 @@ const GalleryContainer = ({ photos }) => {
             </h2>
           </div>
         )}
-        {photos && (
-          <InfiniteList
-            initialSize={EAGER_LOAD_IMAGES_COUNT}
-            batchSize={10}
-            className="photo-grid"
-            items={photos}
-            keyExtractor={(photo) => photo.pid}
-            renderItem={(photo, i) => (
-              <PhotoCard
-                key={photo.pid}
-                photo={photo}
-                minimalisticView={minimalisticView}
-                onClick={() => setCurrentExpanded(i)}
-                lazy={i >= EAGER_LOAD_IMAGES_COUNT}
-              />
-            )}
-          />
-        )}
+        <PaginatedInfiniteList
+          items={photos}
+          renderItem={(photo, i) => (
+            <PhotoCard
+              key={photo.pid}
+              photo={photo}
+              minimalisticView={minimalisticView}
+              onClick={() => setCurrentExpanded(i)}
+              lazy={i >= EAGER_LOAD_IMAGES_COUNT}
+            />
+          )}
+          keyExtractor={(photo) => photo.pid}
+          className="photo-grid"
+          hasMore={hasMore}
+          loadNextPage={loadNextPage}
+        />
+
         {currentExpanded != null && (
           <PhotoCarousel
             photos={photos}
             defaultIndex={currentExpanded}
+            hasMore={hasMore}
+            loadNextPage={loadNextPage}
             onClose={() => setCurrentExpanded(null)}
           />
         )}

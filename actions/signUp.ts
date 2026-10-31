@@ -39,7 +39,6 @@ async function signUp(_previousState: unknown, formData: FormData) {
 
     // Send email verification
     const emailRes = await sendEmailVerification(email);
-    console.log(emailRes);
 
     // Roll-back user creation if failed to send email verification
     if (!emailRes.success) {

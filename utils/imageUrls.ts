@@ -12,6 +12,7 @@ export const buildPhotoUrl = ({
   const baseUrl = process.env.NEXT_PUBLIC_CLOUDFLARE_URL?.replace(/\/$/, "");
 
   if (!baseUrl || uid == null || aid == null || !name) {
+    console.log("uid in buildPhotoUrl", uid);
     return undefined;
   }
 

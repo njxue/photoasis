@@ -1,45 +1,28 @@
-import { authOptions } from "@auth/options";
-import prisma from "@prisma/prisma";
-import { getServerSession } from "next-auth";
 import GalleryContainer from "./components/GalleryContainer";
-import { unstable_cache } from "next/cache";
-import { buildPhotoUrl } from "@utils/imageUrls";
+import { requireUserId } from "@auth/requireUser";
+import { getPhotos } from "@app/api/gallery/getPhotos";
+import { getTotalPhotosCount } from "@app/api/gallery/getTotalPhotosCount";
 
 export const metadata = {
   title: "Gallery",
 };
 
-const fetchPhotos = unstable_cache(
-  async (uid) => {
-    try {
-      let photos = await prisma.photo.findMany({
-        where: {
-          uid,
-          album: {
-            archived: false,
-          },
-        },
-        distinct: ["pid"],
-      });
-      photos = photos.map((photo) => ({
-        ...photo,
-        url: buildPhotoUrl({ uid, aid: photo.aid, name: photo.name }),
-      }));
-      return photos;
-    } catch (err) {
-      console.log(err);
-      return null;
-    }
-  },
-  ["gallery"],
-  { revalidate: 3600 },
-);
-
 const Page = async () => {
-  const session = await getServerSession(authOptions);
-  const uid = session?.user.id;
-  const photos = await fetchPhotos(uid);
-  return <GalleryContainer photos={photos} />;
+  const uid = await requireUserId();
+
+  // First page photos
+  const [{ photos, nextCursor }, totalPhotosCount] = await Promise.all([
+    getPhotos(uid),
+    getTotalPhotosCount(uid),
+  ]);
+
+  return (
+    <GalleryContainer
+      photos={photos}
+      nextCursor={nextCursor}
+      totalPhotosCount={totalPhotosCount}
+    />
+  );
 };
 
 export default Page;
