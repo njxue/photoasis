@@ -1,7 +1,7 @@
 const SEO_META_TITLE_DEFAULT = "Photoasis";
 const SEO_META_DESCRIPTION =
   "An online photo gallery to store your photos along with your photo settings";
-const META_URL = "https://photoasis.vercel.app";
+const META_URL = "https://photoasis.org";
 
 export const SEO_ROOT_META: Metadata = {
   title: {
@@ -34,4 +34,3 @@ export const SEO_NO_INDEX_META: Metadata = {
   },
 };
 import type { Metadata } from "next";
-
