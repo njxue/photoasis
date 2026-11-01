@@ -7,14 +7,16 @@ interface TabProps {
   path: string;
   icon: string;
   label: string;
+  prefetch?: boolean;
 }
 
-const Tab = ({ path, icon, label }: TabProps) => {
+const Tab = ({ path, icon, label, prefetch }: TabProps) => {
   const pathName = usePathname();
   const isActive = pathName === path;
 
   return (
     <Link
+      prefetch={prefetch}
       href={path}
       aria-current={isActive ? "page" : undefined}
       className={`group flex min-w-[64px] basis-1/3 shrink-0 flex-col items-center gap-1 px-3 py-2 text-[9px] font-bold uppercase tracking-[0.14em] transition-colors md:min-w-0 md:basis-auto md:flex-row md:gap-3 md:px-3 md:py-3 md:text-xs md:normal-case md:tracking-normal ${

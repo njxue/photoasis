@@ -27,10 +27,30 @@ const Nav = ({ avatar, name }: NavProps) => {
       </Link>
 
       <div className="flex min-w-0 grow items-center overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:block md:w-full md:grow-0 md:overflow-visible md:space-y-1">
-        <Tab path={PAGE_ROUTE_DASHBOARD} icon="home" label="Library" />
-        <Tab path={PAGE_ROUTE_GALLERY} icon="gallery" label="Gallery" />
-        <Tab path={PAGE_ROUTE_NEW_ALBUM} icon="add-album" label="New album" />
-        <Tab path={PAGE_ROUTE_ARCHIVE} icon="box" label="Archive" />
+        <Tab
+          path={PAGE_ROUTE_DASHBOARD}
+          icon="home"
+          label="Library"
+          prefetch={true}
+        />
+        <Tab
+          path={PAGE_ROUTE_GALLERY}
+          icon="gallery"
+          label="Gallery"
+          prefetch={true}
+        />
+        <Tab
+          path={PAGE_ROUTE_NEW_ALBUM}
+          icon="add-album"
+          label="New album"
+          prefetch={true}
+        />
+        <Tab
+          path={PAGE_ROUTE_ARCHIVE}
+          icon="box"
+          label="Archive"
+          prefetch={true}
+        />
       </div>
 
       <div className="flex h-full shrink-0 items-center border-l border-black/10 bg-white pl-3 md:mt-auto md:h-auto md:w-full md:border-l-0 md:border-t md:pl-0 md:pt-5">
