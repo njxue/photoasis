@@ -2,7 +2,15 @@
 import SelectableItem from "@app/(protected)/components/Select/SelectableItem";
 import PhotoCard from "@app/(protected)/components/Cards/Photo/PhotoCard";
 import { useState } from "react";
-import DraggableAndDroppable from "@app/(protected)/components/DragAndDrop/DraggableAndDroppable";
+import SortableItem from "@app/(protected)/components/DragAndDrop/SortableItem";
+import { DEFAULT_SORTABLE_SENSORS } from "@app/(protected)/components/DragAndDrop/sortableSensors";
+import {
+  DragDropProvider,
+  DragOverlay,
+  type DragEndEvent,
+} from "@dnd-kit/react";
+import { isSortable } from "@dnd-kit/react/sortable";
+import { arrayMove } from "@dnd-kit/helpers";
 import updateAlbum from "@actions/updateAlbum";
 import { toast } from "react-toastify";
 import { useAlbum } from "../AlbumContext";
@@ -26,46 +34,6 @@ function AlbumBody({ minimalisticView }: AlbumBodyProps) {
     useState<PhotoWithUrl[]>(album.photos);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const { selectedItems, mode, isSelecting } = useSelect<PhotoWithUrl>();
-  const [draggedPid, setDraggedPid] = useState<string | null>(null);
-
-  function handleDragEnter(pidTo: string) {
-    const pidFrom = draggedPid;
-
-    if (pidFrom == null || pidFrom === pidTo) {
-      return;
-    }
-
-    const fromIndex = sortedPhotos.findIndex((photo) => photo.pid === pidFrom);
-    const toIndex = sortedPhotos.findIndex((photo) => photo.pid === pidTo);
-
-    if (fromIndex < 0 || toIndex < 0) {
-      // Error, shouldn't happen
-      return;
-    }
-
-    const newlySortedPhotos = [...sortedPhotos];
-
-    // Delete the dragged photo
-    newlySortedPhotos.splice(fromIndex, 1);
-
-    // Calculate new toIndex because we deleted the dragged photo
-    const newToIndex = fromIndex < toIndex ? toIndex - 1 : toIndex;
-
-    if (fromIndex > toIndex) {
-      // Drop before photo at dropzone
-      newlySortedPhotos.splice(newToIndex, 0, sortedPhotos[fromIndex]!);
-    } else {
-      // Drop after photo at dropzone
-      newlySortedPhotos.splice(newToIndex + 1, 0, sortedPhotos[fromIndex]!);
-    }
-
-    setSortedPhotos(newlySortedPhotos);
-    //updateSortOrder(newlySortedPhotos);
-  }
-
-  function handleDragStart(pid: string) {
-    setDraggedPid(pid);
-  }
 
   async function updateSortOrder(sorted: PhotoWithUrl[]) {
     const sortedPids = sorted.map((photo) => photo.pid);
@@ -75,6 +43,24 @@ function AlbumBody({ minimalisticView }: AlbumBodyProps) {
         toastId: "Error: Update photos sort order",
       });
     }
+  }
+
+  function handleDragEnd(event: DragEndEvent) {
+    const { source } = event.operation;
+
+    if (event.canceled || !isSortable(source)) {
+      return;
+    }
+
+    const { initialIndex, index } = source;
+
+    if (initialIndex === index) {
+      return;
+    }
+
+    const reorderedPhotos = arrayMove(sortedPhotos, initialIndex, index);
+    setSortedPhotos(reorderedPhotos);
+    void updateSortOrder(reorderedPhotos);
   }
 
   let banner: PhotoWithUrl | undefined | null;
@@ -148,29 +134,54 @@ function AlbumBody({ minimalisticView }: AlbumBodyProps) {
           </div>
         )}
 
-        <InfiniteList
-          className="photo-grid"
-          initialSize={10}
-          items={sortedPhotos}
-          keyExtractor={(photo) => photo.pid}
-          renderItem={(photo, index) => (
-            <DraggableAndDroppable
-              onDrop={() => updateSortOrder(sortedPhotos)}
-              onDragStart={() => handleDragStart(photo.pid)}
-              onDragEnter={() => handleDragEnter(photo.pid)}
-              key={photo.pid}
-              disabled={isSelecting}>
-              <SelectableItem item={photo} itemId={photo.pid}>
-                <PhotoCard
-                  photo={photo}
-                  minimalisticView={minimalisticView}
-                  onClick={() => setCurrentExpanded(index)}
-                  lazy={true}
-                />
-              </SelectableItem>
-            </DraggableAndDroppable>
-          )}
-        />
+        <DragDropProvider
+          sensors={DEFAULT_SORTABLE_SENSORS}
+          onDragEnd={handleDragEnd}>
+          <InfiniteList
+            className="photo-grid"
+            initialSize={10}
+            items={sortedPhotos}
+            keyExtractor={(photo) => photo.pid}
+            renderItem={(photo, index) => (
+              <SortableItem
+                id={photo.pid}
+                index={index}
+                disabled={isSelecting}>
+                <SelectableItem item={photo} itemId={photo.pid}>
+                  <PhotoCard
+                    photo={photo}
+                    minimalisticView={minimalisticView}
+                    onClick={() => setCurrentExpanded(index)}
+                    lazy={true}
+                  />
+                </SelectableItem>
+              </SortableItem>
+            )}
+          />
+
+          <DragOverlay
+            dropAnimation={{
+              duration: 180,
+              easing: "cubic-bezier(0.2, 0.8, 0.2, 1)",
+            }}>
+            {(source) => {
+              const activePhoto = sortedPhotos.find(
+                (photo) => photo.pid === source.id,
+              );
+
+              return activePhoto ? (
+                <div className="pointer-events-none scale-[1.02] opacity-95 shadow-2xl">
+                  <PhotoCard
+                    className="!h-auto w-full aspect-square"
+                    photo={activePhoto}
+                    minimalisticView={minimalisticView}
+                    lazy={false}
+                  />
+                </div>
+              ) : null;
+            }}
+          </DragOverlay>
+        </DragDropProvider>
 
         {currentExpanded != null && (
           <PhotoCarousel

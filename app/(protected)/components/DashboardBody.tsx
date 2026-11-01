@@ -1,8 +1,20 @@
 "use client";
 import { useEffect, useState } from "react";
+import {
+  DragDropProvider,
+  DragOverlay,
+  type DragEndEvent,
+} from "@dnd-kit/react";
+import { isSortable } from "@dnd-kit/react/sortable";
+import { arrayMove } from "@dnd-kit/helpers";
 import SelectableItem from "@app/(protected)/components/Select/SelectableItem";
 import AlbumCard from "@app/(protected)/components/Cards/Album/AlbumCard";
-import DraggableAndDroppable from "@app/(protected)/components/DragAndDrop/DraggableAndDroppable";
+import SortableItem from "@app/(protected)/components/DragAndDrop/SortableItem";
+import {
+  KeyboardSensor,
+  PointerSensor,
+  SORTABLE_POINTER_SENSOR_OPTIONS,
+} from "@app/(protected)/components/DragAndDrop/sortableSensors";
 import updateUser from "@actions/updateUser";
 import { toast } from "react-toastify";
 import InfiniteList from "./InfiniteLIst/InfiniteList";
@@ -10,15 +22,21 @@ import { useSelect } from "./Select/SelectContext";
 import type { AlbumWithThumbnail } from "@/types/albums";
 
 const EAGER_LOAD_COUNT = 20;
+const ALBUM_SORTING_SENSORS = [
+  PointerSensor.configure({
+    ...SORTABLE_POINTER_SENSOR_OPTIONS,
+    // Album cards are links
+    preventActivation: () => false,
+  }),
+  KeyboardSensor,
+];
+
 interface DashboardBodyProps {
   albums: AlbumWithThumbnail[];
   searchTerm?: string;
 }
 
-function DashboardBody({
-  albums,
-  searchTerm = "",
-}: DashboardBodyProps) {
+function DashboardBody({ albums, searchTerm = "" }: DashboardBodyProps) {
   const [sortedAlbums, setSortedAlbums] =
     useState<AlbumWithThumbnail[]>(albums);
   const { isSelecting } = useSelect();
@@ -26,48 +44,6 @@ function DashboardBody({
   const filteredAndSortedAlbums = sortedAlbums.filter((album) =>
     album.name.toUpperCase().trim().includes(searchTerm.toUpperCase().trim()),
   );
-
-  const [draggedAid, setDraggedAid] = useState<number | string | null>(null);
-  function handleDragEnter(aidTo: number) {
-    const aidFrom = draggedAid;
-    if (aidFrom == null || aidFrom === aidTo) {
-      return;
-    }
-
-    const fromIndex = sortedAlbums.findIndex(
-      (album) => album.aid.toString() === aidFrom.toString(),
-    );
-    const toIndex = sortedAlbums.findIndex(
-      (album) => album.aid.toString() === aidTo.toString(),
-    );
-
-    if (fromIndex < 0 || toIndex < 0) {
-      // Error, shouldn't happen
-      return;
-    }
-
-    const newlySortedAlbums = [...sortedAlbums];
-
-    // Delete the dragged album
-    newlySortedAlbums.splice(fromIndex, 1);
-
-    // Calculate new toIndex because we deleted the dragged photo
-    const newToIndex = fromIndex < toIndex ? toIndex - 1 : toIndex;
-
-    if (fromIndex > toIndex) {
-      // Drop before photo at dropzone
-      newlySortedAlbums.splice(newToIndex, 0, sortedAlbums[fromIndex]!);
-    } else {
-      // Drop after photo at dropzone
-      newlySortedAlbums.splice(newToIndex + 1, 0, sortedAlbums[fromIndex]!);
-    }
-
-    setSortedAlbums(newlySortedAlbums);
-  }
-
-  function handleDragStart(aid: number) {
-    setDraggedAid(aid);
-  }
 
   async function updateSortOrder(sorted: AlbumWithThumbnail[]) {
     const sortedAids = sorted.map((album) => album.aid);
@@ -77,6 +53,26 @@ function DashboardBody({
         toastId: "Error: Update albums sort order",
       });
     }
+  }
+
+  function handleDragEnd(event: DragEndEvent) {
+    const { source } = event.operation;
+
+    if (event.canceled || !isSortable(source)) {
+      return;
+    }
+
+    // initialIndex: original position
+    // index: target position
+    const { initialIndex, index } = source;
+
+    if (initialIndex === index) {
+      return;
+    }
+
+    const reorderedAlbums = arrayMove(sortedAlbums, initialIndex, index);
+    setSortedAlbums(reorderedAlbums);
+    void updateSortOrder(reorderedAlbums);
   }
 
   useEffect(() => {
@@ -106,24 +102,44 @@ function DashboardBody({
         </div>
       )}
 
-      <InfiniteList
-        initialSize={10}
-        className="album-grid"
-        items={filteredAndSortedAlbums}
-        keyExtractor={(album) => album.aid}
-        renderItem={(album, index) => (
-          <DraggableAndDroppable
-            onDrop={() => updateSortOrder(filteredAndSortedAlbums)}
-            onDragStart={() => handleDragStart(album.aid)}
-            onDragEnter={() => handleDragEnter(album.aid)}
-            key={album.aid}
-            disabled={searchTerm.length > 0 || isSelecting}>
-            <SelectableItem item={album.aid} itemId={album.aid}>
-              <AlbumCard data={album} lazy={index >= EAGER_LOAD_COUNT} />
-            </SelectableItem>
-          </DraggableAndDroppable>
-        )}
-      />
+      <DragDropProvider
+        sensors={ALBUM_SORTING_SENSORS}
+        onDragEnd={handleDragEnd}>
+        <InfiniteList
+          initialSize={10}
+          className="album-grid"
+          items={filteredAndSortedAlbums}
+          keyExtractor={(album) => album.aid}
+          renderItem={(album, index) => (
+            <SortableItem
+              id={album.aid}
+              index={index}
+              disabled={searchTerm.length > 0 || isSelecting}>
+              <SelectableItem item={album.aid} itemId={album.aid}>
+                <AlbumCard data={album} lazy={index >= EAGER_LOAD_COUNT} />
+              </SelectableItem>
+            </SortableItem>
+          )}
+        />
+
+        <DragOverlay
+          dropAnimation={{
+            duration: 180,
+            easing: "cubic-bezier(0.2, 0.8, 0.2, 1)",
+          }}>
+          {(source) => {
+            const activeAlbum = sortedAlbums.find(
+              (album) => album.aid === source.id,
+            );
+
+            return activeAlbum ? (
+              <div className="pointer-events-none scale-[1.02] opacity-95 shadow-2xl">
+                <AlbumCard data={activeAlbum} lazy={false} />
+              </div>
+            ) : null;
+          }}
+        </DragOverlay>
+      </DragDropProvider>
     </>
   );
 }

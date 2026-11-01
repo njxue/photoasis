@@ -9,6 +9,7 @@ const PHOTO_GRID_FALLBACK_SIZES =
   "(min-width: 1536px) 20vw, (min-width: 1024px) 25vw, (min-width: 640px) 33.333vw, 50vw";
 
 interface PhotoCardProps {
+  className?: string;
   photo: PhotoWithUrl;
   minimalisticView: boolean;
   onClick?: () => void;
@@ -18,6 +19,7 @@ interface PhotoCardProps {
 
 const PhotoCard = React.memo(
   ({
+    className = "",
     photo,
     minimalisticView,
     onClick,
@@ -42,7 +44,7 @@ const PhotoCard = React.memo(
           onClick?.();
         }}>
         <div
-          className="card photo-card relative overflow-hidden bg-[#e9e9e6]"
+          className={`card photo-card relative overflow-hidden bg-[#e9e9e6] ${className}`}
           onMouseEnter={handleShowPhotoInfo}
           onMouseLeave={handleHidePhotoInfo}>
           <CustomImage
@@ -68,6 +70,7 @@ const PhotoCard = React.memo(
   },
   (prevProps, nextProps) => {
     return (
+      prevProps.className === nextProps.className &&
       prevProps.photo.pid === nextProps.photo.pid &&
       prevProps.minimalisticView === nextProps.minimalisticView &&
       prevProps.sizes === nextProps.sizes &&

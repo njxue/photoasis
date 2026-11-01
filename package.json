@@ -10,6 +10,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@dnd-kit/helpers": "^0.5.3",
+    "@dnd-kit/react": "^0.5.3",
     "@headlessui/react": "^1.7.17",
     "@lottiefiles/dotlottie-react": "^0.14.2",
     "@prisma/adapter-pg": "^7.10.1",
