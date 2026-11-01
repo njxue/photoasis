@@ -1,13 +1,12 @@
 import { unstable_cache } from "next/cache";
-import type { Album, Photo } from "@/generated/prisma/client";
+import type { Album } from "@/generated/prisma/client";
 import prisma from "@prisma/prisma";
 import { buildPhotoUrl } from "@utils/imageUrls";
-
-export type PhotoView = Photo & { url?: string };
+import type { PhotoWithUrl } from "@/types/photos";
 
 export type AlbumPageData = Omit<Album, "photos"> & {
-  photos: PhotoView[];
-  banner: PhotoView | null;
+  photos: PhotoWithUrl[];
+  banner: PhotoWithUrl | null;
 };
 
 const getAlbumData = unstable_cache(

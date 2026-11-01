@@ -1,4 +1,18 @@
 import type { PhotoDataInput } from "@utils/helpers";
+import type { Photo } from "@/generated/prisma/client";
+
+export type PhotoWithUrl = Photo & {
+  url: string | undefined;
+};
+
+export type EditablePhotoData = Omit<PhotoDataInput, "date"> & {
+  date?: string | Date | null;
+  id?: string;
+  url?: string;
+  size?: number;
+  blurhash?: string | null;
+  fileId?: string;
+};
 
 export interface PersistablePhotoInput extends PhotoDataInput {
   fileId: string;
@@ -9,13 +23,4 @@ export interface PersistablePhotoInput extends PhotoDataInput {
 
 export interface UpdatePhotoInput extends PhotoDataInput {
   pid: string;
-}
-
-export interface UpdateAlbumInput {
-  aid: number;
-  photos?: PersistablePhotoInput[];
-  albumName?: string;
-  photoOrder?: string[];
-  thumbnailPid?: string;
-  bannerPid?: string;
 }

@@ -1,0 +1,98 @@
+"use client";
+import { resetPassword } from "@actions/resetPassword";
+import Input from "@app/common/Input";
+import SubmitButton from "@app/common/SubmitButton";
+import { useSearchParams } from "next/navigation";
+import { confirmPasswordSchema } from "@zodSchema/confirmPasswordSchema";
+import { useState, type FormEvent } from "react";
+import { useFormState } from "react-dom";
+import { toast } from "react-toastify";
+import FormContainer from "../components/FormContainer";
+import Link from "next/link";
+import { PAGE_ROUTE_LOGIN } from "@utils/pageRoutes";
+import usePersistentCountdown from "@app/common/hooks/usePersistentCountdown";
+
+const RETRY_DURATION_MS = 60_000;
+
+interface ResetPasswordState {
+  success?: boolean;
+  error?: string;
+  validationError?: string;
+}
+
+interface ResetPasswordErrors {
+  password?: string[];
+  confirmPassword?: string[];
+}
+
+const ResetPassword = () => {
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+
+  const { startTimer, remainingMs } = usePersistentCountdown("reset-password");
+
+  const [state, formAction] = useFormState<ResetPasswordState, FormData>(async (_previousState, formData) => {
+    const password = String(formData.get("password") ?? "");
+    const res = await resetPassword(token ?? "", password);
+    if (res.success) {
+      toast.success("Your password has been reset");
+    } else {
+      toast.error(res.error);
+    }
+    return res;
+  }, {});
+
+  // Client-side validation errors
+  const [errors, setErrors] = useState<ResetPasswordErrors>({});
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const formData = new FormData(event.currentTarget);
+    const data = Object.fromEntries(formData);
+
+    const result = confirmPasswordSchema.safeParse(data);
+    if (!result.success) {
+      event.preventDefault();
+      setErrors(result.error.flatten().fieldErrors);
+    } else {
+      startTimer(RETRY_DURATION_MS);
+      setErrors({});
+    }
+  };
+
+  return (
+    <FormContainer>
+      <h1 className="text-2xl font-semibold">Reset password</h1>
+
+      <form onSubmit={handleSubmit} action={formAction} className="mt-6">
+        <Input
+          type="password"
+          name="password"
+          placeholder="New Password"
+          label="New Password"
+          error={state?.validationError || errors?.password?.[0]}
+          required
+        />
+        <Input
+          type="password"
+          name="confirmPassword"
+          placeholder="Confirm new password"
+          label="Confirm new password"
+          error={errors?.confirmPassword?.[0]}
+          required
+        />
+        <SubmitButton
+          text={state?.success ? "Password has been reset" : "Reset password"}
+          disabled={state?.success}
+          countdownMs={remainingMs}
+        />
+      </form>
+      <Link
+        href={PAGE_ROUTE_LOGIN}
+        className="text-center text-sm font-semibold text-sky-600 hover:text-sky-800 hover:underline transition-all mt-6">
+        Back to login
+      </Link>
+    </FormContainer>
+  );
+};
+
+export default ResetPassword;

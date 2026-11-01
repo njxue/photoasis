@@ -81,10 +81,10 @@ async function downloadImagesToZip(
 ): Promise<{ buffer: Buffer; length: number }> {
   const archive = archiver("zip", { zlib: { level: 9 } });
   const passThrough = new PassThrough();
-  const buffers: Uint8Array<ArrayBufferLike>[] = [];
+  const buffers: Uint8Array[] = [];
   const completion = new Promise<{ buffer: Buffer; length: number }>(
     (resolve, reject) => {
-      passThrough.on("data", (chunk: Uint8Array<ArrayBufferLike>) =>
+      passThrough.on("data", (chunk: Uint8Array) =>
         buffers.push(chunk),
       );
       passThrough.on("end", () => {

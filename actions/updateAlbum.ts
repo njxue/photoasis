@@ -16,7 +16,7 @@ import {
 import { hasAlbumWithSlug } from "@actions/utils/hasAlbumWithSlug";
 import { requireUserId } from "@auth/requireUser";
 import type { MutationResult } from "@actions/types";
-import type { UpdateAlbumInput } from "@/types/photos";
+import type { UpdateAlbumInput } from "@/types/albums";
 
 type AlbumWithPhotos = Album & { photos: Photo[] };
 

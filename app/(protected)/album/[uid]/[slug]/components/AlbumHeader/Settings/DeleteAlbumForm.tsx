@@ -1,0 +1,44 @@
+"use client";
+
+import deleteAlbum from "@actions/deleteAlbum";
+import { useAlbum } from "../../../AlbumContext";
+import ConfirmationModal from "@app/(protected)/components/Modal/ConfirmationModal";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { PAGE_ROUTE_DASHBOARD } from "@utils/pageRoutes";
+import type { Dispatch, SetStateAction } from "react";
+
+interface DeleteAlbumFormProps {
+  isDeletingAlbum: boolean;
+  setIsDeletingAlbum: Dispatch<SetStateAction<boolean>>;
+}
+
+const DeleteAlbumForm = ({
+  isDeletingAlbum,
+  setIsDeletingAlbum,
+}: DeleteAlbumFormProps) => {
+  const album = useAlbum();
+  const { aid, name } = album;
+  const router = useRouter();
+
+  async function handleDeleteAlbum() {
+    const res = await deleteAlbum(aid);
+    if (res.ok) {
+      router.push(PAGE_ROUTE_DASHBOARD);
+      toast.success(`Album "${name}" deleted`);
+    } else {
+      toast.error("Unable to delete album. Plase try again later");
+    }
+  }
+
+  return (
+    <ConfirmationModal
+      prompt="Are you sure you want to delete this album?"
+      isOpen={isDeletingAlbum}
+      onClose={() => setIsDeletingAlbum(false)}
+      onConfirm={handleDeleteAlbum}
+    />
+  );
+};
+
+export default DeleteAlbumForm;
