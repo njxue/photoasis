@@ -3,8 +3,10 @@
 import { useSortable } from "@dnd-kit/react/sortable";
 import type { ReactNode } from "react";
 
+type SortableHandleRef = (element: Element | null) => void;
+
 interface SortableItemProps {
-  children: ReactNode;
+  children: ReactNode | ((handleRef: SortableHandleRef) => ReactNode);
   disabled?: boolean;
   id: string | number;
   index: number;
@@ -16,7 +18,7 @@ const SortableItem = ({
   id,
   index,
 }: SortableItemProps) => {
-  const { ref, isDragging, isDropping } = useSortable({
+  const { ref, handleRef, isDragging, isDropping } = useSortable({
     id,
     disabled,
     index,
@@ -37,7 +39,7 @@ const SortableItem = ({
           ? ""
           : "cursor-grab touch-manipulation select-none will-change-transform active:cursor-grabbing [&_*]:[-webkit-user-drag:none]"
       }`}>
-      {children}
+      {typeof children === "function" ? children(handleRef) : children}
     </div>
   );
 };

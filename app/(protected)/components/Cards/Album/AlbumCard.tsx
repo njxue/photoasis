@@ -1,5 +1,6 @@
 "use client";
 
+import type { Ref } from "react";
 import Link from "next/link";
 import CustomImage from "@app/common/Image/CustomImage";
 import { useUserPreferences } from "@app/(protected)/UserPreferencesContext";
@@ -13,20 +14,24 @@ const ALBUM_GRID_SIZES =
 interface AlbumCardProps {
   data: AlbumWithThumbnail;
   lazy?: boolean;
+  dragHandleRef?: Ref<HTMLAnchorElement>;
 }
 
-const AlbumCard = ({
-  data,
-  lazy = true,
-}: AlbumCardProps) => {
+const AlbumCard = ({ data, dragHandleRef, lazy = true }: AlbumCardProps) => {
   const { uid, name, slug, aid, thumbnail } = data;
   const thumbnailUrl = thumbnail
     ? buildPhotoUrl({ uid, aid, name: thumbnail.name })
     : undefined;
   const { userPreferences } = useUserPreferences();
+
+  // Let the Link receive the handleRef, otherwise
+  // both the div in SortableItem and the Link will receive focus
   return (
     <article className="album-card group">
-      <Link href={getAlbumRoute(uid, slug)} className="cursor-pointer">
+      <Link
+        ref={dragHandleRef}
+        href={getAlbumRoute(uid, slug)}
+        className="block cursor-pointer">
         <div className="card relative overflow-hidden bg-[#e9e9e6]">
           <CustomImage
             preview

@@ -12,8 +12,8 @@ import AlbumCard from "@app/(protected)/components/Cards/Album/AlbumCard";
 import SortableItem from "@app/(protected)/components/DragAndDrop/SortableItem";
 import DragEndMonitor from "@app/(protected)/components/DragAndDrop/DragEndMonitor";
 import {
-  KeyboardSensor,
   PointerSensor,
+  SORTABLE_KEYBOARD_SENSOR,
   SORTABLE_POINTER_SENSOR_OPTIONS,
 } from "@app/(protected)/components/DragAndDrop/sortableSensors";
 import { SORTABLE_DROP_ANIMATION } from "@app/(protected)/components/DragAndDrop/sortableAnimations";
@@ -30,7 +30,7 @@ const ALBUM_SORTING_SENSORS = [
     // Album cards are links
     preventActivation: () => false,
   }),
-  KeyboardSensor,
+  SORTABLE_KEYBOARD_SENSOR,
 ];
 
 interface DashboardBodyProps {
@@ -116,9 +116,15 @@ function DashboardBody({ albums, searchTerm = "" }: DashboardBodyProps) {
               id={album.aid}
               index={index}
               disabled={searchTerm.length > 0 || isSelecting}>
-              <SelectableItem item={album.aid} itemId={album.aid}>
-                <AlbumCard data={album} lazy={index >= EAGER_LOAD_COUNT} />
-              </SelectableItem>
+              {(handleRef) => (
+                <SelectableItem item={album.aid} itemId={album.aid}>
+                  <AlbumCard
+                    data={album}
+                    lazy={index >= EAGER_LOAD_COUNT}
+                    dragHandleRef={handleRef}
+                  />
+                </SelectableItem>
+              )}
             </SortableItem>
           )}
         />

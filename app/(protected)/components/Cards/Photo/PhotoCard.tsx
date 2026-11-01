@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, type Ref } from "react";
 import PhotoInfo from "./PhotoInfo";
 import CustomImage from "@app/common/Image/CustomImage";
 import { useUserPreferences } from "@app/(protected)/UserPreferencesContext";
@@ -10,6 +10,7 @@ const PHOTO_GRID_FALLBACK_SIZES =
 
 interface PhotoCardProps {
   className?: string;
+  dragHandleRef?: Ref<HTMLButtonElement>;
   photo: PhotoWithUrl;
   minimalisticView: boolean;
   onClick?: () => void;
@@ -20,6 +21,7 @@ interface PhotoCardProps {
 const PhotoCard = React.memo(
   ({
     className = "",
+    dragHandleRef,
     photo,
     minimalisticView,
     onClick,
@@ -38,34 +40,42 @@ const PhotoCard = React.memo(
       setShowPhotoInfo(false);
     }
 
-    return (
+    const card = (
       <div
-        onClick={() => {
-          onClick?.();
-        }}>
-        <div
-          className={`card photo-card relative overflow-hidden bg-[#e9e9e6] ${className}`}
-          onMouseEnter={handleShowPhotoInfo}
-          onMouseLeave={handleHidePhotoInfo}>
-          <CustomImage
-            preview
-            fill
-            src={photo.url}
-            name={photo.name}
-            blurhash={photo.blurhash}
-            objectFit={userPreferences.objectFit}
-            lazy={lazy}
-            sizes={sizes}
-            maxSourceWidth={960}
-          />
+        className={`card photo-card relative overflow-hidden bg-[#e9e9e6] ${className}`}
+        onMouseEnter={handleShowPhotoInfo}
+        onMouseLeave={handleHidePhotoInfo}>
+        <CustomImage
+          preview
+          fill
+          src={photo.url}
+          name={photo.name}
+          blurhash={photo.blurhash}
+          objectFit={userPreferences.objectFit}
+          lazy={lazy}
+          sizes={sizes}
+          maxSourceWidth={960}
+        />
 
-          {showPhotoInfo && (
-            <div className="absolute inset-0 w-full bg-black/65 animate-slideUp">
-              <PhotoInfo photo={photo} />
-            </div>
-          )}
-        </div>
+        {showPhotoInfo && (
+          <div className="absolute inset-0 w-full bg-black/65 animate-slideUp">
+            <PhotoInfo photo={photo} />
+          </div>
+        )}
       </div>
+    );
+
+    if (!onClick) return card;
+
+    return (
+      <button
+        ref={dragHandleRef}
+        type="button"
+        className="block w-full text-left"
+        aria-label={`Open ${photo.name}`}
+        onClick={onClick}>
+        {card}
+      </button> 
     );
   },
   (prevProps, nextProps) => {

@@ -31,9 +31,16 @@ export const SORTABLE_POINTER_SENSOR_OPTIONS = {
   },
 } satisfies PointerSensorOptions;
 
+export const SORTABLE_KEYBOARD_SENSOR = KeyboardSensor.configure({
+  keyboardCodes: {
+    ...KeyboardSensor.defaults.keyboardCodes,
+    start: ["Space"],
+  },
+});
+
 export const DEFAULT_SORTABLE_SENSORS = [
   PointerSensor.configure(SORTABLE_POINTER_SENSOR_OPTIONS),
-  KeyboardSensor,
+  SORTABLE_KEYBOARD_SENSOR,
 ];
 
-export { KeyboardSensor, PointerSensor };
+export { PointerSensor };

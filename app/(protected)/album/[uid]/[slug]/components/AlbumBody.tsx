@@ -148,14 +148,17 @@ function AlbumBody({ minimalisticView }: AlbumBodyProps) {
                 id={photo.pid}
                 index={index}
                 disabled={isSelecting}>
-                <SelectableItem item={photo} itemId={photo.pid}>
-                  <PhotoCard
-                    photo={photo}
-                    minimalisticView={minimalisticView}
-                    onClick={() => setCurrentExpanded(index)}
-                    lazy={true}
-                  />
-                </SelectableItem>
+                {(handleRef) => (
+                  <SelectableItem item={photo} itemId={photo.pid}>
+                    <PhotoCard
+                      dragHandleRef={handleRef}
+                      photo={photo}
+                      minimalisticView={minimalisticView}
+                      onClick={() => setCurrentExpanded(index)}
+                      lazy={true}
+                    />
+                  </SelectableItem>
+                )}
               </SortableItem>
             )}
           />
