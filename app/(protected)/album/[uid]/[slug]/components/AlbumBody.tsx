@@ -3,7 +3,9 @@ import SelectableItem from "@app/(protected)/components/Select/SelectableItem";
 import PhotoCard from "@app/(protected)/components/Cards/Photo/PhotoCard";
 import { useState } from "react";
 import SortableItem from "@app/(protected)/components/DragAndDrop/SortableItem";
+import DragEndMonitor from "@app/(protected)/components/DragAndDrop/DragEndMonitor";
 import { DEFAULT_SORTABLE_SENSORS } from "@app/(protected)/components/DragAndDrop/sortableSensors";
+import { SORTABLE_DROP_ANIMATION } from "@app/(protected)/components/DragAndDrop/sortableAnimations";
 import {
   DragDropProvider,
   DragOverlay,
@@ -134,9 +136,8 @@ function AlbumBody({ minimalisticView }: AlbumBodyProps) {
           </div>
         )}
 
-        <DragDropProvider
-          sensors={DEFAULT_SORTABLE_SENSORS}
-          onDragEnd={handleDragEnd}>
+        <DragDropProvider sensors={DEFAULT_SORTABLE_SENSORS}>
+          <DragEndMonitor onDragEnd={handleDragEnd} />
           <InfiniteList
             className="photo-grid"
             initialSize={10}
@@ -159,11 +160,7 @@ function AlbumBody({ minimalisticView }: AlbumBodyProps) {
             )}
           />
 
-          <DragOverlay
-            dropAnimation={{
-              duration: 180,
-              easing: "cubic-bezier(0.2, 0.8, 0.2, 1)",
-            }}>
+          <DragOverlay dropAnimation={SORTABLE_DROP_ANIMATION}>
             {(source) => {
               const activePhoto = sortedPhotos.find(
                 (photo) => photo.pid === source.id,

@@ -10,11 +10,13 @@ import { arrayMove } from "@dnd-kit/helpers";
 import SelectableItem from "@app/(protected)/components/Select/SelectableItem";
 import AlbumCard from "@app/(protected)/components/Cards/Album/AlbumCard";
 import SortableItem from "@app/(protected)/components/DragAndDrop/SortableItem";
+import DragEndMonitor from "@app/(protected)/components/DragAndDrop/DragEndMonitor";
 import {
   KeyboardSensor,
   PointerSensor,
   SORTABLE_POINTER_SENSOR_OPTIONS,
 } from "@app/(protected)/components/DragAndDrop/sortableSensors";
+import { SORTABLE_DROP_ANIMATION } from "@app/(protected)/components/DragAndDrop/sortableAnimations";
 import updateUser from "@actions/updateUser";
 import { toast } from "react-toastify";
 import InfiniteList from "./InfiniteLIst/InfiniteList";
@@ -102,9 +104,8 @@ function DashboardBody({ albums, searchTerm = "" }: DashboardBodyProps) {
         </div>
       )}
 
-      <DragDropProvider
-        sensors={ALBUM_SORTING_SENSORS}
-        onDragEnd={handleDragEnd}>
+      <DragDropProvider sensors={ALBUM_SORTING_SENSORS}>
+        <DragEndMonitor onDragEnd={handleDragEnd} />
         <InfiniteList
           initialSize={10}
           className="album-grid"
@@ -122,11 +123,7 @@ function DashboardBody({ albums, searchTerm = "" }: DashboardBodyProps) {
           )}
         />
 
-        <DragOverlay
-          dropAnimation={{
-            duration: 180,
-            easing: "cubic-bezier(0.2, 0.8, 0.2, 1)",
-          }}>
+        <DragOverlay dropAnimation={SORTABLE_DROP_ANIMATION}>
           {(source) => {
             const activeAlbum = sortedAlbums.find(
               (album) => album.aid === source.id,
